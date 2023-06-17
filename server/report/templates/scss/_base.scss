@@ -1,0 +1,364 @@
+@import '../fonts/roboto/style';
+
+@page {
+  size: a4 portrait;
+  margin: 3cm 1cm 2cm 1cm;
+
+  @top-right {
+      content: " ";
+      background: url(file://images/logo.svg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 12mm;
+      width: 53mm;
+      margin-bottom: 8mm;
+      margin-right: -6mm;
+      background-position: left center;
+  }
+
+}
+
+@page :blank {
+  @top-left {
+    background: none;
+    content: "";
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+@page no-chapter {
+  @top-left {
+    background: none;
+    content: none;
+  }
+
+  @top-center {
+    content: none !important;
+  }
+
+  @top-right {
+    content: none !important;
+  }
+}
+
+@page chapter {
+  background: #2c3e50;
+
+  @top-left {
+    content: none;
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+
+html {
+  color: #393939;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+body {
+  font-family: "Roboto";
+
+}
+
+h1 {
+  break-before: always;
+  font-size: 26px;
+  color: $color-heading-1;
+
+  &::before {
+    counter-increment: chapter;
+    counter-set: section subsection;
+    content: counter(chapter) " ";
+  }
+}
+
+h2 {
+  font-size: 22px;
+  color: $color-heading-2;
+
+  &::before {
+    counter-increment: section;
+    counter-set: subsection;
+    content: counter(chapter) "." counter(section) " ";
+  }
+
+  /*margin-bottom: 1.0 em;*/
+}
+
+h3 {
+  font-size: 18px;
+  color: $color-heading-3;
+
+  &::before {
+    counter-increment: subsection;
+    content: counter(chapter) "." counter(section) "." counter(subsection) " ";
+  }
+}
+
+h4, h5 {
+  font-size: 16px;
+  color: $color-heading-4;
+}
+
+
+.chapter {
+  /*border-bottom: 1px solid black;*/
+  margin-top: -1cm;
+}
+
+table {
+  &.vulnerability-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td, th {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 5px;
+      text-align: left;
+    }
+  }
+
+  &.table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+
+    td, th {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 5px;
+      text-align: left;
+    }
+  }
+}
+
+
+.border-top {
+  border-top: 1px solid $primary;
+}
+
+.float-start {
+  float: left;
+}
+
+.float-end {
+  float: right;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.border-right-1 {
+  border-right: 1px solid black;
+}
+
+.border-1 {
+  border: 1px solid black;
+}
+
+.contact-card {
+  border: 0.5px solid black;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  /* this adds the "card" effect */
+}
+
+/* Float four columns side by side */
+
+.column {
+  float: left;
+  width: 47%;
+  padding: 0 10px;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+/* Remove extra left and right margins, due to padding in columns */
+
+
+.row {
+    display: flex;
+    margin: 5px 0px;
+
+    &.align-center {
+        align-content: center;
+    }
+
+    &.align-start {
+        align-content: flex-start;
+    }
+
+    &.justify-center {
+        justify-content: center;
+    }
+
+    > :not(:first-child) {
+        margin-left: 5px;
+    }
+
+    > :not(:last-child) {
+        margin-right: 5px;
+    }
+}
+
+
+.text-critical {
+  color: $critical-color;
+}
+
+.text-high {
+  color: $high-color;
+}
+
+.text-medium {
+  color: $medium-color;
+}
+
+.text-low {
+  color: $low-color;
+}
+
+.text-informational {
+  color: $informational-color;
+}
+
+.text-critical a, .text-high a, .text-medium a, .text-low a, .text-info a, .text-informational a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+code {
+    display: inline;
+    padding: 1px 2px;
+    font-family: monospace;
+    font-size: 12px;
+    background-color: #e2e2e236;
+    border-radius: 3px;
+    border: 1px solid #bbbbbb;
+}
+
+
+pre code {
+    display: block;
+    padding: 8px;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    line-height: 1.2em;
+    word-wrap: break-word;
+}
+
+
+.page-break {
+  page-break-before: always;
+}
+
+.codehilite .linenos {
+  padding-right: 20px;
+}
+
+.draft {
+  z-index: -2;
+  background: url(file://images/draft.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#severity-chart {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 8cm;
+  max-width: 8cm;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* Colors */
+.color-white {
+  color: $white;
+}
+
+.bg-primary {
+  background-color: $primary;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-content: center;
+}
+
+.page-break-before {
+    break-before: always;
+}
+
+.page-break-after {
+  break-after: always;
+}
+
+.border-top {
+  border-top: 1px solid $primary;
+}
+
+body {
+    counter-reset: chapter section subsection figures;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  margin-right: 5mm;
+
+}
+
+b {
+    font-weight: bold;
+}
+
+strong {
+    font-weight: bold;
+}
+
+i {
+    font-style: italic;
+}
+
+em {
+    font-style: italic;
+    font-weight: 400;
+}

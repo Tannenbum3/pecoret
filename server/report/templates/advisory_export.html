@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ advisory.pk }}</title>
+    <meta name="description" content="{{ advisory.pk }}">
+
+    <style>
+        @page {
+            @bottom-left {
+                font-size: 10px;
+                content: "Confidential";
+                margin-top: -5px;
+
+            }
+
+            @bottom-center {
+                content: "{{ advisory.pk }} ({{ advisory.product }} {{ advisory.affected_versions }})";
+                font-size: 10px;
+                margin-top: -5px;
+            }
+
+            @bottom-right {
+                font-size: 10px;
+                content: counter(page) ' / ' counter(pages);
+                margin-top: -5px;
+            }
+        }
+    </style>
+</head>
+
+<body id="advisory-body">
+
+    <!-- Header Table -->
+    <section id="vuln-{{ advisory.pk }}-header">
+        <h3 id="vuln-{{ advisory.pk }}-title">
+            <span class="fa-layers text-{{ advisory.get_severity_display().lower() }}">
+                <i class="fas fa-bookmark"></i>
+                <span class="fa-layers-text" data-fa-transform="shrink-8 down-3" style="font-weight:900"></span>
+            </span>
+            {{ advisory.vulnerability.name }} - {{ advisory.pk }}
+        </h3>
+
+        <table style="width: 100%" id="intro-detail-table">
+            <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>Category</th>
+                    <th>Discovery</th>
+                    <th>Planned Disclosure</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-{{ advisory.get_severity_display().lower() }}">{{
+                        advisory.get_severity_display().lower().capitalize() }}</td>
+                    <td>{% if advisory.vulnerability.categories.all() %}{{
+                        advisory.vulnerability.categories.all()[0]}}{% else %}-{% endif %}</td>
+                    <td>{{ advisory.date_created.strftime("%B %d, %Y") }}</td>
+                    <td>{{ advisory.date_planned_disclosure.strftime("%B %d, %Y") }}</td>
+                    {% if advisory.status == advisory.vulnerability.STATUS_CLOSED %}
+                    {% if advisory.is_fixed %}
+                    <td>Fixed</td>
+                    {% else %}
+                    <td>Unfixed</td>
+                    {% endif %}
+                    {% else %}
+                    <td>Open</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-top: 30px;">
+            <tr>
+                <th style="padding-right: 65px">Vendor / Product</th>
+                <td>{{ advisory.vendor_name }} / {{ advisory.product }}</td>
+            </tr>
+            <tr>
+                <th>Affected Versions</th>
+                <td>{{ advisory.affected_versions }}</td>
+            </tr>
+            <tr>
+                <th>Fixed Versions</th>
+                <td>{% if advisory.fixed_version %}{{ advisory.fixed_version }}{% else %}-{% endif %}</td>
+            </tr>
+            <tr>
+                <th>CVE-ID</th>
+                <td>{% if advisory.cve_id %}{{ advisory.cve_id }}{% else %}-{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Discovered by</th>
+                <td>{{ advisory.user.username }}</td>
+            </tr>
+        </table>
+    </section>
+
+    <section id="{{ advisory.pk }}-description">
+        <h4>Description:</h4>
+        {{ report_helpers.bleach_md(advisory.description)|safe }}
+    </section>
+    <section id="proofs-{{ advisory.pk }}" class="proofs">
+        <h4>Steps to reproduce:</h4>
+        {% for proof in advisory.advisoryproof_set.all() %}
+        {{ report_helpers.bleach_md(proof.text)|safe }}
+        {% if proof.image %}
+        <div class="image-proof">
+            <div class="image-container">
+                <img src="{{ proof.base64_encoded_image()|safe }}" alt=""
+                    style="width: 100%;max-width: 100%; max-height:50vh;">
+            </div>
+            <div class="caption">
+                <span class="label">Figure</span>
+                <span>{{ proof.image_caption }}</span>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </section>
+
+    <section id="{{ advisory.pk }}-recommendation">
+        <h4>Recommendation:</h4>
+        {{ report_helpers.bleach_md(advisory.recommendation)|safe }}
+    </section>
+</body>
+
+</html>

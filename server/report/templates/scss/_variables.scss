@@ -1,0 +1,31 @@
+
+$critical-color: #9c1720;
+$high-color: #d13c0f;
+$medium-color: #e8971e;
+$low-color: #2075f5;
+$informational-color: #059D1D;
+
+// $primary: #2c3e50;
+$primary: #1c9e75;
+$white: #ddd;
+
+/* cover page */
+$text-color-cover: $primary;
+
+/* page margins */
+$page-margin-top: 30mm;
+$page-margin-bottom: 20mm;
+$page-margin-right: 16mm;
+$page-margin-left: 16mm;
+$page-height: 297mm;
+
+$page-content-height: $page-height - $page-margin-bottom - $page-margin-top;
+
+/* texts **/
+$color-heading-1: $primary;
+$color-heading-2: $primary;
+$color-heading-3: $primary;
+$color-heading-4: $primary;
+
+/* table */
+$table-border-color: #000;

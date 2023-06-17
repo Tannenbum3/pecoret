@@ -1,0 +1,63 @@
+@page cover-page {
+  /* Image by coolvector on Freepik */
+  background: url(file://images/cover.jpg) no-repeat center;
+  background-size: cover;
+  margin: 0;
+
+  @bottom-right {
+    content: none !important;
+  }
+  @bottom-center {
+    content: none !important;
+  }
+  @bottom-left {
+    content: none !important;
+  }
+}
+
+
+#cover {
+  page-break-after: always;
+  page: cover-page;
+  margin-left: $page-margin-left;
+  margin-right: $page-margin-right;
+  margin-top: 86mm;
+  color: $text-color-cover;
+
+  a {
+    color: $text-color-cover;
+  }
+
+  .title {
+    font-size: 40px;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .project {
+    margin-top: 1em;
+    font-size: 40px;
+    line-height: 1.2em;
+  }
+
+  .date {
+    margin-top: 2em;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 2cm;
+    font-weight: 300;
+
+  }
+}
+
+#cover-footer {
+  flex: 1 50%;
+  margin-bottom: 1cm;
+  margin-left: 1cm;
+
+  a {
+    color: $text-color-cover;
+  }
+}

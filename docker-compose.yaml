@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  backend:
+    image: pecoret-server:dev
+    environment:
+      DB_NAME: pecoret
+      DB_USER: pecoret
+      DB_PASSWORD: dontusethispassword
+      SECRET_KEY: randomstuffhere
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: dontusethispasswordtoo
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      ALLOWED_HOSTS: backend,localhost
+    volumes:
+      - ./volumes/server/conf:/app/conf
+      - server-static:/app/static
+      # - ./default_templates:/app/resources/templates
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: dontusethispassword
+      POSTGRES_DB: pecoret
+      POSTGRES_USER: pecoret
+    volumes:
+      - ./volumes/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s  
+
+
+  frontend:
+    image: pecoret-frontend:dev
+    environment:
+      VITE_APP_API_URL: http://localhost/api
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+
+  worker:
+    image: pecoret-server:dev
+    entrypoint: python3 manage.py qcluster
+    environment:
+      DB_NAME: pecoret
+      DB_USER: pecoret
+      DB_PASSWORD: dontusethispassword
+      SECRET_KEY: randomstuffhere
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: dontusethispasswordtoo
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      ALLOWED_HOSTS: backend,localhost
+    volumes:
+      - ./volumes/server/conf:/app/conf
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  server-static:
+  pg-data:

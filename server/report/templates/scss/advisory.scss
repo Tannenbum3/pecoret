@@ -1,0 +1,9 @@
+#advisory-body {
+    * {
+        h3 {
+            &::before {
+                content: " ";
+            }
+        }
+    }
+}

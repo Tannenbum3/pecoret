@@ -1,0 +1,63 @@
+<article id="mgmt-summary" class="chapter">
+    <h1 class="chapter-title" id="mgmt-summary-title">{{ _('Executive Summary') }}</h1>
+</article>
+
+<article>
+    <section id="management-summary-evaluation">
+        {{ report_helpers.bleach_md(report_document.report.evaluation)|safe }}
+    </section>
+    <section>
+        <h2>{{ _('Assessment Summary') }}</h2>
+        <p>
+            {% trans %}
+            The following table represents the penetration testing in-scope items and breaks down the issues, which were
+            identified and classified by severity of risk.
+            These findings can be fixed by following the best practices and recommendation given throughout the report.
+            {% endtrans %}
+        </p>
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>{{ _('Asset') }}</th>
+                    <th>{{ _('Critical') }}</th>
+                    <th>{{ _('High') }}</th>
+                    <th>{{ _('Medium') }}</th>
+                    <th>{{ _('Low') }}</th>
+                    <th>{{ _('Informational') }}</th>
+                    <th>{{ _('Total') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset in variant.get_assets() %}
+                <tr>
+                    <td>{{ asset }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset, "CRITICAL") }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset, "HIGH") }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset, "MEDIUM") }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset, "LOW") }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset, "INFORMATIONAL") }}</td>
+                    <td>{{ variant.get_findings_count_for_asset(asset) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>
+            {% trans %}
+            The graphs below represent a summary of the total number of findings found up until issuing this current
+            report:
+            {% endtrans %}
+        </p>
+
+        <div class="chart-container">
+            {{ variant.plot_severity_chart()|safe }}
+        </div>
+    </section>
+
+    <section>
+        <h2 id="management-summary-recommendation">{{ _('Strategic Recommendations') }}</h2>
+        <p>
+            {{ report_helpers.bleach_md(report_document.report.recommendation, allow_images=True)|safe }}
+        </p>
+    </section>
+</article>
