@@ -1,6 +1,6 @@
 name: Task
 description: 'Anything that is not a bug or feature request'
-labels: ["T: task", "P: default"]
+labels: ["Kind/Task", "Priority/Medium"]
 
 
 body:
