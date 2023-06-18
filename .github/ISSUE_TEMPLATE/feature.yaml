@@ -1,6 +1,6 @@
 name: Feature Request
 description: Give enhancement ideas, feature requests, ...
-labels: ["T: feature", "P: default"]
+labels: ["Kind/Feature", "Priority/Medium"]
 
 body:
   - type: markdown
