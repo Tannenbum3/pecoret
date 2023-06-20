@@ -32,7 +32,8 @@ export default {
                 }
             ],
             advisoryId: this.$route.params.advisoryId,
-            items: []
+            items: [],
+            activeEditableComment: null
         };
     },
     mounted() {
@@ -53,6 +54,17 @@ export default {
                 this.comment = ""
             })
         },
+        onClickEditComment(comment){
+            this.activeEditableComment = comment
+            this.activeEditableComment.editMode = !this.activeEditableComment.editMode
+            if(!this.activeEditableComment.editMode){
+                this.activeEditableComment = null
+            }
+        },
+        patchComment(comment){
+            let data = {comment: comment.comment}
+            this.service.patchComment(this.$api, this.advisoryId, comment.pk, data)
+        }
     },
     components: { AdvisoryTabMenu, ToastUIEditor }
 }
@@ -69,7 +81,7 @@ export default {
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
             <div class="card">
-                <Card v-for="comment in items" :key="comment.pk" class="surface-ground border-200 border-1 border-round">
+                <Card v-for="comment in items" :key="comment.pk" class="surface-ground border-200 border-1 border-round mt-3">
                     <template #header>
                         <div class="col-12 surface-card border-200 border-1 border-round">
                             <div class="grid">
@@ -81,7 +93,7 @@ export default {
                                 </div>
                                 <div class="col-2">
                                     <div class="flex justify-content-end">
-
+                                        <Button size="small" class="p-1 text-color" text icon="fa fa-ellipsis" @click="onClickEditComment(comment)"></Button>
                                     </div>
                                 </div>
                             </div>
@@ -89,16 +101,18 @@ export default {
                     </template>
                     <template #content>
                         <div class="grid">
-                            <div class="col-12">
+                            <div class="col-12" v-if="!comment.editMode">
                                 {{ comment.comment }}
-
+                            </div>
+                            <div class="col-12" v-else>
+                                <ToastUIEditor v-model="comment.comment" @editor-blur="patchComment(comment)"></ToastUIEditor>
                             </div>
                         </div>
 
                     </template>
                 </Card>
             </div>
-            <div class="card mt-3">
+            <div class="card mt-3" v-if="!this.activeEditableComment">
                 <ToastUIEditor v-model="comment"></ToastUIEditor>
                 <div class="flex justify-content-end">
                     <Button @click="saveNewComment" label="Save"></Button>

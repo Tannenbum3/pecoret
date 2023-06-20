@@ -101,6 +101,11 @@ export default class AdvisoryService {
         return api.post(url, data)
     }
 
+    patchComment(api, advisoryId, commentId, data){
+        let url = "/advisories/" + advisoryId + "/comments/" + commentId + "/"
+        return api.patch(url, data)
+    }
+
     getMemberships(api, advisoryId, params){
         let url = "/advisories/" + advisoryId + "/memberships/"
         let config = {}

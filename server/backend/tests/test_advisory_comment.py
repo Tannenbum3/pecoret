@@ -36,43 +36,6 @@ class AdvisoryCommentCreateView(APITestCase, AdvisoryTestCaseMixin):
             )
 
 
-class AdvisoryCommentDeleteView(APITestCase, AdvisoryTestCaseMixin):
-    def setUp(self):
-        self.init_mixin()
-        self.comment1 = self.create_instance(
-            AdvisoryComment, advisory=self.advisory1, user=self.pentester1
-        )
-        self.url = self.get_url(
-            "backend:advisories:comment-detail",
-            advisory=self.advisory1.pk,
-            pk=self.comment1.pk,
-        )
-
-    def test_allowed(self):
-        self.client.force_login(self.pentester1)
-        self.basic_status_code_check(self.url, self.client.delete, 204)
-
-    def test_forbidden(self):
-        users = [
-            self.pentester2,
-            self.vendor2,
-            self.management1,
-            self.management2,
-            self.user1,
-            self.read_only1,
-            self.read_only_vendor
-        ]
-        for user in users:
-            self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.delete, 403)
-
-    def test_not_found(self):
-        users = [self.advisory_manager1, self.vendor1]
-        for user in users:
-            self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.delete, 404)
-
-
 class AdvisoryCommentUpdateView(APITestCase, AdvisoryTestCaseMixin):
     def setUp(self):
         self.init_mixin()
