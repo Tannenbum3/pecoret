@@ -17,11 +17,11 @@ jobs:
         run: |
           docker build -t pecoret-server server
           docker login ${{ secret.CONTAINER_REGISTRY}} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
-          docker tag pecoret-server ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-server:$(git describe --abbrev=0 --tags)
-          docker push ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-server:$(git describe --abbrev=0 --tags)
+          docker tag pecoret-server ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:$(git describe --abbrev=0 --tags)
+          docker push ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:$(git describe --abbrev=0 --tags)
       - name: build and upload frontend
         run: |
           docker build -t pecoret-frontend frontend
           docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
-          docker tag pecoret-frontend ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-frontend:$(git describe --abbrev=0 --tags)
-          docker push ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-frontend:$(git describe --abbrev=0 --tags)
+          docker tag pecoret-frontend ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-frontend:$(git describe --abbrev=0 --tags)
+          docker push ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-frontend:$(git describe --abbrev=0 --tags)
