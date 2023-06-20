@@ -19,10 +19,10 @@ jobs:
           docker build -t pecoret-server server
           docker login ${{ secret.CONTAINER_REGISTRY}} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
           docker tag pecoret-server ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:dev
-          docker push ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-server:dev
+          docker push ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:dev
       - name: build and upload frontend
         run: |
           docker build -t pecoret-frontend frontend
           docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
-          docker tag pecoret-frontend ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-frontend:dev
-          docker push ${{ secrets.CONTAINER_REGISTRY }}//pecoret/pecoret-frontend:dev
+          docker tag pecoret-frontend ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-frontend:dev
+          docker push ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-frontend:dev
