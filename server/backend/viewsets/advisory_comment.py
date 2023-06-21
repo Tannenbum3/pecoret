@@ -2,10 +2,10 @@ from backend import permissions
 from backend.models.advisory_comment import AdvisoryComment
 from backend.models.advisory_membership import Roles
 from backend.serializers.advisory_comment import AdvisoryCommentSerializer
-from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
 
 
-class AdvisoryCommentViewSet(PeCoReTModelViewSet):
+class AdvisoryCommentViewSet(PeCoReTNoDestroyViewSet):
     """manage advisory comments"""
 
     queryset = AdvisoryComment.objects.none()
