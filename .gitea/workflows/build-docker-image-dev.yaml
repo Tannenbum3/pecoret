@@ -17,7 +17,7 @@ jobs:
       - name: build and upload images
         run: |
           docker build -t pecoret-server server
-          docker login ${{ secret.CONTAINER_REGISTRY }} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
+          docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.PACKAGING_USERNAME }} --password ${{ secrets.PACKAGING_TOKEN }}
           docker tag pecoret-server ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:dev
           docker push ${{ secrets.CONTAINER_REGISTRY }}/pecoret/pecoret-server:dev
           docker build -t pecoret-frontend frontend
