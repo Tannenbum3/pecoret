@@ -49,9 +49,10 @@ class AssetChecklistManager(models.Manager):
             for item in Item.objects.for_category(category):
                 AssetItem.objects.get_or_create(
                     project=checklist.project,
-                    name=item.name, item_id=item.item_id,
+                    name=item.name,
+                    item_id=item.item_id,
                     description=item.description,
-                    category=asset_category
+                    category=asset_category,
                 )
         return checklist
 
@@ -61,4 +62,16 @@ class AssetChecklist(AssetRelatedModel, BaseChecklist):
     categories = models.ManyToManyField("checklists.AssetCategory")
 
     class Meta:
-        ordering=  ["checklist_id"]
+        ordering = ["checklist_id"]
+
+    @property
+    def open_item_count(self):
+        return AssetItem.objects.for_category(
+            models.Subquery(self.categories.values("pk"))
+        ).open().count()
+
+    @property
+    def closed_item_count(self):
+        return AssetItem.objects.for_category(
+            models.Subquery(self.categories.values('pk'))
+        ).closed().count()

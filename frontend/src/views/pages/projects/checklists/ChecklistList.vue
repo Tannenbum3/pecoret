@@ -49,11 +49,13 @@ export default {
                 this.categories = response.data.results
                 this.categories.forEach((category) => {
                     category.children = category.items
+                    category.closed_items = 0
                     category.key = category.pk.toString()
                     category.children.forEach((item) => {
                         item.checked = false
                         if (item.status == "Closed") {
                             item.checked = true
+                            category.closed_items += 1
                         }
                     })
                 })
@@ -66,10 +68,13 @@ export default {
                 this.checklistChoices = response.data.results
             })
         },
-        onCheckboxChange(event, item) {
+        onCheckboxChange(event, item, category) {
             let status = "Open"
             if (item.checked === true) {
                 status = "Closed"
+                category.closed_items += 1
+            } else {
+                category.closed_items -= 1
             }
             let data = {
                 status: status
@@ -137,14 +142,14 @@ export default {
                     <Accordion class="mt-3 w-full col">
                         <AccordionTab v-for="category in categories" :key="category.pk">
                             <template #header>
-                                {{ category.name }}
+                                {{ category.name }}  ({{ category.closed_items }}/{{ category.items.length }})
                             </template>
                             <div class="grid">
                                 <div class="col-12">
                                     <div class="flex flex-column xl:flex-row xl:align-items-start p-2 gap-2"
                                         v-for="item in category.items">
                                         <div class="flex align-items-center">
-                                            <Checkbox @change="onCheckboxChange($event, item)" :binary="true"
+                                            <Checkbox @change="onCheckboxChange($event, item, category)" :binary="true"
                                                 v-model="item.checked"></Checkbox>
                                             <label class="ml-3">
 

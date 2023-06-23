@@ -8,9 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = [
-            "pk", "name", "summary", "category_id", "items"
-        ]
+        fields = ["pk", "name", "summary", "category_id", "items"]
 
 
 class AssetCategorySerializer(CategorySerializer):
