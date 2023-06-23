@@ -4,17 +4,13 @@ from backend.serializers.assets.web_application import WebApplicationSerializer
 from backend.serializers.assets.host import HostSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
-from backend.models import (
-    Host, Service, MobileApplication, WebApplication
-)
+from backend.models import Host, Service, MobileApplication, WebApplication
 from pecoret.core.serializers import AssetField
-from .category import CategorySerializer, AssetCategorySerializer
 
 
 class ChecklistIdField(serializers.Field):
-    default_error_messages = {
-        "invalid_id": "Invalid checklist_id"
-    }
+    default_error_messages = {"invalid_id": "Invalid checklist_id"}
+
     def to_representation(self, value):
         return value
 
@@ -59,9 +55,7 @@ class AssetChecklistCreateSerializer(AssetChecklistSerializer):
 
     class Meta:
         model = AssetChecklist
-        fields = [
-            "checklist_id", "asset"
-        ]
+        fields = ["checklist_id", "asset"]
 
     def create(self, validated_data):
         return AssetChecklist.objects.create_from_checklist(**validated_data)

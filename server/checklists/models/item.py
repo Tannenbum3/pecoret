@@ -41,6 +41,12 @@ class AssetItemQuerySet(models.QuerySet):
     def for_category(self, category):
         return self.filter(category=category)
 
+    def open(self):
+        return self.filter(status=ItemStatus.OPEN)
+
+    def closed(self):
+        return self.filter(status=ItemStatus.CLOSED)
+
 
 class AssetItem(BaseItem):
     objects = AssetItemQuerySet.as_manager()
