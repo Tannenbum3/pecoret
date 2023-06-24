@@ -2,6 +2,7 @@
 import ReportService from '@/service/ReportService'
 import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue'
 import ReportDocumentCreateDialog from '../../../../components/dialogs/ReportDocumentCreateDialog.vue';
+import BlankSlate from '@/components/BlankSlate.vue'
 
 
 export default {
@@ -132,7 +133,7 @@ export default {
             })
         }
     },
-    components: { ReportTabMenu, ReportDocumentCreateDialog }
+    components: { ReportTabMenu, ReportDocumentCreateDialog, BlankSlate }
 }
 </script>
 
@@ -159,10 +160,12 @@ export default {
             <div class="card">
                 <ReportTabMenu class="surface-card"></ReportTabMenu>
 
-                <DataTable paginator lazy rowHover dataKey="pk" :totalRecords="totalRecords" filterDisplay="menu"
+                <DataTable paginator lazy :rowHover="items.length > 0" dataKey="pk" :totalRecords="totalRecords" filterDisplay="menu"
                     :rows="pagination.limit" :value="items"
                     :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-
+                    <template #empty>
+                        <BlankSlate icon="fa fa-file" title="Report documents" text="No report documents found!"></BlankSlate>
+                    </template>
                     <Column field="name" header="Header"></Column>
                     <Column field="release_type" header="Release Type"></Column>
                     <Column header="Actions">

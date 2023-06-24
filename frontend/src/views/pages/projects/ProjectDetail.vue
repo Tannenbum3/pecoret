@@ -4,6 +4,7 @@ import FindingService from '@/service/FindingService'
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
+import markdown from '@/utils/markdown'
 
 
 const projectService = new ProjectService();
@@ -51,6 +52,12 @@ export default {
             projectService.getProject(this.projectId).then((response) => {
                 this.project = response.data;
             });
+        },
+        renderMarkdown(text){
+            if(!text){
+                return ""
+            }
+            return markdown.renderMarkdown(text)
         },
         getMembership() {
             projectService.getProjectMembershipMe(this.projectId).then((response) => {
@@ -117,29 +124,27 @@ export default {
     </div>
 
     <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Dates" :text="projectDateDisplay" icon="fa-calendar"></DetailCardWithIcon>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role">
             </DetailCardWithIcon>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <!--
-            <DetailCardWithIcon title="Status" icon="fa-clock" :text="project.status"></DetailCardWithIcon>-->
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <InfoCardWithForm title="Status" icon="fa-bookmark">
                 <Dropdown v-model="project.status" :options="statusChoices" optionValue="value"
                     @change="patchProject({ status: project.status })" optionLabel="label" class="w-full">
                 </Dropdown>
             </InfoCardWithForm>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Pin Project" icon="fa-pin" :text="project.pinned"></DetailCardWithIcon>
         </div>
     </div>
 
     <div class="grid mt-3">
-        <div class="col-12 lg:col-6 xl:col-4">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <Card class="h-full">
                 <template #title>Lastest Findings</template>
                 <template #content>
@@ -165,7 +170,7 @@ export default {
                 </template>
             </Card>
         </div>
-        <div class="col-12 lg:col-6 xl:col-4">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <Card class="h-full">
                 <template #title>Severities</template>
                 <template #content>
@@ -173,7 +178,7 @@ export default {
                 </template>
             </Card>
         </div>
-        <div class="col-12 lg:col-6 xl:col-4">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <Card class="h-full">
                 <template #title>Information</template>
                 <template #content>
@@ -193,6 +198,14 @@ export default {
                         <div class="col-6">Language</div>
                         <div class="col-6">{{ project.language }}</div>
                     </div>
+                </template>
+            </Card>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+            <Card class="h-full">
+                <template #title>Description</template>
+                <template #content>
+                    <div v-html="renderMarkdown(project.description)"></div>
                 </template>
             </Card>
         </div>

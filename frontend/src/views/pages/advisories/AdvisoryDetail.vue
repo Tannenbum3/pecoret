@@ -119,7 +119,7 @@ export default {
             }).finally(() => { this.downloadPending = false })
         },
         downloadAsPDF() {
-            this.downloadPentesting = true
+            this.downloadPending = true
             this.service.downloadAdvisoryAsPDF(this.$api, this.advisoryId).then((response) => {
                 const filename = "advisory_" + this.advisoryId + ".pdf"
                 this.forceMarkdownFileDownload(response, filename);
@@ -165,7 +165,7 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending"
+                <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending"
                     @click="toggleDownloadMenu"></Button>
                 <Menu ref="downloadMenu" :model="downloadMenuItems" :popup="true"></Menu>
                 <Button label="Edit" icon="fa fa-pen-to-square" outlined

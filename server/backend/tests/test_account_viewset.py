@@ -23,25 +23,27 @@ class AccountCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:account-list", project=self.project1.pk)
         self.data = {
-            "role": "Admin", "username": "TestAdmin", "asset": {"pk": self.asset1.pk, "type": self.asset1.asset_type},
-            "accessible": False, "compromised": False, "password": ""
+            "role": "Admin",
+            "username": "TestAdmin",
+            "accessible": False,
+            "compromised": False,
+            "password": "",
+            "description": "just a user account."
         }
 
     def test_allowed_status(self):
         for user in [self.pentester1, self.management1]:
             self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+            self.basic_status_code_check(
+                self.url, self.client.post, 201, data=self.data
+            )
 
     def test_forbidden_status(self):
         for user in [self.read_only1, self.user1, self.pentester2]:
             self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
-
-    def test_foreign_asset(self):
-        data = self.data
-        data["asset"]["pk"] = self.asset2.pk
-        self.client.force_login(self.pentester1)
-        self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
+            self.basic_status_code_check(
+                self.url, self.client.post, 403, data=self.data
+            )
 
 
 class AccountUpdateViewSet(APITestCase, PeCoReTTestCaseMixin):

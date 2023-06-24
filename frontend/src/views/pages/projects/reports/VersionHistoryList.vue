@@ -2,6 +2,7 @@
 import ReportService from '@/service/ReportService'
 import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue'
 import VersionHistoryCreateDialog from '../../../../components/dialogs/VersionHistoryCreateDialog.vue';
+import BlankSlate from '@/components/BlankSlate.vue'
 
 
 export default {
@@ -62,7 +63,7 @@ export default {
             })
         }
     },
-    components: { ReportTabMenu, VersionHistoryCreateDialog }
+    components: { ReportTabMenu, VersionHistoryCreateDialog, BlankSlate }
 }
 </script>
 
@@ -90,9 +91,13 @@ export default {
         <div class="col-12">
             <div class="card">
                 <ReportTabMenu class="surface-card"></ReportTabMenu>
-                <DataTable paginator lazy dataKey="pk" rowHover :value="items" :rows="pagination.limit"
+                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit"
                     :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort"
+                    :rowHover="items.length > 0"
                     @filter="onFilter">
+                    <template #empty>
+                        <BlankSlate icon="fa fa-clock-rotate-left" title="Version History" text="No version history found!"></BlankSlate>
+                    </template>
                     <Column field="version" header="Version"></Column>
                     <Column field="change" header="Change"></Column>
                     <Column field="date" header="Date"></Column>

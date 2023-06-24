@@ -85,6 +85,9 @@ export default {
         toggleMenu(event) {
             this.$refs.menu.toggle(event);
         },
+        onTopBarMenuButton(event){
+            this.topbarMenuActive = !this.topbarMenuActive
+        },
         toggleAdvisoryMenu(event) {
             this.$refs.advisoryMenu.toggle(event)
         },
