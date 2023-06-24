@@ -1,6 +1,6 @@
 <script>
 import UserAccountService from '@/service/UserAccountService'
-import AssetSelectField from '../elements/forms/AssetSelectField.vue';
+import ToastUIEditor from '../elements/forms/ToastUIEditor.vue';
 
 
 export default {
@@ -14,8 +14,8 @@ export default {
                 username: null,
                 password: null,
                 role: null,
-                asset: null,
-                compromised: false
+                compromised: false,
+                description: ''
             },
             accountService: new UserAccountService()
         };
@@ -32,8 +32,8 @@ export default {
                 username: this.model.username,
                 password: this.model.password,
                 role: this.model.role,
-                asset: this.model.asset,
-                compromised: this.model.compromised
+                compromised: this.model.compromised,
+                description: this.model.description
             };
             this.accountService.createAccount(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({
@@ -47,7 +47,7 @@ export default {
             });
         }
     },
-    components: { AssetSelectField }
+    components: { ToastUIEditor }
 }
 </script>
 
@@ -62,13 +62,15 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="password">Password</label>
-                <InputText id="password" v-model="model.password"></InputText>
+                <Password id="password" v-model="model.password" :feedback="false" toggleMask></Password>
             </div>
             <div class="field col-12">
                 <label for="rolel">Role</label>
                 <InputText id="role" v-model="model.role"></InputText>
             </div>
-            <AssetSelectField v-model="model.asset"></AssetSelectField>
+            <div class="field col-12">
+                <ToastUIEditor label="Description" v-model="model.description"></ToastUIEditor>
+            </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
                     <Checkbox v-model="model.compromised" inputId="compromised" />

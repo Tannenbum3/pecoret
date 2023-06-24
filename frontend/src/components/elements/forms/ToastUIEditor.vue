@@ -44,11 +44,15 @@
       },
     },
     mounted() {
+      let initialValue = ""
+      if(this.modelValue !== null){
+        initialValue = this.modelValue
+      }
       this.toastuiEditor = new Editor({
         el: this.$refs.editor,
         height: this.editorSize,
         initialEditType: 'markdown',
-        initialValue: this.modelValue,
+        initialValue: initialValue,
         useStatistics: false,
         hideModeSwitch: true,
         autofocus: false,

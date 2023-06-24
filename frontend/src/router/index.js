@@ -95,9 +95,20 @@ const router = createRouter({
                                     component: () => import('@/views/pages/projects/assets/WebApplicationList.vue')
                                 },
                                 {
+                                    path: '/projects/:projectId/web-applications/:assetId',
+                                    name: 'WebApplicationDetail',
+                                    component: () => import('@/views/pages/projects/assets/WebApplicationDetail.vue')
+
+                                },
+                                {
                                     path: '/projects/:projectId/hosts',
                                     name: 'HostList',
                                     component: () => import('@/views/pages/projects/assets/HostList.vue')
+                                },
+                                {
+                                    path: '/projects/:projectId/hosts/:assetId',
+                                    name: 'HostDetail',
+                                    component: () => import('@/views/pages/projects/assets/HostDetail.vue')
                                 },
                                 {
                                     path: '/projects/:projectId/team',
@@ -163,6 +174,11 @@ const router = createRouter({
                                     path: '/projects/:projectId/services',
                                     name: 'ServiceList',
                                     component: () => import('@/views/pages/projects/assets/ServiceList.vue')
+                                },
+                                {
+                                    path: '/projects/:projectId/services/:assetId',
+                                    name: 'ServiceDetail',
+                                    component: () => import('@/views/pages/projects/assets/ServiceDetail.vue')
                                 },
                                 {
                                     path: '/projects/:projectId/findings/:findingId/update',

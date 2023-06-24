@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService'
-import HostCreateDialog from '../../../../components/dialogs/HostCreateDialog.vue';
+import HostCreateDialog from '@/components/dialogs/HostCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue'
 
 
@@ -112,9 +112,9 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginator rowHover dataKey="pk" lazy :rows="pagination.limit" :value="items" filterDisplay="menu"
+                <DataTable paginator dataKey="pk" lazy :rows="pagination.limit" :value="items" filterDisplay="menu"
                     responsiveLayout="scroll" @sort="onSort" @filter="onFilter" @page="onPage" :totalRecords="totalRecords"
-                    :loading="loading" v-if="items.length > 0">
+                    :loading="loading" :rowHover="items.length > 0">
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
@@ -124,8 +124,18 @@ export default {
                             </span>
                         </div>
                     </template>
+                    <template #empty>
+                        <BlankSlate icon="fa fa-server" title="No hosts!" text="No hosts found!"></BlankSlate>
+                    </template>
 
-                    <Column field="ip" header="IP"></Column>
+                    <Column field="ip" header="IP">
+                        <template #body="slotProps">
+                            <router-link class="text-color underline"
+                                :to="{name: 'HostDetail', params: {projectId: this.projectId, assetId: slotProps.data.pk}}">
+                                {{ slotProps.data.ip }}
+                            </router-link>
+                        </template>
+                    </Column>
                     <Column field="dns" header="DNS"></Column>
                     <Column field="operating_system" header="Operating System"></Column>
                     <Column field="environment" header="Environment"></Column>
@@ -138,7 +148,6 @@ export default {
                         </template>
                     </Column>
                 </DataTable>
-                <BlankSlate v-else icon="fa fa-server" title="No hosts!" text="No hosts found!"></BlankSlate>
             </div>
         </div>
     </div>

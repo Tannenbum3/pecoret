@@ -1,7 +1,6 @@
 <script>
 import FindingService from '@/service/FindingService'
 import ToastUIEditor from '@/components/elements/forms/ToastUIEditor.vue'
-import ProjectVulnerabilityAutocompleteField from '@/components/elements/forms/ProjectVulnerabilityAutocompleteField.vue'
 import UserAccountService from '@/service/UserAccountService'
 
 
@@ -121,8 +120,7 @@ export default {
                 </div>
 
                 <div class="flex flex-column gap-2 mt-3">
-                    <ToastUIEditor v-model="model.recommendation" label="Recommendation"
-                        v-if="model.recommendation !== null"></ToastUIEditor>
+                    <ToastUIEditor v-model="model.recommendation" label="Recommendation"></ToastUIEditor>
                 </div>
                 <div class="flex flex-column gap-2 mt-3">
                     <label for="date_retested">Date Retested</label>
@@ -130,8 +128,7 @@ export default {
                 </div>
 
                 <div class="flex flex-column gap-2 mt-3">
-                    <ToastUIEditor v-model="model.retest_results" label="Retest Results"
-                        v-if="model.retest_results !== null"></ToastUIEditor>
+                    <ToastUIEditor v-model="model.retest_results" label="Retest Results"></ToastUIEditor>
                 </div>
                 <div class="flex flex-column gap-2 mt-3">
                     <div class="flex justify-content-end">

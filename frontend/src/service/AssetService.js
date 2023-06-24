@@ -19,6 +19,16 @@ export default class AssetService {
         return api.delete(url)
     }
 
+    getWebApplication(api, projectId, assetId){
+        let url = "/projects/" + projectId + "/web-applications/" + assetId + "/"
+        return api.get(url)
+    }
+
+    patchWebApplication(api, projectId, assetId, data){
+        let url = "/projects/" + projectId + "/web-applications/" + assetId + "/"
+        return api.patch(url, data)
+    }
+
     getHosts(api, projectId, params){
         let url = "/projects/" + projectId + "/hosts/"
         let config = {}
@@ -33,9 +43,19 @@ export default class AssetService {
         return api.post(url, data)
     }
 
+    getHost(api, projectId, assetId){
+        let url = "/projects/" + projectId + "/hosts/" + assetId + "/"
+        return api.get(url)
+    }
+
     deleteHost(api, projectId, hostId){
         let url = "/projects/" + projectId + "/hosts/" + hostId + "/"
         return api.delete(url) 
+    }
+
+    patchHost(api, projectId, hostId, data){
+        let url = "/projects/" + projectId + "/hosts/" + hostId + "/"
+        return api.patch(url, data) 
     }
 
     getServices(api, projectId, params){
@@ -45,5 +65,25 @@ export default class AssetService {
             config["params"] = params
         }
         return api.get(url, config)
+    }
+
+    createService(api, projectId, data){
+        let url = "/projects/" + projectId + "/services/"
+        return api.post(url, data)
+    }
+
+    deleteService(api, projectId, assetId){
+        let url = "/projects/" + projectId + "/services/" + assetId + "/"
+        return api.delete(url)
+    }
+
+    getService(api, projectId, assetId){
+        let url = "/projects/" + projectId + "/services/" + assetId + "/"
+        return api.get(url)
+    }
+
+    patchService(api, projectId, assetId, data){
+        let url = "/projects/" + projectId + "/services/" + assetId + "/"
+        return api.patch(url, data)
     }
 }

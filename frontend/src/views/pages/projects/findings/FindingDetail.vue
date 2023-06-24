@@ -3,7 +3,6 @@ import FindingService from '@/service/FindingService'
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue'
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue'
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue'
-import FindingUpdateDialog from '@/components/dialogs/FindingUpdateDialog.vue'
 import FindingAsAdvisoryDialog from '@/components/dialogs/FindingAsAdvisoryDialog.vue'
 
 export default {
@@ -130,7 +129,7 @@ export default {
             })
         }
     },
-    components: { FindingTabMenu, DetailCardWithIcon, InfoCardWithForm, FindingUpdateDialog, FindingAsAdvisoryDialog }
+    components: { FindingTabMenu, DetailCardWithIcon, InfoCardWithForm, FindingAsAdvisoryDialog }
 }
 </script>
 

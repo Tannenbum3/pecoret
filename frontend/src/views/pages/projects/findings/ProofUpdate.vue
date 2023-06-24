@@ -89,7 +89,7 @@ export default {
                 data = new FormData()
                 data.append("image", this.model.image)
                 data.append("image_caption", this.model.image_caption)
-                data.append("text", this.text)
+                data.append("text", this.model.text)
                 data.append("title", this.model.title)
             } else {
                 data = {

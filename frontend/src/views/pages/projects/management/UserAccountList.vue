@@ -25,6 +25,11 @@ export default {
     mounted() {
         this.getItems();
     },
+    computed: {
+        passwordDisplay(){
+
+        }
+    },
     methods: {
         onSort(event) { },
         onFilter(event) { },
@@ -65,6 +70,15 @@ export default {
                 this.getItems()
             })
         },
+        copyToClipboard(password){
+            navigator.clipboard.writeText(password)
+            this.$toast.add({
+                severity: 'info',
+                summary: 'Copied',
+                detail: 'Password copied to clipboard',
+                life: 3000
+            })
+        }
     },
     components: { UserAccountCreateDialog, BlankSlate }
 }
@@ -98,12 +112,16 @@ export default {
                     :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort"
                     @filter="onFilter">
                     <Column field="username" header="Username"></Column>
-                    <Column field="password" header="Password"></Column>
+                    <Column field="password" header="Password">
+                        <template #body="slotProps">
+                            ***
+                        </template>
+                    </Column>
                     <Column field="role" header="Role"></Column>
-                    <Column field="asset.name" header="Asset"></Column>
                     <Column field="compromised" header="Compromised"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
+                            <Button size="small" outlined icon="fa fa-copy" @click="copyToClipboard(slotProps.data.password)"></Button>
                             <Button size="small" outlined severity="danger" icon="fa fa-trash"
                                 @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>

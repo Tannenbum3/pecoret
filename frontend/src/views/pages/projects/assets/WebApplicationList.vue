@@ -112,9 +112,14 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginator rowHover dataKey="pk" lazy :rows="pagination.limit" :value="items" filterDisplay="menu"
-                    v-if="items.length > 0" responsiveLayout="scroll" @sort="onSort" @filter="onFilter" @page="onPage"
+                <DataTable paginator dataKey="pk" lazy :rows="pagination.limit" :value="items" filterDisplay="menu"
+                    :rowHover="items.length > 0" responsiveLayout="scroll" @sort="onSort" @filter="onFilter" @page="onPage"
                     :totalRecords="totalRecords" :loading="loading">
+                    <template #empty>
+                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!"
+                            text="No web applications found!">
+                        </BlankSlate>
+                    </template>
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
@@ -125,7 +130,14 @@ export default {
                         </div>
                     </template>
 
-                    <Column field="name" header="Name"></Column>
+                    <Column field="name" header="Name">
+                        <template #body="slotProps">
+                            <router-link class="text-color underline"
+                                :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }">
+                                    {{ slotProps.data.name }}</router-link>
+
+                        </template>
+                    </Column>
                     <Column field="base_url" header="Base URL"></Column>
                     <Column field="environment" header="Environment"></Column>
                     <Column field="accessible" header="Accessible"></Column>
@@ -137,8 +149,7 @@ export default {
                         </template>
                     </Column>
                 </DataTable>
-                <BlankSlate v-else icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!">
-                </BlankSlate>
+
             </div>
         </div>
     </div>
