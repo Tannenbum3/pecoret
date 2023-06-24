@@ -83,7 +83,8 @@ export default {
             this.loading = true;
             let params = {
                 limit: this.pagination.limit,
-                page: this.pagination.page
+                page: this.pagination.page,
+                status: this.filters.status.value
             };
             projectService.getProjects(this.$api, params).then((response) => {
                 this.totalRecords = response.data.count;
