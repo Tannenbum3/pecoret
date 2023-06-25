@@ -22,6 +22,7 @@ class PeCoReTBaseModel(models.Model):
         super().save(*args, **kwargs)
         self.post_save()
 
+
 class TimestampedModel(models.Model):
     """model which just tracks dates for udpate and create
     """
