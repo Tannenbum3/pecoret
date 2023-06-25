@@ -107,4 +107,9 @@ export default class FindingService {
         let url = "/projects/" + projectId + "/findings/" + findingId + "/as_advisory/"
         return api.post(url, data)
     }
+
+    copyFinding(api, projectId, findingId, data){
+        let url = "/projects/" + projectId + "/findings/" + findingId + "/copy/"
+        return api.post(url, data)
+    }
 }

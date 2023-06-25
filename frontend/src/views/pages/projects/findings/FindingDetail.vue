@@ -116,7 +116,7 @@ export default {
             this.downloadPending = false
         },
         downloadAsPDF() {
-            this.downloadPentesting = true
+            this.downloadPending = true
             this.findingService.downloadAsPDF(this.$api, this.projectId, this.findingId).then((response) => {
                 const filename = "finding_" + this.finding.internal_id + ".pdf"
                 this.forceFileDownload(response, filename);
@@ -149,7 +149,7 @@ export default {
         </div>
         <div class="col-6 h-full">
             <div class="flex justify-content-end">
-                <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" @click="downloadAsPDF"></Button>
+                <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
                 <Button outlined icon="fa fa-pen-to-square" label="Edit"
                     @click="this.$router.push({name: 'FindingUpdate', params: {projectId: this.projectId, findingId: this.findingId}})"

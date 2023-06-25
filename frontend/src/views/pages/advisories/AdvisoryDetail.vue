@@ -227,12 +227,12 @@ export default {
                         </InfoCardWithForm>
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12">
+                <div class="grid formgrid p-fluid">
+                    <div class="field col-12">
                         <ToastUIEditor label="Description" @editor-blur="patchAdvisoryDescription"
                             v-model="advisory.description"></ToastUIEditor>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 field">
                         <ToastUIEditor label="Recommendation" @editor-blur="patchRecommendation"
                             v-model="advisory.recommendation"></ToastUIEditor>
                     </div>

@@ -29,16 +29,9 @@ class FindingQuerySet(models.QuerySet):
     def for_report(self, project):
         return self.for_project(project).filter(exclude_from_report=False)
 
-    def with_asset_type(self, asset_type):
-        if asset_type == "WEB_APPLICATION":
-            return self.filter(web_application__is_null=False)
-        elif asset_type == "HOST":
-            return self.filter(host__is_null=False)
-        elif asset_type == "SERVICE":
-            return self.filter(service__is_null=False)
-        elif asset_type == "MOBILE_APPLICATION":
-            return self.filter(mobile_application__is_null=False)
-        raise Exception("Invalid asset type")
+    def with_asset(self, asset):
+        kwargs = {asset.asset_type: asset.pk}
+        return self.filter(**kwargs)
 
     def with_severity(self, severity_name):
         severity = Severity[severity_name.upper()]
@@ -130,9 +123,7 @@ class Finding(models.Model):
         ordering = ["-severity"]
 
     def __str__(self):
-        return "{vuln} at {asset}".format(
-            vuln=self.vulnerability.name, asset=self.asset
-        )
+        return f"{self.vulnerability.name} ({self.asset})"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
