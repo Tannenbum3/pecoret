@@ -6,15 +6,22 @@ from pecoret.core.models import TimestampedModel
 class ReleaseType(models.IntegerChoices):
     DRAFT = 0, "Draft"
     FINAL = 1, "Final"
+    PREVIEW = 2, "Preview"
 
 
-class ReportReleaseManager(models.Manager):
+class ReportReleaseQuerySet(models.QuerySet):
     def for_project(self, project):
         return self.filter(report__project=project)
 
+    def for_report(self, report):
+        return self.filter(report=report)
+
+    def preview(self):
+        return self.filter(release_type=ReleaseType.PREVIEW)
+
 
 class ReportRelease(TimestampedModel):
-    objects = ReportReleaseManager()
+    objects = ReportReleaseQuerySet.as_manager()
     name = models.CharField(max_length=128)
     raw_source = models.TextField(blank=True, null=True)
     compiled_source = models.BinaryField(blank=True, null=True)
@@ -33,3 +40,26 @@ class ReportRelease(TimestampedModel):
             return DjangoQTask.objects.get(pk=self.task_id)
         except DjangoQTask.DoesNotExist:
             return DjangoQTask.objects.none()
+
+    def save(self, *args, **kwargs):
+        """
+        overwrite save method to perform clean
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        """
+        check if there is only one preview document, otherwise wipe ti
+        :return:
+        """
+        if not self.pk:
+            qs = ReportRelease.objects.for_report(self.report).filter(release_type=ReleaseType.PREVIEW)
+            if qs.exists():
+                # delete existing preview document
+                qs.delete()
+        return super().clean()

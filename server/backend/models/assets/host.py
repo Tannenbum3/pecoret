@@ -23,7 +23,7 @@ class Host(BaseAsset):
 
     @property
     def name(self):
-        return self.__str__
+        return self.__str__()
 
     def __str__(self):
         if not self.dns:

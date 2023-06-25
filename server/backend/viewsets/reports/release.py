@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_q.tasks import async_task
 from backend.serializers.reports.release import ReportReleaseSerializer
@@ -17,9 +18,11 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, ReportPermission]
 
     def get_queryset(self):
-        return ReportRelease.objects.for_project(self.request.project).filter(
-            report=self.request.report
-        )
+        qs = ReportRelease.objects.for_project(self.request.project).for_report(self.request.report)
+        if self.action == "list":
+            # exclude Preview documents from list view
+            qs = qs.exclude(release_type=ReleaseType.PREVIEW)
+        return qs
 
     def perform_create(self, serializer):
         instance = serializer.save(report=self.request.report)
@@ -36,3 +39,20 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
         filename = f"{document.name.lower()}-{ReleaseType(document.release_type).label.lower()}.{document.file_extension}"
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
         return response
+
+    @action(detail=False, methods=["get"])
+    def preview_document(self, *args, **kwargs):
+        """
+        get the ReleaseType.PREVIEW document details
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        obj = self.request.report
+        qs = ReportRelease.objects.for_project(self.request.project).for_report(obj).preview()
+        if qs.exists():
+            serializer = self.get_serializer(qs.get())
+            data = serializer.data
+        else:
+            data = {}
+        return Response(data)

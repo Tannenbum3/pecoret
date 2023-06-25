@@ -13,6 +13,11 @@ export default class ReportService {
         return api.get(url)
     }
 
+    getPreviewReportDocument(api, projectId, reportId){
+        let url = "/projects/" + projectId + "/reports/" + reportId + "/report-releases/preview_document/"
+        return api.get(url)
+    }
+
     createReport(api, projectId, data){
         let url = "/projects/" + projectId + "/reports/"
         return api.post(url, data)

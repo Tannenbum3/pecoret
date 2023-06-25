@@ -136,3 +136,20 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
             pk=self.document2.pk,
         )
         self.basic_status_code_check(url, self.client.get, 404)
+
+
+class ReportPreviewDocument(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.report1 = self.create_instance(Report, project=self.project1)
+        self.url = self.get_url("backend:report-release-list", project=self.project1.pk, report=self.report1.pk)
+        self.data = {"release_type": "Preview", "name": "Preview"}
+
+    def test_unique_preview_document(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        self.data["name"] = "second"
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        self.assertEqual(ReportRelease.objects.for_report(self.report1).count(), 1)
+        release = ReportRelease.objects.for_report(self.report1).get()
+        self.assertEqual(release.name, self.data["name"])
