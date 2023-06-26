@@ -55,6 +55,8 @@ class ProjectViewSet(PeCoReTModelViewSet):
                     ]
                 )
             ]
+        elif self.action == "pin_project":
+            return [permissions.PRESET_PENTESTER_OR_READONLY]
         return [permissions.PRESET_OWNER_OR_READ_ONLY()]
 
     @action(methods=["get"], detail=True)

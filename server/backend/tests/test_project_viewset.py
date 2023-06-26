@@ -121,3 +121,49 @@ class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(
                 self.url, self.client.post, 403, data=self.data
             )
+
+
+class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.url = self.get_url("backend:project-pin-project", pk=self.project1.pk)
+
+    def test_forbidden(self):
+        users = [
+            self.read_only1, self.management2, self.pentester2,
+            self.advisory_manager1, self.user1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.post, 403)
+
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.post, 200)
+
+
+class UnpinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.url = self.get_url("backend:project-pin-project", pk=self.project1.pk)
+
+    def test_forbidden(self):
+        users = [
+            self.read_only1, self.management2, self.pentester2,
+            self.advisory_manager1, self.user1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 403)
+
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 204)
