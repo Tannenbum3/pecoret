@@ -143,7 +143,7 @@ class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
         ]
         for user in users:
             self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.post, 200)
+            self.basic_status_code_check(self.url, self.client.post, 201)
 
 
 class UnpinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
