@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
 from backend.models import AdvisoryComment
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
-class AdvisoryCommentCreateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.data = {"comment": "test"}
@@ -36,7 +36,7 @@ class AdvisoryCommentCreateView(APITestCase, AdvisoryTestCaseMixin):
             )
 
 
-class AdvisoryCommentUpdateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.comment1 = self.create_instance(

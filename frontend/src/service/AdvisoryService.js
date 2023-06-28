@@ -55,7 +55,7 @@ export default class AdvisoryService {
     }
 
     getInbox(api, params){
-        let url = "/advisories/inbox/"
+        let url = "/advisory-management/inbox/"
         let config = {}
         if (params){
             config["params"] = params

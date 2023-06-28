@@ -140,7 +140,7 @@ export default {
                 </Dropdown>
               </template>
             </Column>
-            <Column field="is_draft" header="Is Draft?"></Column>
+            <Column field="user.username" header="User"></Column>
             <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
           </DataTable>
 

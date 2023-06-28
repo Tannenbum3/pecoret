@@ -1,10 +1,10 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import VulnerabilityTemplate
 from backend.models.advisory import Severity, Advisory
 
 
-class AdvisoryListViewTestCase(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:advisory-list")
@@ -49,35 +49,7 @@ class AdvisoryListViewTestCase(APITestCase, AdvisoryTestCaseMixin):
         self.assertEqual(response.json()["results"][0]["pk"], self.advisory1.pk)
 
 
-class AdvisoryInboxViewTestCase(APITestCase, AdvisoryTestCaseMixin):
-    def setUp(self) -> None:
-        self.init_mixin()
-        self.url = self.get_url("backend:advisory-inbox")
-
-    def test_allowed(self):
-        self.client.force_login(self.advisory_manager1)
-        response = self.basic_status_code_check(self.url, self.client.get, 200)
-        self.assertEqual(response.json()["count"], 1)
-        self.assertEqual(response.json()["results"][0]["pk"], self.advisory1.pk)
-
-    def test_forbidden(self):
-        users = [
-            self.pentester1,
-            self.pentester2,
-            self.user1,
-            self.read_only1,
-            self.management1,
-            self.management2,
-            self.vendor1,
-            self.vendor2,
-            self.read_only_vendor,
-        ]
-        for user in users:
-            self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.get, 403)
-
-
-class AdvisoryCreateViewTestCase(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:advisory-list")
@@ -125,7 +97,7 @@ class AdvisoryCreateViewTestCase(APITestCase, AdvisoryTestCaseMixin):
             )
 
 
-class AdvisoryUpdateViewTestCase(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:advisory-detail", pk=self.advisory1.pk)
@@ -199,7 +171,7 @@ class AdvisoryUpdateViewTestCase(APITestCase, AdvisoryTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
 
 
-class AdvisoryDestroyViewTestCase(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:advisory-detail", pk=self.advisory1.pk)

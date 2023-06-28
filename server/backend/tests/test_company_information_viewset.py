@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin, AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import CompanyInformation
 
 
-class CompanyInformationCreateView(APITestCase, AdvisoryTestCaseMixin):
+class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:company-information-list")
@@ -49,7 +49,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.delete, 403)
 
 
-class CompanyInformationListView(APITestCase, AdvisoryTestCaseMixin):
+class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:company-information-list")

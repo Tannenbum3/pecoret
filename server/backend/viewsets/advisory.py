@@ -162,20 +162,3 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         filename = f"advisory_{advisory.pk}.md"
         response["Content-Disposition"] = f"attachment;filename={filename}"
         return response
-
-    @action(detail=False, methods=["get"])
-    # pylint: disable=unused-argument
-    def inbox(self, _request, *args, **kwargs):
-        """lists the current inbox of ``Advisories``.
-        This list only contains submitted items (does not have the `is_draft` flag)
-
-        Returns:
-            HttpResponse: list of ``Advisories``
-        """
-        queryset = self.filter_queryset(Advisory.objects.for_advisory_management())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)

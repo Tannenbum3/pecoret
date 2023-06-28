@@ -209,12 +209,14 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 1)
+        # there is already one created during `setUp`
+        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 2)
 
     def test_management1(self):
         self.client.force_login(self.management1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 1)
+        # there is already one created during `setUp`
+        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 2)
 
     def test_forbidden(self):
         users = [

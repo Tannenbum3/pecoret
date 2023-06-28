@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "modeltranslation",
     "backend.apps.BackendConfig",
-    "checklists"
+    "advisories.apps.AdvisoriesConfig",
+    "checklists.apps.ChecklistsConfig"
 ]
 
 MIDDLEWARE = [
@@ -62,11 +63,6 @@ TEMPLATES = [
             ],
         },
     },
-    #{
-    #    "BACKEND": "django.template.backends.jinja2.Jinja2",
-    #    "APP_DIRS": True,
-    #    "DIRS": [Path(BASE_DIR) / "jinja2"]
-    #},
 ]
 
 WSGI_APPLICATION = "pecoret.wsgi.application"
@@ -128,12 +124,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Authentication
 AUTH_USER_MODEL = "backend.User"
 
-BUGHUNTING_INTERNAL_ID_PREFIX = "pecoret"
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
-        #'backend.authentication.TokenExpiryAuthentication',
         "backend.authentication.ProjectTokenAuthentication",
     ],
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",

@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.advisory_timeline import AdvisoryTimeline
 
 
-class AdvisoryTimelineCreateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryTimelineCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
@@ -52,7 +52,7 @@ class AdvisoryTimelineCreateView(APITestCase, AdvisoryTestCaseMixin):
             self.client.force_login(user)
 
 
-class AdvisoryTimelineDestroyView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
@@ -132,7 +132,7 @@ class AdvisoryTimelineDestroyView(APITestCase, AdvisoryTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 404)
 
 
-class AdvisoryTimelineUpdateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
@@ -224,7 +224,7 @@ class AdvisoryTimelineUpdateView(APITestCase, AdvisoryTestCaseMixin):
             )
 
 
-class AdvisoryTimelineListView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)

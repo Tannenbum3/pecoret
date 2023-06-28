@@ -65,3 +65,7 @@ class PeCoReTUpdateRetrieveModelViewSet(
     viewsets.GenericViewSet
 ):
     pass
+
+
+class GenericViewSet(viewsets.GenericViewSet):
+    pass

@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.report_templates import ReportTemplate
 
 
-class AdvisoryExportViewTestCase(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.report_template = ReportTemplate.objects.get(name="default_template")
@@ -40,7 +40,7 @@ class AdvisoryExportViewTestCase(APITestCase, AdvisoryTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.get, 403)
 
 
-class AdvisoryMarkdownExportView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryMarkdownExportView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(

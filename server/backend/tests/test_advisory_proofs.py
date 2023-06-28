@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.advisory_proof import AdvisoryProof
 
 
-class AdvisoryProofCreateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryProofCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.data = {"title": "first_proof", "text": "lorem ipsum"}
@@ -37,7 +37,7 @@ class AdvisoryProofCreateView(APITestCase, AdvisoryTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
 
-class AdvisoryProofListView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryProofListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.proof1 = self.create_instance(AdvisoryProof, advisory=self.advisory1)
@@ -72,11 +72,11 @@ class AdvisoryProofListView(APITestCase, AdvisoryTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.get, 403)
 
 
-class AdvisoryProofUpdateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryProofUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         pass
 
 
-class AdvisoryProofDeleteView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryProofDeleteView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         pass

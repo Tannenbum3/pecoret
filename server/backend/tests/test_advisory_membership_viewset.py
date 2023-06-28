@@ -1,10 +1,10 @@
 from django.core.mail import outbox
 from rest_framework.test import APITestCase
-from pecoret.core.test import AdvisoryTestCaseMixin
+from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.advisory_membership import Roles
 
 
-class AdvisoryMembershipCreateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
@@ -63,7 +63,7 @@ class AdvisoryMembershipCreateView(APITestCase, AdvisoryTestCaseMixin):
             )
 
 
-class AdvisoryMembershipListView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.membership2 = self.assign_advisory_role(
@@ -126,12 +126,12 @@ class AdvisoryMembershipListView(APITestCase, AdvisoryTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.get, 403)
 
 
-class AdvisoryMembershipUpdateView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryMembershipUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
 
 
-class AdvisoryMembershipDestroyView(APITestCase, AdvisoryTestCaseMixin):
+class AdvisoryMembershipDestroyView(APITestCase, PeCoReTTestCaseMixin):
     """test if the membership destroy view is handled correctly
     we should check, if the advisory_manager is the only one allowed to delete memberships
     """
