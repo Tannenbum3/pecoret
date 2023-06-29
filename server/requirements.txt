@@ -3,7 +3,7 @@ djangorestframework==3.14.0
 django-filter==23.2
 Pillow==9.5.0
 django-cors-headers==4.1.0
-django_q2==1.5.3
+django_q2==1.5.4
 weasyprint==58.1
 libsass==0.22.0
 django-modeltranslation==0.18.10
