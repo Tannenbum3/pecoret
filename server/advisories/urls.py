@@ -7,6 +7,7 @@ app_name = "advisories"
 router = DefaultRouter()
 
 router.register("inbox", viewsets.AdvisoryManagementInboxViewSet, "inbox")
+router.register("labels", viewsets.LabelViewSet, "label")
 
 urlpatterns = [
     path('advisory-management/', include(router.urls))

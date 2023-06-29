@@ -1,7 +1,6 @@
 from django.http.response import HttpResponse
 from django.conf import settings
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from backend.models.advisory import Advisory, Roles
 from backend.serializers.advisory import (
     AdvisorySerializer,
@@ -13,6 +12,7 @@ from backend import permissions
 from backend.filters.advisory import AdvisoryFilter
 from backend.models import ReportTemplate
 from backend.tasks.finding_export import export_advisory, export_advisory_markdown
+from advisories.serializers.advisory import AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
@@ -68,12 +68,6 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
                     read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
                 )()
             ]
-        if self.action == "inbox":
-            return [
-                permissions.GroupPermission(
-                    read_write_groups=[permissions.Groups.ADVISORY_MANAGEMENT]
-                )()
-            ]
         if self.action == "create":
             return [
                 permissions.GroupPermission(
@@ -126,9 +120,14 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         if self.action == "create":
             return AdvisoryCreateSerializer
         if self.action in ["list", "retrieve"]:
+            if self.request.user.groups.filter(name="Advisory Management").exists():
+                return AdvisoryAdvisoryManagementSerializer
             return AdvisorySerializer
         if self.action == "timeline":
             return AdvisoryTimelineSerializer
+        if self.action in ["partial_update", "update"]:
+            if self.request.user.groups.filter(name="Advisory Management").exists():
+                return AdvisoryManagementUpdateSerializer
         return AdvisoryUpdateSerializer
 
     @action(detail=True, methods=["get"])

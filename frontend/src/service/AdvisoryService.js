@@ -148,13 +148,32 @@ export default class AdvisoryService {
         return api.patch(url, data)
     }
 
-    getProof(api, advisoryId, proofId){
+    getProof(api, advisoryId, proofId) {
         let url = "/advisories/" + advisoryId + "/proofs/" + proofId + "/"
         return api.get(url)
     }
 
-    deleteProof(api, advisoryId, proofId){
+    deleteProof(api, advisoryId, proofId) {
         let url = "/advisories/" + advisoryId + "/proofs/" + proofId + "/"
+        return api.delete(url)
+    }
+
+    getLabels(api, params) {
+        let url = "/advisory-management/labels/"
+        let config = {}
+        if (params) {
+            config["params"] = params
+        }
+        return api.get(url, config)
+    }
+
+    createLabel(api, data) {
+        let url = "/advisory-management/labels/"
+        return api.post(url, data)
+    }
+
+    deleteLabel(api, id) {
+        let url = "/advisory-management/labels/" + id + "/"
         return api.delete(url)
     }
 }
