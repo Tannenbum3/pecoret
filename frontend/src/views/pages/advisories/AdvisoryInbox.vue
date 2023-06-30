@@ -2,6 +2,7 @@
 import AdvisoryService from '@/service/AdvisoryService'
 import SeverityBadge from '@/components/SeverityBadge.vue'
 import BlankSlate from '@/components/BlankSlate.vue'
+import AdvisoryLabelBadge from "@/components/AdvisoryLabelBadge.vue";
 
 
 export default {
@@ -12,7 +13,7 @@ export default {
       loading: false,
       breadcrumbs: [
         {
-          label: 'Advisories',
+          label: 'Advisory Inbox',
           disabled: true
         }
       ],
@@ -69,7 +70,7 @@ export default {
       })
     }
   },
-  components: {SeverityBadge, BlankSlate}
+  components: {SeverityBadge, BlankSlate, AdvisoryLabelBadge}
 }
 </script>
 <template>
@@ -142,6 +143,13 @@ export default {
             </Column>
             <Column field="user.username" header="User"></Column>
             <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
+            <Column header="Labels">
+              <template #body="slotProps">
+                <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :color="label.color"
+                                    :name="label.name">
+                </AdvisoryLabelBadge>
+              </template>
+            </Column>
           </DataTable>
 
         </template>

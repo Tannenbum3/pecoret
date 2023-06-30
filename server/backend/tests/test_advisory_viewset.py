@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import VulnerabilityTemplate
 from backend.models.advisory import Severity, Advisory
+from advisories.models.label import Label
 
 
 class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -160,6 +161,20 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(
                 self.url2, self.client.patch, 403, data=self.data
             )
+
+    def test_advisory_management_label(self):
+        self.client.force_login(self.advisory_manager1)
+        label = self.create_instance(Label, color="#111111")
+        self.data["labels"] = [label.pk]
+        self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+        self.assertEqual(Advisory.objects.filter(pk=self.advisory1.pk, labels__in=[label.pk]).count(), 1)
+
+    def test_label_forbidden(self):
+        self.client.force_login(self.pentester1)
+        label = self.create_instance(Label, color="#111111")
+        self.data["labels"] = [label.pk]
+        self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+        self.assertEqual(Advisory.objects.filter(pk=self.advisory1.pk, labels__in=[label.pk]).count(), 0)
 
     def test_submitter_is_advisory_management(self):
         self.add_user_to_group(self.pentester1, "Advisory Management")

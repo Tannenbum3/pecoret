@@ -118,6 +118,7 @@ class Advisory(TimestampedModel):
     vendor_name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
+    labels = models.ManyToManyField('advisories.Label', blank=True)
 
     def __str__(self):
         return self.advisory_id

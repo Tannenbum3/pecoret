@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 
 const router = createRouter({
@@ -191,6 +191,16 @@ const router = createRouter({
                                     component: () => import('@/views/pages/projects/checklists/ChecklistList.vue')
                                 },
                             ]
+                        }
+                    ]
+                },
+                {
+                    path: '/advisory-management',
+                    children: [
+                        {
+                            name: 'AdvisoryManagementLabelList',
+                            path: '/advisory-management/labels',
+                            component: () => import('@/views/pages/advisories/LabelList.vue')
                         }
                     ]
                 },
