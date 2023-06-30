@@ -1,6 +1,6 @@
 <template>
-  <div class="vue-simplemde border-0 border-round">
-    <textarea class="vue-simplemde-textarea p-3" :name="name" :value="modelValue"
+  <div class="border-0 border-round">
+    <textarea class="p-3" :name="name" :value="modelValue"
               @blur="this.$emit('blur')"
               @input="handleInput($event.target.value)"/>
   </div>
@@ -80,9 +80,9 @@ export default {
         renderingConfig: {},
         promptURLs: false,
         uploadImage: false,
+        maxHeight: "400px",
         hideIcons: ["guide", "image", "fullscreen", "side-by-side"],
         imagesPreviewHandler: (src) => {
-          console.log(src)
         },
         imageUploadFunction: (file, onSuccess, onError) => {
           const reader = new FileReader();
@@ -196,6 +196,10 @@ export default {
 
 .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
   background: inherit !important;
+}
+
+.CodeMirror-selected {
+  background-color: var(--text-color-secondary) !important;
 }
 
 .editor-preview pre {

@@ -64,7 +64,7 @@ export default {
           })
         }
       ]
-      if (this.authStore.groups.isAdvisoryManagement) {
+      if (this.authStore.groups.isAdvisoryManagement === true) {
         items.push({
           label: 'Inbox',
           to: this.$router.resolve({
