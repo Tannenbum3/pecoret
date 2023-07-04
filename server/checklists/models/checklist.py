@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from pecoret.core.models import PeCoReTBaseModel, AssetRelatedModel
 from .category import AssetCategory
 from .item import AssetItem, Item
@@ -26,6 +27,10 @@ class Checklist(BaseChecklist):
 class AssetChecklistQuerySet(models.QuerySet):
     def for_project(self, project):
         return self.filter(project=project)
+
+    def with_asset(self, asset):
+        kwargs = {asset.asset_type: asset.pk}
+        return self.filter(**kwargs)
 
 
 class AssetChecklistManager(models.Manager):
@@ -58,6 +63,7 @@ class AssetChecklistManager(models.Manager):
 
 
 class AssetChecklist(AssetRelatedModel, BaseChecklist):
+    checklist_id = models.CharField(max_length=128)
     objects = AssetChecklistManager.from_queryset(AssetChecklistQuerySet)()
     categories = models.ManyToManyField("checklists.AssetCategory")
 
@@ -75,3 +81,8 @@ class AssetChecklist(AssetRelatedModel, BaseChecklist):
         return AssetItem.objects.for_category(
             models.Subquery(self.categories.values('pk'))
         ).closed().count()
+
+    def clean(self):
+        if AssetChecklist.objects.filter(checklist_id=self.checklist_id).with_asset(self.asset).exists():
+            raise ValidationError({'asset': "checklist already exist for this asset"})
+        return super().clean()

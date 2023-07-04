@@ -1,59 +1,62 @@
 <script>
 import CompanyService from '@/service/CompanyService'
-import ToastUIEditor from '@/components/elements/forms/ToastUIEditor.vue'
+import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
 
 
 export default {
-    name: 'CompanyInformationCreateDialog',
-    props: {
-        companyId: {
-            required: true
-        }
+  name: 'CompanyInformationCreateDialog',
+  props: {
+    companyId: {
+      required: true
+    }
+  },
+  emits: ["object-created"],
+  data() {
+    return {
+      visible: false,
+      companyService: new CompanyService(),
+      text: ""
+    }
+  },
+  methods: {
+    close() {
+      this.visible = false
     },
-    emits: ["object-created"],
-    data() {
-        return {
-            visible: false,
-            companyService: new CompanyService(),
-            text: ""
-        }
+    open() {
+      this.visible = true
     },
-    methods: {
-        close() {
-            this.visible = false
-        },
-        open() {
-            this.visible = true
-        },
-        create() {
-            let data = {
-                text: this.text,
-                company: this.companyId
-            }
-            this.companyService.createCompanyInformation(data).then(() => {
-                this.$toast.add(
-                    { severity: 'success', summary: 'Created!', detail: 'Company Information created!', life: 3000 }
-                )
-                this.$emit('object-created')
-                this.visible = false
-            })
-        }
-    },
-    components: { ToastUIEditor }
+    create() {
+      let data = {
+        text: this.text,
+        company: this.companyId
+      }
+      this.companyService.createCompanyInformation(this.$api, data).then(() => {
+        this.$toast.add(
+            {severity: 'success', summary: 'Created!', detail: 'Company Information created!', life: 3000}
+        )
+        this.$emit('object-created')
+        this.visible = false
+      })
+    }
+  },
+  components: {MarkdownEditor}
 }
 </script>
 
 <template>
-    <Button icon="fa fa-plus" label="Company Information" @click="open" outlined></Button>
+  <Button icon="fa fa-plus" label="Company Information" @click="open" outlined></Button>
 
-    <Dialog header="Create Company Information" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="flex flex-column gap-2">
-            <ToastUIEditor v-model="text" label="Text"></ToastUIEditor>
-        </div>
+  <Dialog header="Create Company Information" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
+    <div class="grid formgrid p-fluid">
+      <div class="field col-12">
+        <label for="text">Text</label>
+        <MarkdownEditor v-model="text"></MarkdownEditor>
+      </div>
+    </div>
 
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    <template #footer>
+      <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
+      <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+    </template>
+  </Dialog>
 </template>

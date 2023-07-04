@@ -33,21 +33,26 @@ export default class CompanyService {
         return api.patch(url, data)
     }
 
-    getCompanyInformations(companyId){
+    getCompanyInformations(companyId) {
         let url = "/company-information/"
         let config = {params: {company: companyId}}
         return api.get(url, config)
     }
 
-    createCompanyInformation(data){
+    createCompanyInformation(api, data) {
         let url = "/company-information/"
         return api.post(url, data)
     }
 
-    getContacts(companyId, params){
+    deleteCompanyInformation(api, id) {
+        let url = "/company-information/" + id + "/"
+        return api.delete(url)
+    }
+
+    getContacts(companyId, params) {
         let url = "/companies/" + companyId + "/contacts/"
         let config = {}
-        if (params){
+        if (params) {
             config["params"] = params
         }
         return api.get(url, config)

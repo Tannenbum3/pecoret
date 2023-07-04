@@ -201,10 +201,9 @@ export default {
 
   <div class="grid">
     <div class="col-12">
+      <ReportTabMenu class="surface-card"></ReportTabMenu>
       <div class="card">
-        <ReportTabMenu class="surface-card"></ReportTabMenu>
-
-        <div class="grid mt-2">
+        <div class="grid">
           <div class="col-6">
           </div>
           <div class="col-6">

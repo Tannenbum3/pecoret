@@ -149,6 +149,9 @@ export default {
       if (!this.forceSync && this.isValueUpdateFromInner) {
         this.isValueUpdateFromInner = false;
       } else {
+        //if(this.simplemde === null){
+        //  this.initialize()
+        //}
         const pos = this.simplemde.codemirror.getCursor();
         this.simplemde.value(val);
         this.simplemde.codemirror.setSelection(pos);
