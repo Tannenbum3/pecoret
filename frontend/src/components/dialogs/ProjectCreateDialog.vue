@@ -1,12 +1,11 @@
 <script>
 import ProjectService from '@/service/ProjectService';
 import CompanyService from '@/service/CompanyService';
-import MarkdownEditor from '@/components/elements/forms/MarkdownEditor.vue';
 import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
 
 export default {
-    name"ProjectCreateDialog"g',
-    emit"object-created"ted'],
+    name: 'ProjectCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -76,9 +75,9 @@ export default {
             let data = {
                 pentest_types: this.model.pentest_types,
                 name: this.model.name,
-                start_date: this.model.start_date.toISOString().split("T")[0],
-                end_date: this.model.end_date.toISOString().split("T")[0],
-                status: "Open",
+                start_date: this.model.start_date.toISOString().split('T')[0],
+                end_date: this.model.end_date.toISOString().split('T')[0],
+                status: 'Open',
                 test_method: this.model.test_method,
                 language: this.model.language,
                 require_cvss_base_score: this.model.require_cvss_base_score,
@@ -97,7 +96,7 @@ export default {
             });
         }
     },
-    components: { MarkdownEditor, PentestTypeSelectField }
+    components: { PentestTypeSelectField }
 };
 </script>
 
