@@ -1,12 +1,12 @@
 <script>
 import ProjectService from '@/service/ProjectService';
 import CompanyService from '@/service/CompanyService';
-import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
 import MarkdownEditor from '@/components/elements/forms/MarkdownEditor.vue';
+import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
 
 export default {
-    nam"ProjectCreateDialog"og',
-    emits: ['object-created'],
+    name"ProjectCreateDialog"g',
+    emit"object-created"ted'],
     data() {
         return {
             visible: false,
@@ -26,40 +26,40 @@ export default {
                 { title: 'Greybox', value: 'Grey Box' },
                 { title: 'Blackbox', value: 'Black Box' },
                 { title: 'Whitebox', value: 'White Box' }
-            ];,
+            ],
             companyChoices: null,
-            languageCho;ices: null,
-            service: new ProjectSe;rvice(),
+            languageChoices: null,
+            service: new ProjectService(),
             companyService: new CompanyService()
         };
     },
-  ;  methods: {
+    methods: {
         close() {
             this.visible = false;
         },
         open() {
-            this.visible = tr;ue;
-     ;   },
+            this.visible = true;
+        },
         onFocusCompany() {
-            if (this.comp;anyChoices) {
+            if (this.companyChoices) {
                 return;
             }
-            this.companyService.getCompan;ies().then((response) => {
+            this.companyService.getCompanies().then((response) => {
                 this.companyChoices = response.data.results;
             });
         },
-     ;   onFocu;sLanguages() {
+        onFocusLanguages() {
             this.getLanguages();
         },
-        onFilterCo;mpany(event) {
+        onFilterCompany(event) {
             let params = {
                 search: event.value
             };
-            this.company;Service.g;etCompanies(params).then((response) => {
+            this.companyService.getCompanies(params).then((response) => {
                 this.companyChoices = response.data.results;
             });
         },
-        getLa;nguages(); {
+        getLanguages() {
             if (this.languageChoices) {
                 return;
             }
@@ -75,11 +75,13 @@ export default {
         create() {
             let data = {
                 pentest_types: this.model.pentest_types,
-           ;     name: this.model.name,
-                start_date: this.model.start_date.toISOString().split('T')[0],
-           "success"date: this.model.end_"Created"OString().split('T')[0],
-                s"Project created successfully!"test_method;: this.model.test_me"object-created"      language: ;this.model.language,
-        ;        r;equire_cvss_base_score: this.model.require_cvss_base_score,
+                name: this.model.name,
+                start_date: this.model.start_date.toISOString().split("T")[0],
+                end_date: this.model.end_date.toISOString().split("T")[0],
+                status: "Open",
+                test_method: this.model.test_method,
+                language: this.model.language,
+                require_cvss_base_score: this.model.require_cvss_base_score,
                 description: this.model.description,
                 company: this.model.company
             };
@@ -95,7 +97,7 @@ export default {
             });
         }
     },
-    components: { PentestTypeSelectField, MarkdownEditor }
+    components: { MarkdownEditor, PentestTypeSelectField }
 };
 </script>
 
@@ -140,7 +142,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
-                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+                <Textarea v-model="model.description" autoResize rows="5" cols="30"></Textarea>
             </div>
         </div>
 
