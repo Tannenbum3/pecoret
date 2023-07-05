@@ -1,11 +1,10 @@
 <script>
-import UserAccountService from '@/service/UserAccountService'
-import ToastUIEditor from '../elements/forms/ToastUIEditor.vue';
-
+import UserAccountService from '@/service/UserAccountService';
+import MarkdownEditor from '@/components/elements/forms/MarkdownEditor.vue';
 
 export default {
-    name: "UserAccountCreateDialog",
-    emits: ["object-created"],
+    name: 'UserAccountCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -13,8 +12,7 @@ export default {
             model: {
                 username: null,
                 password: null,
-                role: null,
-                compromised: false,
+                role: null""                compromised: false,
                 description: ''
             },
             accountService: new UserAccountService()
@@ -37,18 +35,18 @@ export default {
             };
             this.accountService.createAccount(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Account added!",
+                    severity: 'success',
+                    summary: 'Account added!',
                     life: 3000,
-                    detail: "Account added to project!"
+                    detail: 'Account added to project!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }
     },
-    components: { ToastUIEditor }
-}
+    components: { MarkdownEditor }
+};
 </script>
 
 <template>
@@ -69,7 +67,8 @@ export default {
                 <InputText id="role" v-model="model.role"></InputText>
             </div>
             <div class="field col-12">
-                <ToastUIEditor label="Description" v-model="model.description"></ToastUIEditor>
+                <label for="description">Description</label>
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
@@ -78,7 +77,6 @@ export default {
                 </div>
             </div>
         </div>
-
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>

@@ -1,8 +1,8 @@
 <script>
-import markdown from "@/utils/markdown"
-import FindingService from '@/service/FindingService'
-import ToastUIEditor from '@/components/elements/forms/ToastUIEditor.vue';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue'
+import markdown from '@/utils/markdown';
+import FindingService from '@/service/FindingService';
+import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import MarkdownEditor from '@/components/elements/forms/MarkdownEditor.vue';
 
 export default {
     name: 'FindingCommentList',
@@ -13,7 +13,7 @@ export default {
             findingService: new FindingService(),
             loading: false,
             model: {
-                comment: ""
+                comment: ''
             },
             items: [],
             breadcrumbs: [
@@ -30,33 +30,38 @@ export default {
                     disabled: true
                 }
             ]
-        }
+        };
     },
     methods: {
         renderMarkdown(text) {
-            return markdown.renderMarkdown(text)
+            return markdown.renderMarkdown(text);
         },
         getComments() {
-            this.loading = true
-            this.findingService.getComments(this.projectId, this.findingId).then((response) => {
-                this.items = response.data.results
-            }).finally(() => { this.loading = false })
+            this.loading = true;
+            this.findingService
+                .getComments(this.projectId, this.findingId)
+                .then((response) => {
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         saveNewComment() {
             let data = {
                 comment: this.model.comment
-            }
+            };
             this.findingService.createComment(this.$api, this.projectId, this.findingId, data).then((response) => {
-                this.model.comment = ""
-                this.getComments()
-            })
+                this.model.comment = '';
+                this.getComments();
+            });
         }
     },
     mounted() {
-        this.getComments()
+        this.getComments();
     },
-    components: {ToastUIEditor, FindingTabMenu}
-}
+    components: { MarkdownEditor, FindingTabMenu }
+};
 </script>
 
 <template>
@@ -74,7 +79,7 @@ export default {
                 </div>
             </div>
             <div class="card mt-3">
-                <ToastUIEditor v-model="model.comment"></ToastUIEditor>
+                <MarkdownEditor v-model="model.comment"></MarkdownEditor>
                 <div class="flex justify-content-end">
                     <Button @click="saveNewComment" label="Save"></Button>
                 </div>

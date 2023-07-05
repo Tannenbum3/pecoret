@@ -1,11 +1,9 @@
 <script>
-import CompanyService from '@/service/CompanyService'
-import ToastUIEditor from '@/components/elements/forms/ToastUIEditor.vue'
-
+import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'ContactCreateDialog',
-    emits: ["object-created"],
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -19,14 +17,14 @@ export default {
                 pgp_public_key: null,
                 email: null
             }
-        }
+        };
     },
     methods: {
         close() {
-            this.visible = false
+            this.visible = false;
         },
         open() {
-            this.visible = true
+            this.visible = true;
         },
         create() {
             let data = {
@@ -36,18 +34,16 @@ export default {
                 pgp_public_key: this.model.pgp_public_key,
                 email: this.model.email,
                 role: this.model.role
-            }
+            };
             this.companyService.createContact(this.$api, this.companyId, data).then(() => {
-                this.$toast.add(
-                    { severity: 'success', summary: 'Created!', detail: 'Contact created for company!', life: 3000 }
-                )
-                this.$emit('object-created')
-                this.visible = false
-            })
+                this.$toast.add({ severity: 'success', summary: 'Created!', detail: 'Contact created for company!', life: 3000 });
+                this.$emit('object-created');
+                this.visible = false;
+            });
         }
     },
-    components: { ToastUIEditor }
-}
+    components: {}
+};
 </script>
 
 <template>
@@ -78,8 +74,6 @@ export default {
             <label for="pgp_public_key">PGP Public Key</label>
             <Textarea id="pgp_public_key" v-model="model.pgp_public_key"></Textarea>
         </div>
-
-
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
