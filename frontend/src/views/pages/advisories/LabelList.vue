@@ -125,7 +125,7 @@ export default defineComponent({
           <Column field="description" header="Description"></Column>
           <Column header="Preview">
             <template #body="slotProps">
-              <AdvisoryLabelBadge :color="slotProps.data.color" :name="slotProps.data.name"></AdvisoryLabelBadge>
+              <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
             </template>
           </Column>
           <Column header="Actions">

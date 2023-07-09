@@ -145,8 +145,7 @@ export default {
             <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
             <Column header="Labels">
               <template #body="slotProps">
-                <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :color="label.color"
-                                    :name="label.name">
+                <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label">
                 </AdvisoryLabelBadge>
               </template>
             </Column>

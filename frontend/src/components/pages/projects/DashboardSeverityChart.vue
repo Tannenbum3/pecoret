@@ -50,7 +50,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Card class="h-full">
+  <Card class="card">
     <template #title>Severities</template>
     <template #content>
       <div class="flex justify-content-center">

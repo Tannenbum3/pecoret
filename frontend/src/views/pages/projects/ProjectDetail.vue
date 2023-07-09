@@ -6,6 +6,7 @@ import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
 import ProjectUpdateDialog from "@/components/dialogs/ProjectUpdateDialog.vue";
 import markdown from "@/utils/markdown";
 import DashboardSeverityChart from "@/components/pages/projects/DashboardSeverityChart.vue";
+import DashboardFindingsCount from "@/components/pages/projects/DashboardFindingsCount.vue";
 
 
 const projectService = new ProjectService();
@@ -83,7 +84,13 @@ export default {
       return this.project.start_date + " - " + this.project.end_date;
     }
   },
-  components: { DetailCardWithIcon, ProjectUpdateDialog, InfoCardWithForm, DashboardSeverityChart }
+  components: {
+    DashboardFindingsCount,
+    DetailCardWithIcon,
+    ProjectUpdateDialog,
+    InfoCardWithForm,
+    DashboardSeverityChart
+  }
 };
 </script>
 
@@ -118,13 +125,13 @@ export default {
       </InfoCardWithForm>
     </div>
     <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-      <DetailCardWithIcon title="Pin Project" icon="fa-pin" :text="project.pinned"></DetailCardWithIcon>
+      <DetailCardWithIcon title="Pin Project" icon="fa fa-thumbtack" :text="project.pinned"></DetailCardWithIcon>
     </div>
   </div>
 
-  <div class="grid mt-3">
-    <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-      <Card class="h-full">
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+      <Card class="card">
         <template #title>Lastest Findings</template>
         <template #content>
           <DataView :value="latestFindings">
@@ -149,12 +156,14 @@ export default {
 
         </template>
       </Card>
+
+      <DashboardFindingsCount></DashboardFindingsCount>
     </div>
-    <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+    <div class="col-12 md:col-6 lg:col-6 xl:col-4">
       <DashboardSeverityChart></DashboardSeverityChart>
     </div>
-    <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-      <Card class="h-full">
+    <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+      <Card class="card">
         <template #title>Information</template>
         <template #content>
           <div class="grid">
@@ -175,14 +184,15 @@ export default {
           </div>
         </template>
       </Card>
-    </div>
-    <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-      <Card class="h-full">
+
+      <Card class="card">
         <template #title>Description</template>
         <template #content>
           <div v-html="renderMarkdown(project.description)"></div>
         </template>
       </Card>
     </div>
+
   </div>
+
 </template>
