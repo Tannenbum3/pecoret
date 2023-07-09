@@ -5,7 +5,7 @@ from backend.serializers.assets.host import HostSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 from backend.models import Host, Service, MobileApplication, WebApplication
-from pecoret.core.serializers import AssetField
+from pecoret.core.serializers import AssetGenericRelatedField
 
 
 class ChecklistIdField(serializers.Field):
@@ -33,21 +33,17 @@ class ChecklistSerializer(serializers.ModelSerializer):
         ]
 
 
-ASSET_SERIALIZERS = {
-    "web_application": WebApplicationSerializer(WebApplication.objects.all()),
-    "host": HostSerializer(Host.objects.all()),
-    "service": MinimalServiceSerializer(Service.objects.all()),
-    "mobile_application": MobileApplicationSerializer(MobileApplication.objects.all()),
-}
-
-
 class AssetChecklistSerializer(ChecklistSerializer):
-    asset = AssetField(serializers=ASSET_SERIALIZERS)
-    # categories = AssetCategorySerializer(many=True, read_only=True)
+    component = AssetGenericRelatedField({
+        WebApplication: WebApplicationSerializer(),
+        Host: HostSerializer(),
+        Service: MinimalServiceSerializer(),
+        MobileApplication: MobileApplicationSerializer()
+    })
 
     class Meta:
         model = AssetChecklist
-        fields = ChecklistSerializer.Meta.fields + ["asset"]
+        fields = ChecklistSerializer.Meta.fields + ["component"]
 
 
 class AssetChecklistCreateSerializer(AssetChecklistSerializer):
@@ -55,7 +51,7 @@ class AssetChecklistCreateSerializer(AssetChecklistSerializer):
 
     class Meta:
         model = AssetChecklist
-        fields = ["checklist_id", "asset"]
+        fields = ["checklist_id", "component"]
 
     def create(self, validated_data):
         return AssetChecklist.objects.create_from_checklist(**validated_data)

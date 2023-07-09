@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+from backend.models.finding import Finding
 from .base import BaseAsset
 
 
@@ -9,7 +11,12 @@ class WebApplication(BaseAsset):
     name = models.CharField(max_length=256)
     base_url = models.URLField()
     version = models.CharField(max_length=128, blank=True, null=True)
-
+    findings = GenericRelation(Finding, object_id_field='component_object_id',
+                               related_query_name="web_application",
+                               content_type_field='component_content_type')
+    checklists = GenericRelation('checklists.AssetChecklist', object_id_field='component_object_id',
+                                 related_query_name="web_application",
+                                 content_type_field='component_content_type')
     asset_type = "web_application"
 
     class Meta:

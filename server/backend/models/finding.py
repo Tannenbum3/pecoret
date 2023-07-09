@@ -5,13 +5,11 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from .vulnerability import Severity, ProjectVulnerability
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
-from .assets.web_application import WebApplication
-from .assets.host import Host
-from .assets.service import Service
-from .assets.mobile_application import MobileApplication
 from .cvss_score import CVSSBaseScore
 from .owasp_risk_rating import OWASPRiskRating
 
@@ -30,8 +28,7 @@ class FindingQuerySet(models.QuerySet):
         return self.for_project(project).filter(exclude_from_report=False)
 
     def with_asset(self, asset):
-        kwargs = {asset.asset_type: asset.pk}
-        return self.filter(**kwargs)
+        return self.filter(**{asset.asset_type: asset.pk})
 
     def with_severity(self, severity_name):
         severity = Severity[severity_name.upper()]
@@ -76,6 +73,11 @@ class FindingManager(models.Manager):
 
 
 class Finding(models.Model):
+    component_choices = models.Q(app_label="backend", model="webapplication") | \
+                        models.Q(app_label="backend", model="service") | \
+                        models.Q(app_label="backend", model="host") | \
+                        models.Q(app_label="backend", model="mobileapplication")
+
     objects = FindingManager.from_queryset(FindingQuerySet)()
     project = models.ForeignKey(
         "backend.Project", editable=False, on_delete=models.CASCADE
@@ -105,25 +107,20 @@ class Finding(models.Model):
     date_retest = models.DateField(null=True, blank=True)
     retest_results = models.TextField(null=True, blank=True)
 
-    # assets
-    assets = ["web_application", "host", "service", "mobile_application"]
-
-    web_application = models.ForeignKey(
-        WebApplication, on_delete=models.CASCADE, null=True, blank=True
-    )
-    mobile_application = models.ForeignKey(
-        MobileApplication, on_delete=models.CASCADE, null=True, blank=True
-    )
-    host = models.ForeignKey(Host, on_delete=models.CASCADE, null=True, blank=True)
-    service = models.ForeignKey(
-        Service, on_delete=models.CASCADE, null=True, blank=True
-    )
+    # affected components
+    component_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
+                                               limit_choices_to=component_choices)
+    component_object_id = models.PositiveSmallIntegerField()
+    component = GenericForeignKey('component_content_type', 'component_object_id')
 
     class Meta:
         ordering = ["-severity"]
+        indexes = [
+            models.Index(fields=['component_content_type', 'component_object_id'])
+        ]
 
     def __str__(self):
-        return f"{self.vulnerability.name} ({self.asset})"
+        return f"{self.vulnerability.name} ({self.component})"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -135,38 +132,6 @@ class Finding(models.Model):
             return True
         return False
 
-    @property
-    def asset(self):
-        for asset in self.assets:
-            if getattr(self, asset):
-                return getattr(self, asset)
-        return None
-
-    @asset.setter
-    def asset(self, value):
-        for field, value in self.asset_field_values(value).items():
-            setattr(self, field, value)
-
-    def asset_field_values(self, value):
-        found = False
-        fields = {}
-        for asset in self.assets:
-            if isinstance(value, self._meta.get_field(asset).related_model):
-                fields[asset] = value
-                found = True
-            else:
-                fields[asset] = None
-        if not found:
-            raise ValueError(f"{value} is no a valid asset")
-        return fields
-
-    @property
-    def asset_type(self):
-        for asset in self.assets:
-            if getattr(self, asset):
-                return asset
-        return None
-
     def save(self, *args, **kwargs):
         if not self.finding_date:
             self.finding_date = timezone.now()
@@ -176,19 +141,10 @@ class Finding(models.Model):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        # FIXME: remove workaround for django-admin which does model.clean on form submissions
-        # Since finding.project is not yet set, this will through an error
-        if not hasattr(self, "project"):
-            self.project = self.vulnerability.project
-        for asset in self.assets:
-            if getattr(self, asset) and getattr(self, asset).project != self.project:
-                raise ValidationError(
-                    {
-                        asset: f"The {asset} does not belong to the vulnerability's project."
-                    }
-                )
-        if not self.asset:
-            raise ValidationError({"asset": "is required"})
+        if not self.component:
+            raise ValidationError({'component': 'component is required'})
+        if self.component.project != self.project:
+            raise ValidationError({"component": "component does not belong to project"})
         return super().clean()
 
     @property

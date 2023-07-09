@@ -1,12 +1,16 @@
 from django_filters import rest_framework as filters
-from backend.models import WebApplication
 from checklists.models import AssetChecklist
-from pecoret.core.utils.filters import filter_model_by_project
 
 
 class AssetChecklistFilter(filters.FilterSet):
-    web_application = filters.ModelChoiceFilter(
-        field_name="web_application", queryset=filter_model_by_project(WebApplication))
+    web_application = filters.NumberFilter(method="component_filter")
+    host = filters.NumberFilter(method="component_filter")
+    service = filters.NumberFilter(method="component_filter")
+    mobile_application = filters.NumberFilter(method="component_filter")
+
+    def component_filter(self, queryset, name, value):
+        project = self.request.project
+        return queryset.for_project(project).filter(**{name: value})
 
     class Meta:
         model = AssetChecklist

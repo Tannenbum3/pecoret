@@ -1,8 +1,13 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 from ddf import G
 from backend.models import (
-    User, Project, Membership, ReportTemplate, WebApplication
+    User, Project, Membership, ReportTemplate, WebApplication,
+    Finding
+)
+from checklists.models import (
+    AssetChecklist
 )
 from backend.models.membership import Roles
 from backend.models import advisory
@@ -74,6 +79,19 @@ class PeCoReTTestCaseMixin:
 
     def create_instance(self, obj_class, **kwargs):
         return G(obj_class, **kwargs)
+
+    def create_finding(self, **kwargs):
+        kwargs["component_object_id"] = kwargs["component"].pk
+        kwargs["component_content_type"] = self.get_content_type_for_model(kwargs["component"])
+        return self.create_instance(Finding, **kwargs)
+
+    def create_asset_checklist(self, **kwargs):
+        kwargs["component_object_id"] = kwargs["component"].pk
+        kwargs["component_content_type"] = self.get_content_type_for_model(kwargs["component"])
+        return self.create_instance(AssetChecklist, **kwargs)
+
+    def get_content_type_for_model(self, model):
+        return ContentType.objects.get_for_model(model)
 
     def basic_permission_checks(self, url, user_status_map, req_func, data=None, debug=False):
         for u in user_status_map:

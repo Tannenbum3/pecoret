@@ -8,20 +8,12 @@ from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 from pecoret.core.serializers import (
     ValuedChoiceField,
-    AssetField,
+    AssetGenericRelatedField,
     ProjectVulnerabilityIdField,
     ProjectFilteredPrimaryKeyRelatedField,
 )
 from .vulnerability import ProjectVulnerabilitySerializer
 from .account import AccountSerializer
-
-
-ASSET_SERIALIZERS = {
-    "web_application": WebApplicationSerializer(WebApplication.objects.all()),
-    "host": HostSerializer(Host.objects.all()),
-    "service": MinimalServiceSerializer(Service.objects.all()),
-    "mobile_application": MobileApplicationSerializer(MobileApplication.objects.all()),
-}
 
 
 class FindingSerializer(serializers.ModelSerializer):
@@ -30,11 +22,16 @@ class FindingSerializer(serializers.ModelSerializer):
     )
     severity = ValuedChoiceField(choices=Severity.choices)
     status = ValuedChoiceField(choices=FindingStatus.choices)
-    asset = AssetField(serializers=ASSET_SERIALIZERS)
     internal_id = serializers.CharField(read_only=True)
     user_account = ProjectFilteredPrimaryKeyRelatedField(
         required=False, allow_empty=True, allow_null=True, serializer=AccountSerializer
     )
+    component = AssetGenericRelatedField({
+        WebApplication: WebApplicationSerializer(),
+        Host: HostSerializer(),
+        Service: MinimalServiceSerializer(),
+        MobileApplication: MobileApplicationSerializer()
+    })
 
     class Meta:
         model = Finding
@@ -53,10 +50,10 @@ class FindingSerializer(serializers.ModelSerializer):
             "finding_date",
             "authenticated_test",
             "needs_review",
-            "asset",
             "retest_results",
             "date_retest",
             "exclude_from_report",
+            "component"
         ]
 
 

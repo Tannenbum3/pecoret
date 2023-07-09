@@ -27,8 +27,8 @@ export default {
         },
         create() {
             let data = {
-                asset: this.model.asset,
-                checklist_id: this.model.checklist
+              component: this.model.asset,
+              checklist_id: this.model.checklist
             }
             this.service.createAssetChecklist(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({

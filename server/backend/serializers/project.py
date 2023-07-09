@@ -18,7 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         return obj.company.name
 
     def get_pinned(self, obj):
-        return obj.pinnedproject_set.filter(user=self.context["request"].user).exists()
+        return obj.pinnedproject_set.for_user(self.context["request"].user).exists()
 
     class Meta:
         model = Project

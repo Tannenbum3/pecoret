@@ -14,18 +14,16 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
             user=self.pentester1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
+        self.finding2 = self.create_finding(
             project=self.project2,
             vulnerability__project=self.project2,
-            web_application=self.asset2.pk,
+            component=self.asset2,
             user=self.pentester2,
         )
         self.url = self.get_url("backend:finding-list", project=self.project1.pk)
@@ -60,7 +58,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "status": FindingStatus.OPEN.label,
             "recommendation": "",
             "imported": False,
-            "asset": {"type": "web_application", "pk": self.asset1.pk},
+            "component": {"type": "web_application", "pk": self.asset1.pk},
             "vulnerability_id": "path-traversal",
         }
 
@@ -82,7 +80,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_foreign_asset(self):
         data = self.data
-        data["asset"]["pk"] = self.asset2.pk
+        data["component"]["pk"] = self.asset2.pk
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
 
@@ -99,18 +97,16 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
             user=self.pentester1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
+        self.finding2 = self.create_finding(
             project=self.project2,
             vulnerability__project=self.project2,
-            web_application=self.asset2.pk,
+            component=self.asset2,
             user=self.pentester2,
         )
         self.url = self.get_url(
@@ -154,11 +150,10 @@ class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class FindingDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
             user=self.pentester1,
         )
         self.url = self.get_url(
@@ -189,10 +184,9 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
             project=self.project1,
             vulnerability_id=self.template.vulnerability_id,
         )
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
             user=self.pentester1,
             vulnerability=self.project_vulnerability,
         )
@@ -243,10 +237,9 @@ class TestFindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
             project=self.project1,
             vulnerability_id=self.template.vulnerability_id,
         )
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
             user=self.pentester1,
             vulnerability=self.project_vulnerability,
         )

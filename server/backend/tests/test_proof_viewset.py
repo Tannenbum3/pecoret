@@ -6,17 +6,15 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
-            web_application=self.asset1,
+            component=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
+        self.finding2 = self.create_finding(
             project=self.project2,
-            web_application=self.asset2,
+            component=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
@@ -58,17 +56,15 @@ class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ProofCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
-            web_application=self.asset1,
+            component=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
+        self.finding2 = self.create_finding(
             project=self.project2,
-            web_application=self.asset2,
+            component=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
@@ -101,17 +97,15 @@ class ProofCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ProofDestroyViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
+        self.finding1 = self.create_finding(
             project=self.project1,
-            web_application=self.asset1,
+            component=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
+        self.finding2 = self.create_finding(
             project=self.project2,
-            web_application=self.asset2,
+            component=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
