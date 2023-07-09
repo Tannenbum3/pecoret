@@ -38,7 +38,7 @@ class FindingViewSet(PeCoReTModelViewSet):
     @action(detail=True, methods=["get"])
     def export_pdf(self, request, *args, **kwargs):
         finding = self.get_object()
-        # export finding using company wide report_template
+        # export finding using company-wide report_template
         template = self.request.project.company.report_template
         result = export_single_finding(finding, template)
         response = HttpResponse(result, content_type="application/pdf")
@@ -56,7 +56,7 @@ class FindingViewSet(PeCoReTModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, project=self.request.project)
 
     def perform_update(self, serializer):
         instance = serializer.save()

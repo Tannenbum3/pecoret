@@ -1,14 +1,15 @@
 <script>
-import ProjectService from '@/service/ProjectService';
-import FindingService from '@/service/FindingService'
-import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
-import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
-import markdown from '@/utils/markdown'
+import ProjectService from "@/service/ProjectService";
+import FindingService from "@/service/FindingService";
+import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
+import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
+import ProjectUpdateDialog from "@/components/dialogs/ProjectUpdateDialog.vue";
+import markdown from "@/utils/markdown";
+import DashboardSeverityChart from "@/components/pages/projects/DashboardSeverityChart.vue";
 
 
 const projectService = new ProjectService();
-const findingService = new FindingService()
+const findingService = new FindingService();
 
 
 export default {
@@ -19,37 +20,20 @@ export default {
       project: {},
       latestFindings: [],
       role: {},
-      severityChartData: {
-        labels: ['Critical', 'High', 'Medium', 'Low', 'Informational'],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: [
-              "#8f0d2d", "#e21538",
-              "#f0801d", "#fab725",
-              "#86cbce"
-            ]
-          }
-        ]
-      },
-      severityChartOptions: {
-        cutout: '60%'
-      },
       breadcrumbs: [
-        {label: "Projects", to: this.$router.resolve({name: "ProjectList"})},
-        {label: "Project Detail", disabled: true}
+        { label: "Projects", to: this.$router.resolve({ name: "ProjectList" }) },
+        { label: "Project Detail", disabled: true }
       ],
       statusChoices: [
-        {label: 'Open', value: 'Open'},
-        {label: 'Closed', value: 'Closed'}
+        { label: "Open", value: "Open" },
+        { label: "Closed", value: "Closed" }
       ]
     };
   },
   mounted() {
     this.getProject();
-    this.getMembership()
-    this.getLatestFindings()
-    this.getSeverityChartData()
+    this.getMembership();
+    this.getLatestFindings();
   },
   methods: {
     getProject() {
@@ -59,48 +43,39 @@ export default {
     },
     renderMarkdown(text) {
       if (!text) {
-        return ""
+        return "";
       }
-      return markdown.renderMarkdown(text)
+      return markdown.renderMarkdown(text);
     },
     getMembership() {
       projectService.getProjectMembershipMe(this.projectId).then((response) => {
-        this.role = response.data
-      })
+        this.role = response.data;
+      });
     },
     getLatestFindings() {
       let params = {
         limit: 5,
         page: 1,
-        ordering: '-date_created'
-      }
+        ordering: "-date_created"
+      };
       findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-        this.latestFindings = response.data.results
-      })
-    },
-    getSeverityChartData() {
-      let url = "/projects/" + this.projectId + "/stats_finding_dashboard/";
-      this.$api.get(url).then((response) => {
-        this.severityChartData.datasets[0].data = [
-          response.data.Critical, response.data.High,
-          response.data.Medium, response.data.Low, response.data.Information
-        ]
-      })
+        this.latestFindings = response.data.results;
+      });
     },
     getPentestTypeDisplay() {
       if (!this.project.pentest_types) {
-        return ""
+        return "";
       }
-      let pentestTypeNames = []
+      let pentestTypeNames = [];
       this.project.pentest_types.forEach(element => {
-        pentestTypeNames.push(element.name)
-      })
-      return pentestTypeNames.join(", ")
+        pentestTypeNames.push(element.name);
+      });
+      return pentestTypeNames.join(", ");
     },
     patchProject(data) {
       projectService.patchProject(this.$api, this.projectId, data).then((response) => {
-        this.project = response.data
-      })
+        this.project = response.data;
+      });
     }
   },
   computed: {
@@ -108,8 +83,8 @@ export default {
       return this.project.start_date + " - " + this.project.end_date;
     }
   },
-  components: {DetailCardWithIcon, ProjectUpdateDialog, InfoCardWithForm}
-}
+  components: { DetailCardWithIcon, ProjectUpdateDialog, InfoCardWithForm, DashboardSeverityChart }
+};
 </script>
 
 <template>
@@ -176,12 +151,7 @@ export default {
       </Card>
     </div>
     <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-      <Card class="h-full">
-        <template #title>Severities</template>
-        <template #content>
-          <Chart type="doughnut" :data="severityChartData" :options="severityChartOptions"></Chart>
-        </template>
-      </Card>
+      <DashboardSeverityChart></DashboardSeverityChart>
     </div>
     <div class="col-12 md:col-6 lg:col-6 xl:col-3">
       <Card class="h-full">

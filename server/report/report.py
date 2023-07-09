@@ -110,7 +110,7 @@ class PentestPDFReport(report_types.PentestPDFReport):
         return errors
 
     def get_findings_count_for_asset(self, asset, severity=None):
-        qs = asset.finding_set.exclude(exclude_from_report=True)
+        qs = asset.findings.exclude(exclude_from_report=True)
         if severity:
             qs = qs.filter(severity=Severity[severity].value)
         return qs.count()

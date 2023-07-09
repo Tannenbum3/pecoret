@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "modeltranslation",
+    "generic_relations",
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig"

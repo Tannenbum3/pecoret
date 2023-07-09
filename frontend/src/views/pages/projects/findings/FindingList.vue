@@ -118,7 +118,7 @@ export default {
               <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
             </template>
           </Column>
-          <Column field="asset.name" header="Asset"></Column>
+          <Column field="component.name" header="Asset"></Column>
           <Column field="vulnerability.name" header="Vulnerability"></Column>
           <Column field="status" header="Status"></Column>
           <Column field="finding_date" header="Date"></Column>

@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Subquery
+from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers
 from backend.models.finding import ProjectVulnerability
 from backend.models.membership import Roles
@@ -79,39 +80,23 @@ class PrimaryKeyRelatedField(serializers.RelatedField):
             self.pk_field.fail("incorrect_type", data_type=type(data).__name__)
 
 
-class AssetField(serializers.DictField):
+class AssetGenericRelatedField(GenericRelatedField):
     default_error_messages = {
-        "does_not_exist": 'Asset with this primary key and type does not exist.',
-        "incorrect_type": 'Invalid asset type.',
-        "incorrect_value": 'Incorrect value. Got error "{value}".',
-        "malformed": 'DictField is malformed. Requires "type" and "pk" field.'
+        "does_not_exist": 'object does not exist.',
+        'malformed': 'component is malformed. "type" and "pk" fields are required.',
+        'incorrect_value': 'value is incorrect.'
     }
-
-    def __init__(self, **kwargs):
-        self.serializers = kwargs.pop("serializers")
-        super().__init__(**kwargs)
-
-    def to_representation(self, value):
-        serializer = self.serializers[value.asset_type].__class__
-        return serializer(value, context=self.context).data
 
     def to_internal_value(self, data):
         if "type" not in data or "pk" not in data:
             self.fail("malformed")
-        try:
-            return self.get_queryset(data["type"]).get(pk=data["pk"])
-        except ObjectDoesNotExist:
-            self.fail("does_not_exist")
-        except TypeError:
-            self.fail("incorrect_type")
-        except ValueError as error:
-            self.fail("incorrect_value", value=str(error))
-
-    def get_queryset(self, asset_type):
-        if asset_type not in self.serializers:
-            raise TypeError("unknown asset type")
-        Asset = self.serializers[asset_type].Meta.model
-        return Asset.objects.all()
+        for serializer in self.serializers.keys():
+            if serializer.asset_type == data["type"]:
+                try:
+                    return serializer.objects.for_project(self.context['request'].project).get(pk=data["pk"])
+                except ObjectDoesNotExist:
+                    self.fail("does_not_exist")
+        self.fail("incorrect_value")
 
 
 class ProjectFilteredPrimaryKeyRelatedField(PrimaryKeyRelatedField):
@@ -128,11 +113,6 @@ class ProjectFilteredPrimaryKeyRelatedField(PrimaryKeyRelatedField):
 class NonDraftAdvisoryPrimaryKeyRelatedField(PrimaryKeyRelatedField):
     def get_queryset(self):
         return self.serializer.Meta.model.objects.for_advisory_management()
-
-
-class ProjectAssetField(AssetField):
-    def get_queryset(self, *args):
-        return super().get_queryset(*args).for_project(self.context["request"].project)
 
 
 class ReportAuthorRelatedField(PrimaryKeyRelatedField):

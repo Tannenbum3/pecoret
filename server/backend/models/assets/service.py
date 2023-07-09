@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django.contrib.contenttypes.fields import GenericRelation
+from backend.models.finding import Finding
 from pecoret.core.models import TimestampedModel
 
 
@@ -27,6 +29,12 @@ class Service(TimestampedModel):
     port = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)], blank=False, null=True)
     product = models.CharField(max_length=255, blank=True, null=True)
     state = models.PositiveSmallIntegerField(choices=State.choices, default=State.OPEN, null=True)
+    findings = GenericRelation(Finding, object_id_field='component_object_id',
+                               related_query_name="service",
+                               content_type_field='component_content_type')
+    checklists = GenericRelation('checklists.AssetChecklist', object_id_field='component_object_id',
+                                 related_query_name="service",
+                                 content_type_field='component_content_type')
 
     class Meta:
         ordering = ["host__dns", "host__ip", "port"]

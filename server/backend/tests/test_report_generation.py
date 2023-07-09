@@ -26,7 +26,9 @@ class ReportGenerationTask(APITestCase, PeCoReTTestCaseMixin):
             models.Finding,
             project=self.project1,
             vulnerability__project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
+            component_object_id=self.asset1.pk,
+            component_content_type=self.get_content_type_for_model(self.asset1.__class__),
             user=self.pentester1,
         )
 
@@ -49,7 +51,9 @@ class SingleFindingExportTask(APITestCase, PeCoReTTestCaseMixin):
             models.Finding,
             project=self.project1,
             vulnerability__project=self.project1,
-            web_application=self.asset1.pk,
+            component=self.asset1,
+            component_object_id=self.asset1.pk,
+            component_content_type=self.get_content_type_for_model(self.asset1.__class__),
             user=self.pentester1,
         )
         self.report_template = models.ReportTemplate.objects.get(

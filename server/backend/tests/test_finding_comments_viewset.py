@@ -7,19 +7,26 @@ from backend.models.finding import Finding
 class FindingCommentListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
+        self.finding1 = self.create_finding(
+            user=self.pentester1,
+            vulnerability__project=self.project1,
+            project=self.project1,
+            component=self.asset1
+        )
         self.comment1 = self.create_instance(
             FindingComment,
-            finding__user=self.pentester1,
-            finding__vulnerability__project=self.project1,
-            finding__web_application=self.asset1,
-            finding__project=self.project1,
+            finding=self.finding1
         )
+        self.finding2 = self.create_finding(
+            user=self.pentester2,
+            vulnerability__project=self.project2,
+            project=self.project2,
+            component=self.asset2
+        )
+
         self.comment2 = self.create_instance(
             FindingComment,
-            finding__vulnerability__project=self.project2,
-            finding__user=self.pentester2,
-            finding__web_application=self.asset2,
-            finding__project=self.project2,
+            finding=self.finding2
         )
         self.url = self.get_url(
             "backend:findings:comment-list",
@@ -43,16 +50,14 @@ class FindingCommentListView(APITestCase, PeCoReTTestCaseMixin):
 class FindingCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
-            web_application=self.asset1,
+        self.finding1 = self.create_finding(
+            component=self.asset1,
             vulnerability__project=self.project1,
             project=self.project1,
             user=self.pentester1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
-            web_application=self.asset2,
+        self.finding2 = self.create_finding(
+            component=self.asset2,
             vulnerability__project=self.project2,
             project=self.project2,
             user=self.pentester2,
@@ -99,12 +104,15 @@ class FindingCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
 class FindingCommentDestroyView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
+        self.finding1 = self.create_finding(
+            user=self.pentester1,
+            vulnerability__project=self.project1,
+            component=self.asset1,
+            project=self.project1
+        )
         self.comment1 = self.create_instance(
             FindingComment,
-            finding__user=self.pentester1,
-            finding__vulnerability__project=self.project1,
-            finding__web_application=self.asset1,
-            finding__project=self.project1,
+            finding=self.finding1
         )
         self.url = self.get_url(
             "backend:findings:comment-detail",
@@ -135,16 +143,14 @@ class FindingCommentDestroyView(APITestCase, PeCoReTTestCaseMixin):
 class FindingCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.finding1 = self.create_instance(
-            Finding,
-            web_application=self.asset1,
+        self.finding1 = self.create_finding(
+            component=self.asset1,
             vulnerability__project=self.project1,
             project=self.project1,
             user=self.pentester1,
         )
-        self.finding2 = self.create_instance(
-            Finding,
-            web_application=self.asset2,
+        self.finding2 = self.create_finding(
+            component=self.asset2,
             vulnerability__project=self.project2,
             project=self.project2,
             user=self.pentester2,
