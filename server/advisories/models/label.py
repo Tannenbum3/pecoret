@@ -1,4 +1,3 @@
-import colorsys
 from django.db import models
 from django.core.validators import RegexValidator
 from pecoret.core.models import PeCoReTBaseModel, TimestampedModel
@@ -16,12 +15,9 @@ class Label(PeCoReTBaseModel, TimestampedModel):
 
     @property
     def color_rgb(self):
-        return tuple(int(self.color.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
-
-    @property
-    def color_hsl(self):
-        r, g, b = self.color_rgb
-        return colorsys.rgb_to_hsv(r, g, b)
+        value = self.color.lstrip('#')
+        lv = len(value)
+        return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
     class Meta:
         ordering = ["name"]

@@ -7,5 +7,5 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = [
             "name", "description", "color", "pk",
-            "color_rgb", "color_hsl"
+            "color_rgb",
         ]
