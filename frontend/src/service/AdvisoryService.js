@@ -168,12 +168,17 @@ export default class AdvisoryService {
     }
 
     createLabel(api, data) {
-        let url = "/advisory-management/labels/"
-        return api.post(url, data)
+        let url = "/advisory-management/labels/";
+        return api.post(url, data);
     }
 
     deleteLabel(api, id) {
-        let url = "/advisory-management/labels/" + id + "/"
-        return api.delete(url)
+        let url = "/advisory-management/labels/" + id + "/";
+        return api.delete(url);
+    }
+
+    patchLabel(api, id, data) {
+        let url = "/advisory-management/labels/" + id + "/";
+        return api.patch(url, data);
     }
 }

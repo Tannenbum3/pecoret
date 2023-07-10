@@ -1,32 +1,39 @@
 <script>
-import {defineComponent} from 'vue'
-import AdvisoryService from '@/service/AdvisoryService'
+import { defineComponent } from "vue";
+import AdvisoryService from "@/service/AdvisoryService";
 import BlankSlate from "@/components/BlankSlate.vue";
 import AdvisoryManagementLabelCreateDialog from "@/components/dialogs/AdvisoryManagementLabelCreateDialog.vue";
-import AdvisoryLabelBadge from "@/components/AdvisoryLabelBadge.vue"
+import AdvisoryLabelBadge from "@/components/AdvisoryLabelBadge.vue";
+import AdvisoryManagementLabelUpdateDialog
+  from "@/components/dialogs/advisory-management/AdvisoryManagementLabelUpdateDialog.vue";
 
 
 export default defineComponent({
   name: "LabelList",
-  components: {AdvisoryManagementLabelCreateDialog, BlankSlate, AdvisoryLabelBadge},
+  components: {
+    AdvisoryManagementLabelUpdateDialog,
+    AdvisoryManagementLabelCreateDialog,
+    BlankSlate,
+    AdvisoryLabelBadge
+  },
   data() {
     return {
       service: new AdvisoryService(),
       loading: false,
       breadcrumbs: [
         {
-          label: 'Labels',
+          label: "Labels",
           disabled: true
         }
       ],
       items: [],
       totalRecords: 0,
-      pagination: {page: 1, limit: 25},
+      pagination: { page: 1, limit: 25 },
       filters: {}
-    }
+    };
   },
   mounted() {
-    this.getItems()
+    this.getItems();
   },
   methods: {
     onSort(event) {
@@ -34,52 +41,52 @@ export default defineComponent({
     onFilter(event) {
     },
     onPage(event) {
-      this.pagination.page = event.page + 1
-      this.getItems()
+      this.pagination.page = event.page + 1;
+      this.getItems();
     },
     onGlobalSearch(query) {
       let params = {
         search: query
-      }
+      };
       this.service.getLabels(this.$api, params).then((response) => {
-        this.items = response.data.results
-        this.totalRecords = response.data.count
-      })
+        this.items = response.data.results;
+        this.totalRecords = response.data.count;
+      });
     },
     confirmDialogDelete(id) {
       this.$confirm.require({
-        message: 'Do you want to remove this label?',
-        header: 'Delete confirmation',
-        icon: 'fa fa-trash',
-        acceptClass: 'p-button-danger',
+        message: "Do you want to remove this label?",
+        header: "Delete confirmation",
+        icon: "fa fa-trash",
+        acceptClass: "p-button-danger",
         accept: () => {
           this.service.deleteLabel(this.$api, id).then(() => {
             this.$toast.add({
-              severity: 'info',
-              summary: 'Deleted',
-              detail: 'Label was removed!',
+              severity: "info",
+              summary: "Deleted",
+              detail: "Label was removed!",
               life: 3000
-            })
-            this.getItems()
-          })
+            });
+            this.getItems();
+          });
         }
-      })
+      });
     },
     getItems() {
-      this.loading = true
+      this.loading = true;
       let params = {
         limit: this.pagination.limit,
         page: this.pagination.page
-      }
+      };
       this.service.getLabels(this.$api, params).then((response) => {
-        this.items = response.data.results
-        this.totalRecords = response.data.count
+        this.items = response.data.results;
+        this.totalRecords = response.data.count;
       }).finally(() => {
-        this.loading = false
-      })
+        this.loading = false;
+      });
     }
   }
-})
+});
 </script>
 
 <template>
@@ -110,9 +117,9 @@ export default defineComponent({
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
                 <span class="p-input-icon-left mb-2">
-                    <i class="pi pi-search"/>
+                    <i class="pi pi-search" />
                     <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                               style="width: 100%"/>
+                               style="width: 100%" />
                 </span>
             </div>
           </template>
@@ -130,6 +137,9 @@ export default defineComponent({
           </Column>
           <Column header="Actions">
             <template #body="slotProps">
+              <AdvisoryManagementLabelUpdateDialog :label="slotProps.data"
+                                                   @object-updated="getItems">
+              </AdvisoryManagementLabelUpdateDialog>
               <Button size="small" outlined icon="fa fa-trash" severity="danger"
                       @click="confirmDialogDelete(slotProps.data.pk)"
               ></Button>
