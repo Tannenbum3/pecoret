@@ -61,7 +61,6 @@ export default {
       })
     },
     getFileObject(event) {
-      console.log(event)
       this.model.image = event.files[0]
     },
     confirmDialogDelete(id) {
@@ -93,9 +92,9 @@ export default {
       if (this.model.image) {
         data = new FormData()
         data.append("image", this.model.image)
-        data.append("image_caption", this.model.image_caption)
-        data.append("text", this.text)
-        data.append("title", this.model.title)
+        data.append("image_caption", this.model.image_caption);
+        data.append("text", this.model.text);
+        data.append("title", this.model.title);
       } else {
         data = {
           title: this.model.title,

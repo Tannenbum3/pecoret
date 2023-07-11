@@ -48,7 +48,6 @@ export default {
     },
     methods: {
         getFileObject(event) {
-            console.log(event);
             this.model.image = event.files[0];
         },
         createProof() {
