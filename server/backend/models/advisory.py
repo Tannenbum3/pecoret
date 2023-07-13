@@ -119,6 +119,8 @@ class Advisory(TimestampedModel):
     description = models.TextField(null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
     labels = models.ManyToManyField('advisories.Label', blank=True)
+    custom_report_title = models.CharField(max_length=255, null=True, blank=True)
+    hide_advisory_id_in_report = models.BooleanField(default=False)
 
     def __str__(self):
         return self.advisory_id

@@ -16,7 +16,8 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
             "pk", "user",
             "product", "affected_versions", "fixed_version", "severity",
             "vendor_url", "vendor_name", "description", "internal_name",
-            "recommendation", "date_created", "date_updated"
+            "recommendation", "date_created", "date_updated",
+            "custom_report_title", "hide_advisory_id_in_report",
         ]
         read_only_fields = [
             "pk", "user"
