@@ -1,11 +1,11 @@
 <script>
-import ProjectService from '@/service/ProjectService';
-import CompanyService from '@/service/CompanyService';
-import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
+import ProjectService from "@/service/ProjectService";
+import CompanyService from "@/service/CompanyService";
+import PentestTypeSelectField from "../elements/forms/PentestTypeSelectField.vue";
 
 export default {
-    name: 'ProjectCreateDialog',
-    emits: ['object-created'],
+    name: "ProjectCreateDialog",
+    emits: ["object-created"],
     data() {
         return {
             visible: false,
@@ -16,15 +16,15 @@ export default {
                 end_date: null,
                 test_method: null,
                 language: null,
-                description: '',
+                description: "",
                 require_cvss_base_score: false,
                 company: null
             },
             testMethodChoices: [
-                { title: 'Unknown', value: 'Unknown' },
-                { title: 'Greybox', value: 'Grey Box' },
-                { title: 'Blackbox', value: 'Black Box' },
-                { title: 'Whitebox', value: 'White Box' }
+                { title: "Unknown", value: "Unknown" },
+                { title: "Greybox", value: "Grey Box" },
+                { title: "Blackbox", value: "Black Box" },
+                { title: "Whitebox", value: "White Box" }
             ],
             companyChoices: null,
             languageChoices: null,
@@ -75,23 +75,24 @@ export default {
             let data = {
                 pentest_types: this.model.pentest_types,
                 name: this.model.name,
-                start_date: this.model.start_date.toISOString().split('T')[0],
-                end_date: this.model.end_date.toISOString().split('T')[0],
-                status: 'Open',
+                start_date: this.model.start_date.toISOString().split("T")[0],
+                end_date: this.model.end_date.toISOString().split("T")[0],
+                status: "Open",
                 test_method: this.model.test_method,
                 language: this.model.language,
                 require_cvss_base_score: this.model.require_cvss_base_score,
+                require_owasp_risk_rating: this.model.require_owasp_risk_rating,
                 description: this.model.description,
                 company: this.model.company
             };
             this.service.createProject(this.$api, data).then((response) => {
                 this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created',
+                    severity: "success",
+                    summary: "Created",
                     life: 3000,
-                    detail: 'Project created successfully!'
+                    detail: "Project created successfully!"
                 });
-                this.$emit('object-created', response.data);
+                this.$emit("object-created", response.data);
                 this.visible = false;
             });
         }
@@ -103,7 +104,8 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Project" @click="open()" outlined></Button>
 
-    <Dialog header="Create Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }" :modal="true">
+    <Dialog header="Create Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }"
+            :style="{ width: '70vw' }" :modal="true">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -119,24 +121,34 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="test_method">Test Method</label>
-                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Dropdown>
+                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title"
+                          optionValue="value"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="language">Language</label>
-                <Dropdown optionLabel="language" optionValue="language" @focus="onFocusLanguages" v-model="model.language" :options="languageChoices"></Dropdown>
+                <Dropdown optionLabel="language" optionValue="language" @focus="onFocusLanguages"
+                          v-model="model.language" :options="languageChoices"></Dropdown>
             </div>
 
             <div class="field col-12">
                 <label for="company">Company</label>
-                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter
+                          optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
             </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
                     <Checkbox v-model="model.require_cvss_base_score" :binary="true" inputId="require_cvss"></Checkbox>
                     <label for="require_cvss" class="ml-2">Require CVSS Base Score?</label>
+                </div>
+            </div>
+            <div class="field col-12">
+                <div class="flex align-items-center">
+                    <Checkbox v-model="model.require_owasp_risk_rating" :binary="true"
+                              inputId="require_risk_rating"></Checkbox>
+                    <label for="require_risk_rating" class="ml-2">Require OWASP Risk Rating?</label>
                 </div>
             </div>
             <div class="field col-12">

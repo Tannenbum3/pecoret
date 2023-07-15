@@ -11,6 +11,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField("get_company_name")
     pentest_types = PrimaryKeyRelatedField(serializer=PentestTypeSerializer, many=True)
     require_cvss_base_score = serializers.BooleanField(required=False)
+    require_owasp_risk_rating = serializers.BooleanField(required=False)
     language = ValuedChoiceField(choices=settings.LANGUAGES)
     pinned = serializers.SerializerMethodField()
 
@@ -38,6 +39,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "year",
             "pentest_types",
             "require_cvss_base_score",
+            "require_owasp_risk_rating",
             "language",
         ]
         extra_kwargs = {"description": {"required": False}}

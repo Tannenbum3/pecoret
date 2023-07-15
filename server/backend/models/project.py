@@ -45,6 +45,7 @@ class Project(TimestampedModel):
     test_method = models.PositiveSmallIntegerField(choices=TestMethod.choices)
     year = models.PositiveIntegerField(editable=False, blank=True, null=True)
     require_cvss_base_score = models.BooleanField(default=False)
+    require_owasp_risk_rating = models.BooleanField(default=False)
     language = models.CharField(choices=settings.LANGUAGES, default="en", max_length=4)
 
     def __str__(self):

@@ -1,57 +1,72 @@
 <section class="page-break-after">
-    <h2 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.internal_id }}</h2>
+  <h2 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.internal_id }}</h2>
 
-    <table class="finding-details">
-        <thead>
-            <tr>
-                <th>{{ _('Asset') }}</th>
-                <th>{{ _('Severity') }}</th>
-                {% if project.require_cvss_base_score %}<th>CVSS-Score</th>{% endif %}
-                <th>{{ _('Date') }}</th>
-                <th>{{ _('Status') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ finding.asset }}</td>
-                <td class="text-{{ finding.get_severity_display().lower() }}">{{ finding.get_severity_display()|dynamic_trans }}</td>
-                {% if project.require_cvss_base_score %}<td
-                    class="text-{{ finding.cvssbasescore.cvss31_base_severity.lower() }}">{{
-                    finding.cvssbasescore.cvss31_base_score }} ({{finding.cvssbasescore.cvss31_base_severity | dynamic_trans}})</td>{%
-                endif %}
+  <table class="finding-details">
+    <thead>
+    <tr>
+      <th>{{ _('Asset') }}</th>
+      <th>{{ _('Severity') }}</th>
+      <th>{{ _('Date') }}</th>
+      <th>{{ _('Status') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ finding.component }}</td>
+      <td class="text-{{ finding.get_severity_display().lower() }}">
+        {{ finding.get_severity_display()|dynamic_trans }}</td>
+      <td>{{ finding.finding_date.strftime("%B %d, %Y") }}</td>
+      <td>{{ finding.get_status_display()|dynamic_trans }}</td>
+    </tr>
+    </tbody>
+  </table>
 
-                <td>{{ finding.finding_date.strftime("%B %d, %Y") }}</td>
-                <td>{{ finding.get_status_display()|dynamic_trans }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h4>{{ _('Description') }}</h4>
-    {{ report_helpers.bleach_md(finding.vulnerability.description)|safe }}
-
-    <h4>{{ _('Recommendation') }}</h4>
-    {% if finding.recommendation %}
-    {{ report_helpers.bleach_md(finding.recommendation)|safe }}
-    {% else %}
-    {{ report_helpers.bleach_md(finding.vulnerability.recommendation)|safe }}
+  <table style="margin-top: 30px;">
+    {% if finding.project.require_cvss_base_score %}
+      <tr>
+        <th style="padding-right: 65px">CVSS Base Score</th>
+        <td> {{ finding.cvssbasescore.cvss31_base_score }} -
+          {{ finding.cvssbasescore.cvss31_base_severity | dynamic_trans }} ({{ finding.cvssbasescore.cvss31_vector }})
+        </td>
+      </tr>
     {% endif %}
+    {% if finding.project.require_owasp_risk_rating %}
+      <tr>
+        <th style="padding-right: 65px">OWASP Risk Rating</th>
+        <td>
+          {{ finding.owaspriskrating.vulnerability_factor }}
+          - {{ finding.owaspriskrating.overall_risk_severity | dynamic_trans }} ({{ finding.owaspriskrating.vector }})
+        </td>
+      </tr>
+    {% endif %}
+  </table>
 
-    <h4>{{ _('Steps to reproduce') }}</h4>
-    <div class="proofs">
-        {% for proof in finding.proof_set.all() %}
-        {{ report_helpers.bleach_md(proof.text)|safe }}
-        {% if proof.image %}
+  <h4>{{ _('Description') }}</h4>
+  {{ report_helpers.bleach_md(finding.vulnerability.description)|safe }}
+
+  <h4>{{ _('Recommendation') }}</h4>
+  {% if finding.recommendation %}
+    {{ report_helpers.bleach_md(finding.recommendation)|safe }}
+  {% else %}
+    {{ report_helpers.bleach_md(finding.vulnerability.recommendation)|safe }}
+  {% endif %}
+
+  <h4>{{ _('Steps to reproduce') }}</h4>
+  <div class="proofs">
+    {% for proof in finding.proof_set.all() %}
+      {{ report_helpers.bleach_md(proof.text)|safe }}
+      {% if proof.image %}
         <div class="image-proof">
-            <div class="image-container">
-                <img src="{{ proof.base64_encoded_image()|safe }}" style="width: 100%;max-width: 100%; height:auto;">
-            </div>
-            <div class="caption">
-                <span class="label">{{ _('Figure') }}</span>
-                <span>{{ proof.image_caption }}</span>
-            </div>
+          <div class="image-container">
+            <img src="{{ proof.base64_encoded_image()|safe }}" style="width: 100%;max-width: 100%; height:auto;">
+          </div>
+          <div class="caption">
+            <span class="label">{{ _('Figure') }}</span>
+            <span>{{ proof.image_caption }}</span>
+          </div>
         </div>
-        {% endif %}
-        {% endfor %}
-    </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 
 </section>

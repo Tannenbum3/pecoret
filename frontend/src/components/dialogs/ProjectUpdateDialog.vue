@@ -1,18 +1,18 @@
 <script>
-import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
-import CompanyService from '@/service/CompanyService';
-import ProjectService from '@/service/ProjectService';
+import PentestTypeSelectField from "../elements/forms/PentestTypeSelectField.vue";
+import CompanyService from "@/service/CompanyService";
+import ProjectService from "@/service/ProjectService";
 
 const projectService = new ProjectService();
 
 export default {
-    name: 'ProjectUpdateDialog',
+    name: "ProjectUpdateDialog",
     props: {
         project: {
             required: true
         }
     },
-    emits: ['object-updated'],
+    emits: ["object-updated"],
     data() {
         return {
             visible: false,
@@ -22,10 +22,10 @@ export default {
             availableLanguages: [],
             companyChoices: null,
             testMethodChoices: [
-                { title: 'Unknown', value: 'Unknown' },
-                { title: 'Greybox', value: 'Grey Box' },
-                { title: 'Blackbox', value: 'Black Box' },
-                { title: 'Whitebox', value: 'White Box' }
+                { title: "Unknown", value: "Unknown" },
+                { title: "Greybox", value: "Grey Box" },
+                { title: "Blackbox", value: "Black Box" },
+                { title: "Whitebox", value: "White Box" }
             ]
         };
     },
@@ -39,42 +39,42 @@ export default {
         open() {
             this.visible = true;
         },
-        getCompanies(){
+        getCompanies() {
             this.companyService.getCompanies().then((response) => {
-                this.companyChoices = response.data.results
-            })
+                this.companyChoices = response.data.results;
+            });
         },
-        onFocusCompany(){
-            if(this.companyChoices){
-                return
+        onFocusCompany() {
+            if (this.companyChoices) {
+                return;
             }
             this.companyService.getCompanies().then((response) => {
-                this.companyChoices = response.data.results
-            })
+                this.companyChoices = response.data.results;
+            });
         },
-        onFilterCompany(event){
+        onFilterCompany(event) {
             let params = {
                 search: event.value
-            }
+            };
             this.companyService.getCompanies(params).then((response) => {
-                this.companyChoices = response.data.results
-            })
+                this.companyChoices = response.data.results;
+            });
         },
         getLanguages() {
-            let url = '/projects/available-languages/';
+            let url = "/projects/available-languages/";
             this.$api.get(url).then((response) => {
                 this.availableLanguages = response.data;
             });
         },
-        getCompany(){
+        getCompany() {
             this.companyService.getCompany(this.project.company).then((response) => {
-                this.companyChoices = [response.data]
-            })
+                this.companyChoices = [response.data];
+            });
         },
         patchProject() {
-            if (typeof this.model.pentest_types === 'object') {
-                if (this.model.pentest_types.length > 0){
-                    if(this.model.pentest_types[0].pk){
+            if (typeof this.model.pentest_types === "object") {
+                if (this.model.pentest_types.length > 0) {
+                    if (this.model.pentest_types[0].pk) {
                         delete this.model.pentest_types;
                     }
                 }
@@ -87,11 +87,12 @@ export default {
                 test_method: this.model.test_method,
                 language: this.model.language,
                 require_cvss_base_score: this.model.require_cvss_base_score,
+                require_owasp_risk_rating: this.model.require_owasp_risk_rating,
                 description: this.model.description,
                 company: this.model.company
             };
             projectService.patchProject(this.$api, this.projectId, data).then(() => {
-                this.$emit('object-updated', this.model);
+                this.$emit("object-updated", this.model);
                 this.visible = false;
             });
         }
@@ -102,8 +103,8 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                if(this.model.company && !this.companyChoices){
-                    this.getCompany()
+                if (this.model.company && !this.companyChoices) {
+                    this.getCompany();
                 }
             }
         }
@@ -115,7 +116,8 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" label="Edit" @click="open()" outlined></Button>
 
-    <Dialog header="Dialog" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }" :modal="true">
+    <Dialog header="Dialog" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }"
+            :modal="true">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -133,25 +135,35 @@ export default {
 
             <div class="field col-12">
                 <label for="test_method">Test Method</label>
-                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Dropdown>
+                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title"
+                          optionValue="value"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="language">Language</label>
-                <Dropdown optionLabel="language" optionValue="language" v-model="model.language" :options="availableLanguages"></Dropdown>
+                <Dropdown optionLabel="language" optionValue="language" v-model="model.language"
+                          :options="availableLanguages"></Dropdown>
             </div>
 
             <div class="field col-12">
                 <label for="company">Company</label>
-                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter
+                          optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
             </div>
 
             <div class="field col-12">
                 <div class="flex align-items-center">
                     <Checkbox v-model="model.require_cvss_base_score" :binary="true" inputId="require_cvss"></Checkbox>
                     <label for="require_cvss" class="ml-2">Require CVSS Base Score?</label>
+                </div>
+            </div>
+            <div class="field col-12">
+                <div class="flex align-items-center">
+                    <Checkbox v-model="model.require_owasp_risk_rating" :binary="true"
+                              inputId="require_owasp"></Checkbox>
+                    <label for="require_owasp" class="ml-2">Require OWASP Risk Rating?</label>
                 </div>
             </div>
             <div class="field col-12">

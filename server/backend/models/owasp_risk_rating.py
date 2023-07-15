@@ -1,6 +1,5 @@
 from django.db import models
 
-
 RISK_INFORMATIONAL = "Informational"
 RISK_LOW = "Low"
 RISK_MEDIUM = "Medium"
@@ -215,6 +214,12 @@ class OWASPRiskRating(models.Model):
         ordering = ["finding"]
 
     @property
+    def is_incomplete(self):
+        if self.technical_impact_factor and self.impact_factors and self.business_impact_factor and self.likelihood_factors:
+            return False
+        return True
+
+    @property
     def vector(self):
         threat_agent = (
             f"SL:{self.skill_level}/M:{self.motive}/O:{self.opportunity}/S:{self.size}"
@@ -224,25 +229,25 @@ class OWASPRiskRating(models.Model):
         technial = f"LC:{self.loss_of_confidentiality}/LI:{self.loss_of_integrity}/LAV:{self.loss_of_availability}/LAC:{self.loss_of_availability}"
         business = f"FD:{self.financial_damage}/RD:{self.reputation_damage}/NC:{self.non_compliance}/PV:{self.privacy_violation}"
         impact = f"{technial}/{business}"
-        return f"({likelihood}/{impact})"
+        return f"{likelihood}/{impact}"
 
     @property
     def technical_impact_factor(self):
         factors = (
-            self.loss_of_confidentiality
-            + self.loss_of_integrity
-            + self.loss_of_availability
-            + self.loss_of_accountability
+                self.loss_of_confidentiality
+                + self.loss_of_integrity
+                + self.loss_of_availability
+                + self.loss_of_accountability
         )
         return factors / 4.0
 
     @property
     def business_impact_factor(self):
         factors = (
-            self.financial_damage
-            + self.reputation_damage
-            + self.non_compliance
-            + self.privacy_violation
+                self.financial_damage
+                + self.reputation_damage
+                + self.non_compliance
+                + self.privacy_violation
         )
         return factors / 4.0
 
@@ -254,10 +259,10 @@ class OWASPRiskRating(models.Model):
     @property
     def vulnerability_factor(self):
         factors = (
-            self.ease_of_discovery
-            + self.ease_of_exploit
-            + self.awareness
-            + self.intrusion_detection
+                self.ease_of_discovery
+                + self.ease_of_exploit
+                + self.awareness
+                + self.intrusion_detection
         )
         return factors / 4.0
 
