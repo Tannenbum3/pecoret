@@ -88,11 +88,11 @@ export default {
           <div class="grid formgrid p-fluid">
             <div class="field col-12">
               <label for="evaluation">Evaluation</label>
-              <MarkdownEditor v-model="model.evaluation"></MarkdownEditor>
+              <MarkdownEditor v-model="model.evaluation" @blur="patchEvaluation"></MarkdownEditor>
             </div>
             <div class="field col-12">
               <label for="recommendation">Recommendation</label>
-              <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>
+                <MarkdownEditor v-model="model.recommendation" @blur="patchRecommendation"></MarkdownEditor>
             </div>
           </div>
         </template>
