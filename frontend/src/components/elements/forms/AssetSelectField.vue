@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: 'AssetSelectField',
+    name: "AssetSelectField",
     props: {
         modelValue: {
             required: true
@@ -23,29 +23,29 @@ export default {
                     url: "web-applications"
                 },
                 {
-                    label: 'Host',
-                    value: 'host',
-                    url: 'hosts'
+                    label: "Host",
+                    value: "host",
+                    url: "hosts"
                 },
                 {
-                    label: 'Service',
-                    value: 'service',
-                    url: 'services'
+                    label: "Service",
+                    value: "service",
+                    url: "services"
                 },
                 {
-                    label: 'Mobile Application',
-                    value: 'mobile_application',
-                    url: 'mobile-applications'
+                    label: "Mobile Application",
+                    value: "mobile_application",
+                    url: "mobile-applications"
                 }
             ]
-        }
+        };
     },
     methods: {
         loadAssets() {
-            let url = "/projects/" + this.projectId + "/" + this.assetType.url + "/"
+            let url = "/projects/" + this.projectId + "/" + this.assetType.url + "/";
             this.$api.get(url).then((response) => {
-                this.assetChoices = response.data.results
-            })
+                this.assetChoices = response.data.results;
+            });
         },
         onFilter(event) {
             let config = {
@@ -53,29 +53,31 @@ export default {
                     search: event.value
 
                 }
-            }
-            let url = "/projects/" + this.projectId + "/" + this.assetType.url + "/"
+            };
+            let url = "/projects/" + this.projectId + "/" + this.assetType.url + "/";
             this.$api.get(url, config).then((response) => {
-                this.assetChoices = response.data.results
-            })
+                this.assetChoices = response.data.results;
+            });
         }
     },
     computed: {
         assetObject() {
-            return { pk: this.asset.pk, type: this.assetType.value }
+            return { pk: this.asset.pk, type: this.assetType.value };
         }
-    },
-}
+    }
+};
 </script>
 
 <template>
     <div class="field col-3" v-if="displayInline === true">
-        <Dropdown :options="choices" v-model="assetType" placeholder="Asset Type" optionLabel="label" @change="loadAssets">
+        <Dropdown :options="choices" v-model="assetType" placeholder="Asset Type" optionLabel="label"
+                  @change="loadAssets">
         </Dropdown>
     </div>
     <div class="field col-9" v-if="displayInline === true">
-        <Dropdown :options="assetChoices" v-model="asset" placeholder="Asset" :disabled="!this.assetType" optionLabel="name"
-            filter @filter="onFilter" @update:modelValue="this.$emit('update:modelValue', this.assetObject)">
+        <Dropdown :options="assetChoices" v-model="asset" placeholder="Asset" :disabled="!this.assetType"
+                  optionLabel="name"
+                  filter @filter="onFilter" @update:modelValue="this.$emit('update:modelValue', this.assetObject)">
         </Dropdown>
     </div>
 
@@ -86,8 +88,9 @@ export default {
     </div>
     <div v-if="displayInline !== true" class="field col-12">
         <label for="asset">Asset</label>
-        <Dropdown :options="assetChoices" v-model="asset" id="asset" :disabled="!this.assetType" optionLabel="name" filter
-            @filter="onFilter" @update:modelValue="this.$emit('update:modelValue', this.assetObject)"></Dropdown>
+        <Dropdown :options="assetChoices" v-model="asset" id="asset" :disabled="!this.assetType" optionLabel="name"
+                  filter
+                  @filter="onFilter" @update:modelValue="this.$emit('update:modelValue', this.assetObject)"></Dropdown>
 
     </div>
 </template>

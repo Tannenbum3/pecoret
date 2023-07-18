@@ -12,7 +12,7 @@ class AssetCategoryViewSet(PeCoReTReadOnlyModelViewSet):
     ]
     serializer_class = AssetCategorySerializer
     filterset_class = AssetCategoryFilter
-    search_fields = ["name"]
+    search_fields = ["name", "assetitem__name"]
 
     def get_queryset(self):
         return AssetCategory.objects.for_project(self.request.project)

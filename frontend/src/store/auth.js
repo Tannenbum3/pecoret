@@ -1,55 +1,47 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useAuthStore = defineStore('authStore', {
+export const useAuthStore = defineStore("authStore", {
   state: () => ({
-    authToken: '',
+    authToken: "",
     isAuthenticated: false,
     me: null,
     csrfToken: null,
-    groups: { isAdmin: false, isManagement: false, isAdvisoryManagement: false },
+    groups: { isAdmin: false, isManagement: false, isAdvisoryManagement: false, isVendor: false },
     activeProject: {}
   }),
-  getters: {
-  },
+  getters: {},
   actions: {
     activateProject(project) {
-      this.activeProject = project
+      this.activeProject = project;
     },
     deactivateProject(project) {
-      this.activeProject = {}
+      this.activeProject = {};
     },
     setAuthData(responseData) {
-      this.csrfToken = responseData.csrf_token
+      this.csrfToken = responseData.csrf_token;
       if (responseData.user) {
-        this.me = responseData.user
-        this.groups.isAdmin = responseData.user.is_superuser
-        let data = responseData.user
-        data.groups.forEach((item) => {
-          if (item.name === "Management") {
-            this.groups.isManagement = true
-          }
-          if (item.name === "Advisory Management") {
-            this.groups.isAdvisoryManagement = true
-          }
-        })
-        this.isAuthenticated = true
+        this.setMe(responseData.user);
+        this.isAuthenticated = true;
       }
     },
     unsetMe() {
-      this.me = null
-      this.isAuthenticated = false
+      this.me = null;
+      this.isAuthenticated = false;
     },
     setMe(data) {
-      this.me = data
-      this.groups.isAdmin = data.is_superuser
+      this.me = data;
+      this.groups.isAdmin = data.is_superuser;
       data.groups.forEach((item) => {
         if (item.name === "Management") {
-          this.groups.isManagement = true
+          this.groups.isManagement = true;
         }
         if (item.name === "Advisory Management") {
-          this.groups.isAdvisoryManagement = true
+          this.groups.isAdvisoryManagement = true;
         }
-      })
+        if (item.name === "Vendor") {
+          this.groups.isVendor = true;
+        }
+      });
     }
-  },
+  }
 });
