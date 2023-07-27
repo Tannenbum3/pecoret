@@ -7,7 +7,7 @@ django_q2==1.5.4
 weasyprint==58.1
 libsass==0.22.0
 django-modeltranslation==0.18.11
-markdown==3.4.3
+markdown==3.4.4
 bleach==6.0.0
 pygments==2.15.1
 drf-spectacular==0.26.4
