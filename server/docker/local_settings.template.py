@@ -1,3 +1,5 @@
+from pecoret.settings import *
+
 import os
 # This is a minimal example settings file for PeCoReT docker
 # it is created, if no file exists to make the app running on first boot

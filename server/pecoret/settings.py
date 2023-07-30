@@ -168,8 +168,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 # expire session after 15 minutes
 SESSION_COOKIE_AGE = 15 * 60
 
-RESPONSIBLE_DISCLOSURE_DISCLOSURE_DAYS = 60
-
 Q_CLUSTER = {
     "name": "DjangORM",
     "workers": 2,
@@ -182,11 +180,6 @@ Q_CLUSTER = {
     "orm": "default",
 }
 
-ADVISORY_ID_PREFIX = "pecoret"
-ADVISORY_TEMPLATE = "default_template"
-ADVISORY_MEMBERSHIP_DEFAULT_READ_ONLY_PERMISSION_DAYS = 120
-
-ADDITIONAL_PACKAGES = []
 
 REPORT_COMPANY_INFORMATION = {"name": "PeCoReT Project", "street": "Unkown Street"}
 
@@ -213,22 +206,13 @@ SESSION_COOKIE_SECURE = True
 
 FALLBACK_REPORT_TEMPLATE = "default_template"
 
+############
+# Advisories
+############
+ADVISORY_ID_PREFIX = "pecoret"
+ADVISORY_TEMPLATE = "default_template"
+ADVISORY_MEMBERSHIP_DEFAULT_READ_ONLY_PERMISSION_DAYS = 120
 
-try:
-    # pylint: disable=wildcard-import
-    # pylint: disable=unused-wildcard-import
-    from local_settings import *
-except ImportError:
-    pass
-
-
-# required for docker; TODO: make directory the default for settings
-try:
-    # pylint: disable=wildcard-import
-    # pylint: disable=unused-wildcard-import
-    from conf.local_settings import *
-except ImportError:
-    pass
 
 
 if DEBUG:
@@ -236,5 +220,3 @@ if DEBUG:
         "rest_framework.renderers.BrowsableAPIRenderer"
     )
 
-# add additional django packages to installed apps
-INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_PACKAGES

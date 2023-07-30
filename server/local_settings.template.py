@@ -1,3 +1,4 @@
+from pecoret.settings import *
 
 # General
 # SITE_NAME = "PeCoReT staging"

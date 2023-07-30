@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.core import mail
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import User
@@ -76,6 +77,7 @@ class UserCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         user = User.objects.get(username="tlast")
         self.assertEqual(user.is_active, False)
         self.assertEqual(user.has_usable_password(), False)
+        self.assertEqual(len(mail.outbox), 1)
 
 
 class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):

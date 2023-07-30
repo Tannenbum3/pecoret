@@ -27,8 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
-        echo 'SECRET_KEY = "Test"' > local_settings.py
     - name: Run Tests
       run: |
         cd server
-        python manage.py test
+        python manage.py test --settings conf.settings_testing

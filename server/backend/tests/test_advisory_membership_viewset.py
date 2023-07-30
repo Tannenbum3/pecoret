@@ -1,4 +1,4 @@
-from django.core.mail import outbox
+from django.core import mail
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.advisory_membership import Roles
@@ -19,8 +19,13 @@ class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
     def test_allowed(self):
         self.client.force_login(self.advisory_manager1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        # TODO: fix github action with django-q2
-        # self.assertEqual(len(outbox), 0)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_allowed_new_user(self):
+        self.client.force_login(self.advisory_manager1)
+        self.data["email"] = "mynewrandommail@local.host"
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        self.assertEqual(len(mail.outbox), 2)
 
     def test_forbidden(self):
         users = [

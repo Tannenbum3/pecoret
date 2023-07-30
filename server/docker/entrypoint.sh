@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ ! -f "/app/conf/local_settings.py" ]; then
+if [ ! -f "/app/conf/production.py" ]; then
     touch /app/conf/__init__.py
-    cp docker/local_settings.template.py /app/conf/local_settings.py
+    cp docker/local_settings.template.py /app/conf/production.py
 fi
 
 # Apply database migrations

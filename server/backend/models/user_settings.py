@@ -31,7 +31,7 @@ def create_user_settings_object(sender, instance, created, **kwargs):
     Args:
         sender (_type_): _description_
         instance (_type_): _description_
-        create (_type_): _description_
+        created (_type_): _description_
     """
     if created:
         UserSettings.objects.create(user=instance)
