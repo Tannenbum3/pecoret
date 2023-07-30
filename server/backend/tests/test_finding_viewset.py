@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
+from django.core import mail
 from backend.models import (
-    Finding,
     VulnerabilityTemplate,
     Advisory,
     ProjectVulnerability,
@@ -61,6 +61,8 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "component": {"type": "web_application", "pk": self.asset1.pk},
             "vulnerability_id": "path-traversal",
         }
+        self.pentester1.usersettings.notify_critical_findings = True
+        self.pentester1.usersettings.save()
 
     def test_allowed(self):
         users = [self.pentester1, self.management1]
@@ -69,6 +71,8 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(
                 self.url, self.client.post, 201, data=self.data
             )
+        # this is two, because two critical findings will be created. one for management1 and one for pentester1
+        self.assertEqual(len(mail.outbox), 2)
 
     def test_forbidden(self):
         users = [self.pentester2, self.user1, self.management2]

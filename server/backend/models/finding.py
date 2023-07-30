@@ -7,6 +7,8 @@ from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django_q.tasks import async_task
+from backend.tasks import mail
 from .vulnerability import Severity, ProjectVulnerability
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
@@ -189,3 +191,27 @@ def init_scores(sender, instance, created, **kwargs):
     if created:
         CVSSBaseScore.objects.create(finding=instance)
         OWASPRiskRating.objects.create(finding=instance)
+
+
+@receiver(signals.post_save, sender=Finding)
+def notify_project_users_critical_finding(sender, instance, created, **kwargs):
+    """
+    notify users - with corresponding setting - when new critical finding is created
+    :param sender:
+    :param instance:
+    :param created:
+    :param kwargs:
+    :return:
+    """
+    if created:
+        context = {
+            "findingId": instance.pk, "projectId": instance.project.pk,
+            "project": instance.project
+        }
+        for membership in instance.project.membership_set.filter(user__usersettings__notify_critical_findings=True):
+            # do not notify expired memberships
+            if not membership.active:
+                membership.delete()
+                continue
+            context["user"] = membership.user
+            async_task(mail.send_new_critical_finding_mail, context, membership.user.email)

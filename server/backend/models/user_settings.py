@@ -20,6 +20,9 @@ class UserSettings(PeCoReTBaseModel):
     # send notification mails, when disclosure of advisory is soon
     notify_before_disclosure_mail = models.BooleanField(default=False)
 
+    # notifications
+    notify_critical_findings = models.BooleanField(default=False)
+
     def __str__(self):
         return str(self.user)
 

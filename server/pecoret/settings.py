@@ -188,6 +188,7 @@ SITE_URLS = {
     "PASSWORD_RESET": "/reset-password/{uid}/{token}",
     "ACTIVATION": "/account-activation/{uid}/{token}",
     "ADVISORY_DETAIL": "/advisories/{advisoryId}",
+    "FINDING_DETAIL": "/projects/{projectId}/findings/{findingId}"
 }
 
 PASSWORD_HASHERS = [
