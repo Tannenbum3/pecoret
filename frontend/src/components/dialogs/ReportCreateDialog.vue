@@ -1,5 +1,5 @@
 <script>
-import ReportService from '@/service/ReportService'
+import ReportService from "@/service/ReportService";
 
 
 export default {
@@ -13,12 +13,12 @@ export default {
                 name: null,
                 template: null,
                 variant: null,
-                author: null,
+                author: null
             },
             templateChoices: null,
             variantChoices: [
-                { label: 'Vulnerability CSV', value: 'Vulnerability CSV' },
-                { label: 'Pentest PDF Report', value: 'Pentest PDF' }
+                { label: "Vulnerability CSV", value: "Vulnerability CSV" },
+                { label: "Pentest PDF Report", value: "Pentest PDF" }
             ],
             authorChoices: null,
             service: new ReportService()
@@ -33,12 +33,12 @@ export default {
         },
         getTemplates() {
             if (this.templateChoices) {
-                return
+                return;
             }
-            let url = "/report-templates/"
+            let url = "/report-templates/";
             this.$api.get(url).then((response) => {
-                this.templateChoices = response.data.results
-            })
+                this.templateChoices = response.data.results;
+            });
         },
         create() {
             let data = {
@@ -61,39 +61,41 @@ export default {
         getAuthors() {
             let url = "/projects/" + this.projectId + "/memberships/";
             this.$api.get(url).then((response) => {
-                let authors = []
-                response.data.results.forEach(function (item) {
-                    authors.push(item.user)
+                let authors = [];
+                response.data.results.forEach(function(item) {
+                    authors.push(item.user);
                 });
                 this.authorChoices = authors;
             });
-        },
+        }
     },
     components: {}
-}
+};
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Report" outlined @click="open"></Button>
 
     <Dialog header="Create Report" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="flex flex-column gap-2">
-            <label for="name">Name</label>
-            <InputText id="name" v-model="model.name"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="template">Template</label>
-            <Dropdown v-model="model.template" id="template" @focus="getTemplates" optionLabel="name"
-                :options="templateChoices"></Dropdown>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="variant">Variant</label>
-            <Dropdown v-model="model.variant" id="variant" optionLabel="label" :options="variantChoices"></Dropdown>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="author">Author</label>
-            <Dropdown v-model="model.author" id="author" optionLabel="username"
-                :options="authorChoices" @focus="getAuthors"></Dropdown>
+        <div class="grid formgrid p-fluid">
+            <div class="field col-12">
+                <label for="name">Name</label>
+                <InputText id="name" v-model="model.name"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="template">Template</label>
+                <Dropdown v-model="model.template" id="template" @focus="getTemplates" optionLabel="name"
+                          :options="templateChoices"></Dropdown>
+            </div>
+            <div class="field col-12">
+                <label for="variant">Variant</label>
+                <Dropdown v-model="model.variant" id="variant" optionLabel="label" :options="variantChoices"></Dropdown>
+            </div>
+            <div class="field col-12">
+                <label for="author">Author</label>
+                <Dropdown v-model="model.author" id="author" optionLabel="username"
+                          :options="authorChoices" @focus="getAuthors"></Dropdown>
+            </div>
         </div>
 
         <template #footer>

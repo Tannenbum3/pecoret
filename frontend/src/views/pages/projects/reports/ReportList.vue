@@ -106,7 +106,7 @@ export default {
                         </template>
                     </Column>
                     <Column field="variant" header="Variant"></Column>
-                    <Column field="template" header="Template"></Column>
+                    <Column field="template.name" header="Template"></Column>
                     <Column field="author.username" header="Author"></Column>
                 </DataTable>
                 <BlankSlate icon="fa fa-file" text="No reports!" title="No reports found!" v-else> </BlankSlate>

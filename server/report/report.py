@@ -1,62 +1,13 @@
 import datetime
-import io
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 from django.db.models import Count, Max, Q
-from django.utils.html import format_html
 from django.conf import settings
 from backend.models import ProjectVulnerability, Finding, Host, WebApplication
 from backend.models.vulnerability import Severity
-from backend.models.finding import FindingStatus
 from pecoret.core.reporting import types as report_types
 from pecoret.core.reporting.error import ReportError
 
 
-mpl.use("Agg")
-
-
-class Chart:
-    def __init__(self, project):
-        self.plt = None
-        self.project = project
-
-    def get_html(self, plot):
-        figure_file = io.StringIO()
-        plot.savefig(figure_file, format="svg", transparent=True)
-        plot.close("all")
-        svg = "<svg" + figure_file.getvalue().split("<svg")[1]
-        return format_html(
-            '<img class="graph" src="data:image/svg+xml;utf8,{}" Z>', svg
-        )
-
-    def plot_severity_pie_chart(self, colors):
-        if not Finding.objects.for_report(self.project).exists():
-            return ""
-        # TODO: make this more efficient
-        values = [
-            Finding.objects.for_report(self.project)
-            .filter(~Q(status=FindingStatus.FIXED), severity=Severity.CRITICAL)
-            .count(),
-            Finding.objects.for_report(self.project)
-            .filter(~Q(status=FindingStatus.FIXED), severity=Severity.HIGH)
-            .count(),
-            Finding.objects.for_report(self.project)
-            .filter(~Q(status=FindingStatus.FIXED), severity=Severity.MEDIUM)
-            .count(),
-            Finding.objects.for_report(self.project)
-            .filter(~Q(status=FindingStatus.FIXED), severity=Severity.LOW)
-            .count(),
-            Finding.objects.for_report(self.project)
-            .filter(~Q(status=FindingStatus.FIXED), severity=Severity.INFORMATIONAL)
-            .count(),
-        ]
-        fig, ax = plt.subplots(figsize=[6, 2.5])
-        ax.pie(values, startangle=90, colors=colors)
-        return self.get_html(plt)
-
-
 class PentestPDFReport(report_types.PentestPDFReport):
-    COLORS = ["#9c1720", "#d13c0f", "#e8971e", "#2075f5", "#059D1D"]
 
     def get_assets(self):
         assets = []
@@ -88,9 +39,6 @@ class PentestPDFReport(report_types.PentestPDFReport):
         return ProjectVulnerability.objects.for_project(
             project=self.get_project()
         ).filter(finding__is_null=False)
-
-    def plot_severity_chart(self):
-        return Chart(self.get_project()).plot_severity_pie_chart(self.COLORS)
 
     def get_errors(self):
         errors = []
@@ -125,7 +73,10 @@ class AdvisoryMarkdownExport(report_types.AdvisoryMarkdownExport):
 
 
 class AdvisoryPDFExport(report_types.AdvisoryPDFExport):
-    pass
+    def get_context(self):
+        context = super().get_context()
+        context["now"] = datetime.datetime.now().strftime("%B %d, %Y")
+        return context
 
 
 class VulnerabilityCSVReport(report_types.VulnerabilityCSVReport):

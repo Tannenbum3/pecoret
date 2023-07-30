@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from backend.serializers.user import MinimalUserSerializer
+from backend.serializers.report_templates import ReportTemplateMinimalSerializer
 from backend.models.reports.report import Report, ReportVariant
 from backend.models import User, ReportTemplate
 from pecoret.core.serializers import (
     ValuedChoiceField,
     ReportAuthorRelatedField,
+    PrimaryKeyRelatedField
 )
 
 
@@ -13,7 +15,8 @@ class ReportSerializer(serializers.ModelSerializer):
     author = ReportAuthorRelatedField(
         serializer=MinimalUserSerializer, queryset=User.objects.all()
     )
-    template = serializers.PrimaryKeyRelatedField(
+    template = PrimaryKeyRelatedField(
+        serializer=ReportTemplateMinimalSerializer,
         queryset=ReportTemplate.objects.active()
     )
 

@@ -23,6 +23,11 @@ export default class ReportService {
         return api.post(url, data)
     }
 
+    deleteReport(api, projectId, reportId) {
+        let url = "/projects/" + projectId + "/reports/" + reportId + "/";
+        return api.delete(url);
+    }
+
     getReportTemplate(api, reportTemplateId){
         let url = "/report-templates/" + reportTemplateId + "/"
         return api.get(url) 

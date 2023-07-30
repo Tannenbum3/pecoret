@@ -30,6 +30,7 @@
 </head>
 
 <body id="advisory-body">
+{% include './pages/advisories/cover.html' %}
 
     <!-- Header Table -->
     <section id="vuln-{{ advisory.pk }}-header">
@@ -38,7 +39,8 @@
                 <i class="fas fa-bookmark"></i>
                 <span class="fa-layers-text" data-fa-transform="shrink-8 down-3" style="font-weight:900"></span>
             </span>
-            {{ advisory.vulnerability.name }} - {{ advisory.pk }}
+          {{ advisory.vulnerability.name }}{% if not advisory.hide_advisory_id_in_report %} -
+            {{ advisory.get_advisory_id_display() }}{% endif %}
         </h3>
 
         <table style="width: 100%" id="intro-detail-table">

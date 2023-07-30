@@ -5,12 +5,13 @@ $medium-color: #e8971e;
 $low-color: #2075f5;
 $informational-color: #059D1D;
 
-// $primary: #2c3e50;
-$primary: #1c9e75;
+$primary: #206fbd;
+$secondary: #bee3ff;
 $white: #ddd;
 
 /* cover page */
 $text-color-cover: $primary;
+$text-color-cover-secondary: $secondary;
 
 /* page margins */
 $page-margin-top: 30mm;
@@ -26,6 +27,9 @@ $color-heading-1: $primary;
 $color-heading-2: $primary;
 $color-heading-3: $primary;
 $color-heading-4: $primary;
+
+$text-color-primary: #393939;
+$text-default-font-size: 13px;
 
 /* table */
 $table-border-color: #000;

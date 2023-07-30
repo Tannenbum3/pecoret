@@ -38,26 +38,30 @@
     margin-top: 1em;
     font-size: 40px;
     line-height: 1.2em;
+    color: $text-color-cover-secondary;
   }
 
   .date {
     margin-top: 2em;
+    color: $text-color-cover-secondary;
+
   }
 
   .footer {
     position: absolute;
     bottom: 2cm;
     font-weight: 300;
+    color: $text-color-cover-secondary;
 
+    a {
+      color: $text-color-cover-secondary;
+    }
   }
 }
 
-#cover-footer {
-  flex: 1 50%;
-  margin-bottom: 1cm;
-  margin-left: 1cm;
+a {
 
-  a {
-    color: $text-color-cover;
+  &:hover {
+    background-color: $text-color-cover;
   }
 }
