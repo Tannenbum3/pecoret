@@ -6,5 +6,5 @@ class CWESerializer(serializers.ModelSerializer):
     class Meta:
         model = CWE
         fields = [
-            "cwe_id", "name", "description"
+            "cwe_id", "name", "description", "pk"
         ]
