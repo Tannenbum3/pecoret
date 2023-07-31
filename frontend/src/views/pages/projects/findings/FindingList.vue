@@ -1,135 +1,168 @@
 <script>
-import FindingService from '@/service/FindingService'
-import SeverityBadge from '@/components/SeverityBadge.vue'
-import BlankSlate from '@/components/BlankSlate.vue'
+import FindingService from "@/service/FindingService";
+import SeverityBadge from "@/components/SeverityBadge.vue";
+import BlankSlate from "@/components/BlankSlate.vue";
 import FindingCopyDialog from "@/components/dialogs/FindingCopyDialog.vue";
 
 
 export default {
-  name: 'FindingList',
-  mounted() {
-    this.getFindings()
-  },
-  data() {
-    return {
-      breadcrumbs: [
-        {
-          label: 'Findings', disabled: true
+    name: "FindingList",
+    mounted() {
+        this.getFindings();
+    },
+    data() {
+        return {
+            breadcrumbs: [
+                {
+                    label: "Findings", disabled: true
+                }
+            ],
+            projectId: this.$route.params.projectId,
+            findingService: new FindingService(),
+            findings: [],
+            selectedItems: [],
+            deleteButtonLoading: false,
+            loading: false,
+            totalRecords: 0,
+            pagination: { page: 1, limit: 20 }
+        };
+    },
+    methods: {
+        getFindings() {
+            this.loading = true;
+            let params = {
+                limit: this.pagination.limit,
+                page: this.pagination.page
+            };
+            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
+                this.totalRecords = response.data.count;
+                this.findings = response.data.results;
+            }).finally(() => {
+                this.loading = false;
+            });
+        },
+        onSort(event) {
+        },
+        onFilter(event) {
+        },
+        onPage(event) {
+            this.pagination.page = event.page + 1;
+            this.getFindings();
+        },
+        bulkDeleteConfirm() {
+            this.$confirm.require({
+                message: "Do you want to delete all selected items?",
+                header: "Delete confirmation",
+                icon: "fa fa-trash",
+                acceptClass: "p-button-danger",
+                accept: () => {
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
+                    this.selectedItems.forEach((item) => {
+                        this.findingService.deleteFinding(this.$api, this.projectId, item.pk).then(() => {
+                            itemsDeleted++;
+                            if (itemsDeleted === this.selectedItems.length) {
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedItems = [];
+                                this.getFindings();
+                            }
+                        });
+                    });
+                }
+            });
+        },
+        onGlobalSearch(search) {
+            this.loading = true;
+            let params = {
+                search: search
+            };
+            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
+                this.totalRecords = response.data.count;
+                this.findings = response.data.results;
+            }).finally(() => {
+                this.loading = false;
+            });
         }
-      ],
-      projectId: this.$route.params.projectId,
-      findingService: new FindingService(),
-      findings: [],
-      loading: false,
-      totalRecords: 0,
-      pagination: {page: 1, limit: 20}
-    }
-  },
-  methods: {
-    getFindings() {
-      this.loading = true
-      let params = {
-        limit: this.pagination.limit,
-        page: this.pagination.page
-      }
-      this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-        this.totalRecords = response.data.count
-        this.findings = response.data.results
-      }).finally(() => {
-        this.loading = false
-      })
     },
-    onSort(event) {
-    },
-    onFilter(event) {
-    },
-    onPage(event) {
-      this.pagination.page = event.page + 1
-      this.getFindings()
-    },
-    onGlobalSearch(search) {
-      this.loading = true
-      let params = {
-        search: search
-      }
-      this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-        this.totalRecords = response.data.count
-        this.findings = response.data.results
-      }).finally(() => {
-        this.loading = false
-      })
-    }
-  },
-  components: {FindingCopyDialog, SeverityBadge, BlankSlate}
-}
+    components: { FindingCopyDialog, SeverityBadge, BlankSlate }
+};
 
 </script>
 
 <template>
-  <div class="grid mt-3">
-    <div class="col-12">
-      <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+    <div class="grid mt-3">
+        <div class="col-12">
+            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+        </div>
     </div>
-  </div>
-  <div class="grid">
-    <div class="col-6">
-      <div class="justify-content-start flex"></div>
-    </div>
-    <div class="col-6">
-      <div class="flex justify-content-end">
-        <Button outlined
-                @click="this.$router.push({ name: 'FindingCreate', params: { projectId: this.projectId } })"
-                icon="fa fa-plus" label="Finding"></Button>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="col-12">
-      <div class="card">
-        <DataTable :paginator="true" dataKey="pk" :rows="pagination.limit" :value="findings"
-                   :rowHover="findings.length > 0"
-                   filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
-                   :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-
-          <template #header>
-            <div class="flex justify-content-between flex-column sm:flex-row">
-              <span class="p-input-icon-left mb-2">
-                <i class="pi pi-search"/>
-                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                           style="width: 100%"/>
-              </span>
+    <div class="grid">
+        <div class="col-6">
+            <div class="justify-content-start flex"></div>
+        </div>
+        <div class="col-6">
+            <div class="flex justify-content-end">
+                <Button outlined
+                        @click="this.$router.push({ name: 'FindingCreate', params: { projectId: this.projectId } })"
+                        icon="fa fa-plus" label="Finding"></Button>
             </div>
-          </template>
-          <template #empty>
-            <BlankSlate title="No findings!" text="No findings here!" icon="fa fa-bug"></BlankSlate>
-          </template>
-
-          <Column field="name" header="Name">
-            <template #body="slotProps">
-              <router-link class="text-color underline"
-                           :to="{name: 'FindingDetail', params: {projectId: this.projectId, findingId: slotProps.data.pk}}">
-                {{ slotProps.data.name }}
-              </router-link>
-            </template>
-          </Column>
-          <Column field="severity" header="Severity">
-            <template #body="slotProps">
-              <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-            </template>
-          </Column>
-          <Column field="component.name" header="Asset"></Column>
-          <Column field="vulnerability.name" header="Vulnerability"></Column>
-          <Column field="status" header="Status"></Column>
-          <Column field="finding_date" header="Date"></Column>
-          <Column field="needs_review" header="Needs Review"></Column>
-          <Column header="Actions">
-            <template #body="slotProps">
-              <FindingCopyDialog :finding="slotProps.data.pk" @object-created="getFindings"></FindingCopyDialog>
-            </template>
-          </Column>
-        </DataTable>
-      </div>
+        </div>
     </div>
-  </div>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <DataTable :paginator="true" dataKey="pk" :rows="pagination.limit" :value="findings"
+                           :rowHover="findings.length > 0"
+                           v-model:selection="selectedItems"
+                           filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
+                           :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
+
+                    <template #header>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+                <i class="pi pi-search" />
+                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
+                           style="width: 100%" />
+              </span>
+
+                        </div>
+                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" size="small"
+                                outlined
+                                severity="danger" @click="bulkDeleteConfirm"></Button>
+                    </template>
+                    <template #empty>
+                        <BlankSlate title="No findings!" text="No findings here!" icon="fa fa-bug"></BlankSlate>
+                    </template>
+                    <Column selectionMode="multiple" headerStyle=""></Column>
+
+                    <Column field="name" header="Name">
+                        <template #body="slotProps">
+                            <router-link class="text-color underline"
+                                         :to="{name: 'FindingDetail', params: {projectId: this.projectId, findingId: slotProps.data.pk}}">
+                                {{ slotProps.data.name }}
+                            </router-link>
+                        </template>
+                    </Column>
+                    <Column field="severity" header="Severity">
+                        <template #body="slotProps">
+                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
+                        </template>
+                    </Column>
+                    <Column field="component.name" header="Asset"></Column>
+                    <Column field="vulnerability.name" header="Vulnerability"></Column>
+                    <Column field="status" header="Status"></Column>
+                    <Column field="finding_date" header="Date"></Column>
+                    <Column field="needs_review" header="Needs Review"></Column>
+                    <Column header="Actions">
+                        <template #body="slotProps">
+                            <FindingCopyDialog :finding="slotProps.data.pk"
+                                               @object-created="getFindings"></FindingCopyDialog>
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
+        </div>
+    </div>
 </template>

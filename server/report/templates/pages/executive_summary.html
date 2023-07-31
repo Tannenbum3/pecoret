@@ -12,6 +12,10 @@
 
 <article>
   <section id="management-summary-evaluation">
+    <h2>{{ _('Evaluation') }}</h2>
+    {% with section="#management-summary-evaluation" %}
+      {% include './components/report_error_for_section.html' %}
+    {% endwith %}
     {{ report_helpers.bleach_md(report_document.report.evaluation)|safe }}
   </section>
   <section>
@@ -54,6 +58,9 @@
   <section>
     <h2 id="management-summary-recommendation">{{ _('Strategic Recommendations') }}</h2>
     <p>
+      {% with section="#management-summary-recommendation" %}
+        {% include './components/report_error_for_section.html' %}
+      {% endwith %}
       {{ report_helpers.bleach_md(report_document.report.recommendation, allow_images=True)|safe }}
     </p>
   </section>

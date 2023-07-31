@@ -21,7 +21,7 @@ export default class FindingService {
         return api.get(url)
     }
 
-    deleteFinding(projectId, findingId){
+  deleteFinding(api, projectId, findingId) {
         let url = "/projects/" + projectId + "/findings/" + findingId + "/"
         return api.delete(url)
     }

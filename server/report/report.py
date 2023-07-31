@@ -7,7 +7,19 @@ from pecoret.core.reporting import types as report_types
 from pecoret.core.reporting.error import ReportError
 
 
-class PentestPDFReport(report_types.PentestPDFReport):
+class ErrorMixin:
+    def check_finding_errors(self):
+        # check finding errors
+        for finding in Finding.objects.for_report(self.get_project()):
+            if not finding.proof_set.all():
+                error = ReportError("Missing proof!", f"#finding-{finding.pk}-proofs")
+                self._add_error(error)
+            if self.get_project().require_cvss_base_score and finding.cvssbasescore.is_incomplete:
+                error = ReportError("Missing CVSS base score", f"#finding-{finding.pk}-title")
+                self._add_error(error)
+
+
+class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
 
     def get_assets(self):
         assets = []
@@ -40,32 +52,25 @@ class PentestPDFReport(report_types.PentestPDFReport):
             project=self.get_project()
         ).filter(finding__is_null=False)
 
-    def get_errors(self):
-        errors = []
-        for finding in Finding.objects.for_report(self.get_project()):
-            if not finding.proof_set.all():
-                error = ReportError("Missing proof!", f"#finding-{finding.pk}-title")
-                errors.append(error)
-            if self.get_project().require_cvss_base_score and finding.cvssbasescore.is_incomplete:
-                error = ReportError("Missing CVSS base score", f"#finding-{finding.pk}-title")
-                errors.append(error)
-        if not self.report_document.report.recommendation:
-            error = ReportError("Missing recommendation!", "#management-summary-recommendation")
-            errors.append(error)
-        if not self.report_document.report.evaluation:
-            error = ReportError("Missing evaluation!", "#management-summary-evaluation")
-            errors.append(error)
-        return errors
-
     def get_findings_count_for_asset(self, asset, severity=None):
         qs = asset.findings.exclude(exclude_from_report=True)
         if severity:
             qs = qs.filter(severity=Severity[severity].value)
         return qs.count()
 
+    def check_report_errors(self):
+        self.check_finding_errors()
+        if not self.report_document.report.recommendation:
+            error = ReportError("Missing recommendation!", "#management-summary-recommendation")
+            self._add_error(error)
+        if not self.report_document.report.evaluation:
+            error = ReportError("Missing evaluation!", "#management-summary-evaluation")
+            self._add_error(error)
 
-class SingleFindingPDFReport(report_types.SingleFindingPDFReport):
-    pass
+
+class SingleFindingPDFReport(ErrorMixin, report_types.SingleFindingPDFReport):
+    def check_report_errors(self):
+        self.check_finding_errors()
 
 
 class AdvisoryMarkdownExport(report_types.AdvisoryMarkdownExport):
@@ -73,6 +78,7 @@ class AdvisoryMarkdownExport(report_types.AdvisoryMarkdownExport):
 
 
 class AdvisoryPDFExport(report_types.AdvisoryPDFExport):
+
     def get_context(self):
         context = super().get_context()
         context["now"] = datetime.datetime.now().strftime("%B %d, %Y")

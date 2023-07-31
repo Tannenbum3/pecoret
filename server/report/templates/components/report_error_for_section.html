@@ -1,0 +1,3 @@
+{% for error in variant.get_errors_for_section(section) %}
+  <p class="text-color-error"><strong>Error: </strong>{{ error.message }}</p>
+{% endfor %}

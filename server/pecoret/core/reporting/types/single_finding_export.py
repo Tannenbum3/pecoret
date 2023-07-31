@@ -1,5 +1,4 @@
 from django.core.exceptions import ImproperlyConfigured
-from pecoret.core.utils.markdown import bleach_md
 from .base import ProjectRelatedReportType
 from .mixins.pdf import PDFExportMixin
 
@@ -22,7 +21,8 @@ class SingleFindingPDFReport(PDFExportMixin, ProjectRelatedReportType):
         return self.finding.project
 
     def get_context(self):
-        context = {"finding": self.finding, "report_helpers": {"bleach_md": bleach_md}}
+        context = super().get_context()
+        context["finding"] = self.finding
         return context
 
     def post_processing(self, *args, **kwargs):

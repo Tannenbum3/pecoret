@@ -63,7 +63,7 @@ export default {
       });
     },
     deleteFinding() {
-      this.findingService.deleteFinding(this.projectId, this.findingId).then(() => {
+        this.findingService.deleteFinding(this.$api, this.projectId, this.findingId).then(() => {
         this.$toast.add({ severity: "info", summary: "Confirmed", detail: "Finding deleted!", life: 3000 });
         this.$router.push({ name: "FindingList", params: { projectId: this.projectId } });
 

@@ -24,6 +24,7 @@ class BaseReportType:
             extensions=["jinja2.ext.i18n"],
         )
         self.enable_i18n()
+        self.errors = {}
 
     def enable_i18n(self):
         # pylint: disable=no-member
@@ -71,7 +72,7 @@ class BaseReportType:
         Returns:
             dict: the context that is passed to jinja2
         """
-        return {"report_helpers": {"bleach_md": bleach_md}}
+        return {"report_helpers": {"bleach_md": bleach_md}, "variant": self}
 
     def get_template_name(self):
         """just get the template name
@@ -96,7 +97,7 @@ class BaseReportType:
         raise NotImplementedError
 
     def pre_processing(self, *args, **kwargs):
-        pass
+        self.check_report_errors()
 
     def post_processing(self, *args, **kwargs):
         pass
@@ -111,6 +112,21 @@ class BaseReportType:
         rendered_report = self.render_report()
         self.post_processing(rendered_report=rendered_report)
         return rendered_report
+
+    def _add_error(self, error):
+        if not self.errors.get(error.url):
+            self.errors[error.url] = [error]
+        else:
+            self.errors[error.url].append(error)
+
+    def check_report_errors(self):
+        pass
+
+    def get_errors(self):
+        return self.errors
+
+    def get_errors_for_section(self, section):
+        return self.errors.get(section, [])
 
 
 class ProjectRelatedReportType(BaseReportType):
@@ -146,7 +162,6 @@ class ProjectRelatedReportType(BaseReportType):
         context = super().get_context()
         context["project"] = self.get_project()
         context["report_document"] = self.report_document
-        context["variant"] = self
         return context
 
     def post_processing(self, *args, **kwargs):
