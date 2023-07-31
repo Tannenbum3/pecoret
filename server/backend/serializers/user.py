@@ -7,6 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from backend.models.user import User
 from pecoret.core.utils import decode_uid
 
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group

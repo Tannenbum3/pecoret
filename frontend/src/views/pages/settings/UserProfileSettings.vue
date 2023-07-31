@@ -2,7 +2,7 @@
 import SettingsTabMenu from "@/components/pages/SettingsTabMenu.vue";
 
 export default {
-    name: "UserSettingsDetail",
+    name: "UserProfileSettings",
     components: { SettingsTabMenu },
     data() {
         return {
@@ -17,13 +17,13 @@ export default {
     },
     methods: {
         getItem() {
-            let url = "/users/user-settings/";
+            let url = "/auth/check/";
             this.$api.get(url).then((response) => {
-                this.model = response.data;
+                this.model = response.data.user;
             });
         },
         patch() {
-            let url = "/users/user-settings/";
+            let url = "/users/update_profile/";
             this.$api.patch(url, this.model).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
@@ -55,39 +55,16 @@ export default {
                 <template #content>
                     <div class="grid formgrid p-fluid">
                         <div class="field col-12">
-                            <div class="flex align-items-center">
-                                <Checkbox v-model="model.show_real_name_in_report"
-                                          id="show_real_name_in_report" binary
-                                />
-                                <label for="show_real_name_in_report" class="ml-2"> Show real name in report? </label>
-                            </div>
-                            <small class="text-color-secondary">If checked, show your first and last name in several
-                                reports. Otherwise use username.</small>
+                            <label for="first_name">First Name</label>
+                            <InputText v-model="model.first_name"></InputText>
                         </div>
-                    </div>
-                </template>
-            </Card>
-
-            <Card class="mt-3">
-                <template #title>Notifications</template>
-                <template #content>
-                    <div class="grid formgrid p-fluid">
                         <div class="field col-12">
-                            <div class="flex align-items-center">
-                                <Checkbox v-model="model.notify_critical_findings"
-                                          id="notify_critical_findings" binary
-                                />
-                                <label for="notify_critical_findings" class="ml-2"> Notify me on new critical
-                                    findings? </label>
-                            </div>
-                            <small class="text-color-secondary">Receive notification mail when new critical finding is
-                                created in one of your projects.</small>
+                            <label for="first_name">Last Name</label>
+                            <InputText v-model="model.last_name"></InputText>
                         </div>
                     </div>
                 </template>
             </Card>
-
-
             <div class="flex justify-content-end mt-3">
                 <Button @click="patch" label="Save"></Button>
             </div>
