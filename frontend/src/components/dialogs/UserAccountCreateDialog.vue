@@ -73,7 +73,7 @@ export default {
       </div>
       <div class="field col-12">
         <div class="flex align-items-center">
-          <Checkbox v-model="model.compromised" inputId="compromised" />
+            <Checkbox v-model="model.compromised" inputId="compromised" :binary="true" />
           <label for="compromised" class="ml-2"> Compromised?</label>
         </div>
       </div>

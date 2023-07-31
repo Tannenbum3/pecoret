@@ -1,6 +1,7 @@
 <script>
 import UserAccountService from "@/service/UserAccountService";
 import UserAccountCreateDialog from "@/components/dialogs/UserAccountCreateDialog.vue";
+import UserAccountUpdateDialog from "@/components/dialogs/UserAccountUpdateDialog.vue";
 import BlankSlate from "@/components/BlankSlate.vue";
 
 
@@ -24,11 +25,6 @@ export default {
     },
     mounted() {
         this.getItems();
-    },
-    computed: {
-        passwordDisplay() {
-
-        }
     },
     methods: {
         onSort() {
@@ -86,7 +82,7 @@ export default {
             });
         }
     },
-    components: { UserAccountCreateDialog, BlankSlate }
+    components: { UserAccountCreateDialog, UserAccountUpdateDialog, BlankSlate }
 };
 </script>
 
@@ -133,6 +129,8 @@ export default {
                         <template #body="slotProps">
                             <Button size="small" outlined icon="fa fa-copy"
                                     @click="copyToClipboard(slotProps.data.password)"></Button>
+                            <UserAccountUpdateDialog :account="slotProps.data"
+                                                     @object-updated="this.getItems"></UserAccountUpdateDialog>
                             <Button size="small" outlined severity="danger" icon="fa fa-trash"
                                     @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>

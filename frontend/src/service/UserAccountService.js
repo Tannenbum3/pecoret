@@ -17,4 +17,9 @@ export default class UserAccountService {
         let url = "/projects/" + projectId + "/accounts/" + accountId + "/"
         return api.delete(url)
     }
+
+    patchAccount(api, projectId, accountId, data) {
+        let url = "/projects/" + projectId + "/accounts/" + accountId + "/";
+        return api.patch(url, data);
+    }
 }
