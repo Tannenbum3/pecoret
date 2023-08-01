@@ -29,6 +29,9 @@ class MembershipQuerySet(models.QuerySet):
     def for_roles(self, roles):
         return self.filter(role__in=roles)
 
+    def for_report(self):
+        return self.filter(display_in_report=True)
+
 
 class Membership(TimestampedModel, PeCoReTBaseModel):
     objects = MembershipManager.from_queryset(MembershipQuerySet)()

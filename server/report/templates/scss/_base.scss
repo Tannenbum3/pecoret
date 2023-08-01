@@ -5,15 +5,15 @@
   margin: 3cm 1cm 2cm 1cm;
 
   @top-right {
-      content: " ";
-      background: url(file://images/logo.svg);
-      background-size: cover;
-      background-repeat: no-repeat;
-      height: 12mm;
-      width: 53mm;
-      margin-bottom: 8mm;
-      margin-right: -6mm;
-      background-position: left center;
+    content: " ";
+    background: url(file://images/logo.svg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 12mm;
+    width: 53mm;
+    margin-bottom: 8mm;
+    margin-right: -6mm;
+    background-position: left center;
   }
 
 }
@@ -165,23 +165,23 @@ table {
 }
 
 code {
-    display: inline;
-    padding: 1px 2px;
-    font-family: monospace;
-    font-size: 12px;
-    background-color: #e2e2e236;
-    border-radius: 3px;
-    border: 1px solid #bbbbbb;
+  display: inline;
+  padding: 1px 2px;
+  font-family: monospace;
+  font-size: 12px;
+  background-color: #e2e2e236;
+  border-radius: 3px;
+  border: 1px solid #bbbbbb;
 }
 
 
 pre code {
-    display: block;
-    padding: 8px;
-    margin-bottom: 8px;
-    white-space: pre-wrap;
-    line-height: 1.2em;
-    word-wrap: break-word;
+  display: block;
+  padding: 8px;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  line-height: 1.2em;
+  word-wrap: break-word;
 }
 
 
@@ -210,22 +210,68 @@ img {
 }
 
 body {
-    counter-reset: chapter section subsection figures;
+  counter-reset: chapter section subsection figures;
 }
 
 b {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 i {
-    font-style: italic;
+  font-style: italic;
 }
 
 em {
-    font-style: italic;
-    font-weight: 400;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* helper classes */
+
+.flex {
+  display: flex;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
+  flex: 1;
+}
+
+.border-left-1 {
+  border-left: 1px solid $border-color;
+}
+
+.pl-3 {
+  padding-left: 3rem;
+}
+
+.mt-default {
+  margin-top: 30px;
+}
+
+.mt-small {
+  margin-top: 10px;
+}
+
+.table-width {
+  width: 100%
+}
+
+.font-space-small {
+  line-height: normal !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.text-dark {
+  color: $text-color-dark;
 }

@@ -1,7 +1,6 @@
 @import './variables';
 @import './page';
 @import './base';
-@import './toc';
 
 @import "./components/table";
 @import "./components/codehilite";
@@ -10,6 +9,8 @@
 @import "./pages/technical_summary";
 @import "./pages/single_finding";
 @import "./pages/errors";
+@import './pages/toc';
+@import './pages/assessment_information';
 
 
 @import "./advisory.scss";

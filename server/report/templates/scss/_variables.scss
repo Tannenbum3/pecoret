@@ -8,6 +8,11 @@ $informational-color: #059D1D;
 $primary: #206fbd;
 $secondary: #bee3ff;
 $white: #ddd;
+$accent-3: #43616f;
+$black: #000;
+$text-color-dark: #393939;
+
+$border-color: $black;
 
 /* cover page */
 $text-color-cover: $primary;
@@ -28,8 +33,12 @@ $color-heading-2: $primary;
 $color-heading-3: $primary;
 $color-heading-4: $primary;
 
-$text-color-primary: #393939;
+$text-color-primary: $text-color-dark;
 $text-default-font-size: 13px;
 
 /* table */
-$table-border-color: #000;
+$table-border-color: $black;
+
+/* toc */
+$toc-item-color-1: $text-color-dark;
+$toc-item-color-2: $accent-3;

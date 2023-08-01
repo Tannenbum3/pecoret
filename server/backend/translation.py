@@ -8,7 +8,7 @@ from backend.models import (
 
 @register(VulnerabilityTemplate)
 class VulnerabilityTemplateTranslation(TranslationOptions):
-    fields = ["name", "description", "recommendation"]
+    fields = ["name", "description", "recommendation", "remediation"]
 
 
 @register(VulnerabilityCategory)
@@ -18,4 +18,4 @@ class VulnerabilityCategoryTranslation(TranslationOptions):
 
 @register(ProjectVulnerability)
 class ProjectVulnerabilityTranslation(TranslationOptions):
-    fields = ["name", "description", "recommendation"]
+    fields = ["name", "description", "recommendation", "remediation"]

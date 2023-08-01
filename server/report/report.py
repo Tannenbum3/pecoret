@@ -1,7 +1,7 @@
 import datetime
 from django.db.models import Count, Max, Q
 from django.conf import settings
-from backend.models import ProjectVulnerability, Finding, Host, WebApplication
+from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
 from pecoret.core.reporting.error import ReportError
@@ -32,6 +32,7 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
         context["now"] = datetime.datetime.now().strftime("%B %d, %Y")
         context["REPORT_COMPANY_INFORMATION"] = settings.REPORT_COMPANY_INFORMATION
         context["findings"] = Finding.objects.for_report(self.get_project())
+        context["members"] = Membership.objects.for_project(self.get_project()).for_report()
         return context
 
     def get_unique_vulnerabilities_by_severity(self):
@@ -61,10 +62,13 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
     def check_report_errors(self):
         self.check_finding_errors()
         if not self.report_document.report.recommendation:
-            error = ReportError("Missing recommendation!", "#management-summary-recommendation")
+            error = ReportError("Missing recommendation!", "#executive-summary-recommendation")
             self._add_error(error)
         if not self.report_document.report.evaluation:
-            error = ReportError("Missing evaluation!", "#management-summary-evaluation")
+            error = ReportError("Missing evaluation!", "#executive-summary-evaluation")
+            self._add_error(error)
+        if not self.report_document.report.changehistory_set.count():
+            error = ReportError("Change History missing!", "#change-history-table")
             self._add_error(error)
 
 

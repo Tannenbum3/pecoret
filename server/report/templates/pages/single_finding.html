@@ -16,7 +16,7 @@
     <tr>
       <td>{{ finding.component }}</td>
       <td class="text-{{ finding.get_severity_display().lower() }}">
-        {{ finding.get_severity_display()|dynamic_trans }}</td>
+        <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong></td>
       <td>{{ finding.finding_date.strftime("%B %d, %Y") }}</td>
       <td>{{ finding.get_status_display()|dynamic_trans }}</td>
     </tr>

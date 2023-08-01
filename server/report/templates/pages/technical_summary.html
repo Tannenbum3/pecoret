@@ -1,144 +1,138 @@
-<article id="vulnerability-listing" class="chapter">
-    <h1 class="chapter-title" id="vulnerability-listing-title">{{ _('Technical Summary') }}</h1>
+<article id="technical-summary" class="chapter">
+  <h1 class="chapter-title" id="technical-summary-title">{{ _('Technical Summary') }}</h1>
 </article>
 
 <section>
-    <p>
-        {% trans %}
-        The following table shows the in-scope items and a short description of the asset.
-        {% endtrans %}
-    </p>
-    <table class="table-custom">
-        <thead>
-        <tr>
-            <th>{{ _('Asset') }}</th>
-            <th>{{ _('Environment') }}</th>
-            <th>{{ _('Description') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for asset in variant.get_assets() %}
-            <tr>
-                <td>{{ asset }}</td>
-                <td>{{ asset.get_environment_display() | dynamic_trans }}</td>
-                <td>{% if asset.description %}{{ report_helpers.bleach_md(asset.description)|safe }}{% else %}-{% endif %}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <p>
+    {% trans %}
+      This technical summary provides an overview of the findings resulting from the pentest conducted on the defined
+      assets.
+      Throughout the test, our team of skilled ethical hackers simulated real-world attacks on various targets within
+      scope. The approach included a combination of automated
+      vulnerability scanning, manual testing, and exploitation techniques to ascertain the level of resilience against
+      potential malicious actors.
+    {% endtrans %}
+  </p>
+</section>
+
+<section id="post-assessment-clean-up">
+  <h2>{{ _('Post Assessment Clean-up') }}</h2>
+  <p>
+    {% trans %}
+      Any test accounts, which were created for the purpose of this assessment, should be disabled or removed, as
+      appropriate, together with any associated content.
+    {% endtrans %}
+  </p>
 </section>
 
 <section>
-    <h2>{{ _('Post Assessment Clean-up') }}</h2>
-    <p>
+  <h2 id="section-risk-ratings">{{ _('Risk Ratings') }}</h2>
+  <p>
+    {% trans %}
+      The table below gives a key to the risk naming and colours used throughout this report to provide a clear and
+      concise risk scoring system.
+    {% endtrans %}
+  </p>
+  <p>
+    {% trans %}
+      It should be noted that quantifying the overall business risk posed by any of the issues found in any test is
+      outside
+      our scope. This means that some risks may be reported as high from a technical perspective but may, as a result
+      of other controls unknown to us, be considered acceptable by the business.
+    {% endtrans %}
+  </p>
+
+  <table class="table-custom">
+    <thead>
+    <tr>
+      <th>{{ _('Risk Rating') }}</th>
+      <th>{{ _('Description') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th class="text-critical">{{ _('Critical') }}</th>
+      <td>
         {% trans %}
-        Any test accounts, which were created for the purpose of this assessment, should be disabled or removed, as
-        appropriate, together with any associated content.
+          Critical vulnerabilities can lead to a full compromise of the asset.
+          They pose a serious risk to the security of the target and should be remediated immediately.
         {% endtrans %}
-    </p>
+      </td>
+    </tr>
+    <tr>
+      <th class="text-high">{{ _('High') }}</th>
+      <td>
+        {% trans %}
+          High-risk vulnerabilities pose a serious threat to the target.
+          These vulnerabilities require resolution in a short-term.
+        {% endtrans %}
+      </td>
+    </tr>
+    <tr>
+      <th class="text-medium">{{ _('Medium') }}</th>
+      <td>
+        {% trans %}
+          Vulnerabilities indicated with this severity level pose a medium risk to the target.
+          Typically, these vulnerabilities depend on other factors that must be present for successful exploitation.
+          These vulnerabilities should be resolved throughout the ongoing maintenance process.
+        {% endtrans %}
+      </td>
+    </tr>
+    <tr>
+      <th class="text-low">{{ _('Low') }}</th>
+      <td>
+        {% trans %}
+          Low severity vulnerabilities pose a minimal risk to the target and are often theoretical in nature.
+          These vulnerabilities should be addressed as part of routine maintenance tasks.
+        {% endtrans %}
+      </td>
+    </tr>
+    <tr>
+      <th class="text-informational">{{ _('Informational') }}</th>
+      <td>
+        {% trans %}
+          Informational vulnerabilities, by themselves, have little or no impact on the target.
+          These vulnerabilities should be addressed in order to meet leading practice.
+        {% endtrans %}
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </section>
+<div class="page-break-after"></div>
 
-<section>
-    <h2 id="section-risk-ratings">{{ _('Risk Ratings') }}</h2>
-    <p>
-        {% trans %}
-        The table below gives a key to the risk naming and colours used throughout this report to provide a clear and
-        concise risk scoring system.
-        {% endtrans %}
-    </p>
-    <p>
-        {% trans %}
-        It should be noted that quantifying the overall business risk posed by any of the issues found in any test is
-        outside
-        our scope. This means that some risks may be reported as high from a technical perspective but may, as a result
-        of other controls unknown to us, be considered acceptable by the business.
-        {% endtrans %}
-    </p>
+<section id="findings-overview">
+  <h2>{{ _('Findings Overview') }}</h2>
+  <p>
+    {% trans %}
+      All the issues identified during the assessment are listed below with a brief description and risk rating for each
+      issue.
+      The risk rating used in this report are defined in
+    {% endtrans %}
+    <a href="#section-risk-ratings">{{ _('Risk Rating Section') }}</a>.
+  </p>
+  <table class="table-width finding-overview-table">
+    <thead>
+    <tr>
+      <th>Finding</th>
+      <th class="risk">{{ _('Risk') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for finding in findings %}
+      <tr>
+        <td class="text-{{ finding.get_severity_display().lower() }}">
+          <a href="#finding-{{ finding.pk }}-title">
+            <strong>{{ finding.internal_id }} - {{ finding.vulnerability.name }}</strong>
+          </a>
+          <p class="text-dark font-space-small">{{ finding.vulnerability.remediation }}</p>
 
-    <table class="table-custom">
-        <thead>
-        <tr>
-            <th>{{ _('Risk Rating') }}</th>
-            <th>{{ _('Description') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="text-critical">{{ _('Critical') }}</td>
-            <td>
-                {% trans %}
-                A vulnerability was discovered that has been rated as critical. This requires resolution as quickly as
-                possible.
-                {% endtrans %}
-            </td>
-        </tr>
-        <tr>
-            <td class="text-high">{{ _('High') }}</td>
-            <td>
-                {% trans %}
-                A vulnerability was discovered that has been rated as high.
-                This requires resolution in a short term.
-                {% endtrans %}
-            </td>
-        </tr>
-        <tr>
-            <td class="text-medium">{{ _('Medium') }}</td>
-            <td>
-                {% trans %}
-                A vulnerability was discovered that has been rated as
-                medium. This should be resolved throughout the ongoing
-                maintenance process.
-                {% endtrans %}
-            </td>
-        </tr>
-        <tr>
-            <td class="text-low">{{ _('Low') }}</td>
-            <td>
-                {% trans %}
-                A vulnerability was discovered that has been rated as low.
-                This should be addressed as part of routine maintenance
-                tasks.
-                {% endtrans %}
-            </td>
-        </tr>
-        <tr>
-            <td class="text-informational">{{ _('Informational') }}</td>
-            <td>
-                {% trans %}
-                A discovery was made that is reported for information. This
-                should be addressed in order to meet leading practice.
-                {% endtrans %}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</section>
-
-<section>
-    <h2>{{ _('Findings Overview') }}</h2>
-    <p>
-        {% trans %}
-        All the issues identified during the assessment are listed below with a brief description and risk rating for each issue.
-        The risk rating used in this report are defined in 
-        {% endtrans %}
-        <a href="#section-risk-ratings">{{ _('Risk Rating Section') }}</a>.
-    </p>
-    <table class="table-custom">
-        <thead>
-            <tr>
-                <th>{{ _('Reference') }}</th>
-                <th>{{ _('Description') }}</th>
-                <th>{{ _('Risk') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for finding in findings %}
-                <tr>
-                    <td class="reference"><a href="#finding-{{ finding.pk }}-title"></a></td>
-                    <td>{{ finding.vulnerability.name }}</td>
-                    <td class="text-{{ finding.get_severity_display().lower() }}">{{ finding.get_severity_display()|dynamic_trans }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        </td>
+        <td class="text-{{ finding.get_severity_display().lower() }} risk">
+          <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </section>

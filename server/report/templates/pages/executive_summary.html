@@ -1,5 +1,5 @@
-<article id="mgmt-summary" class="chapter">
-  <h1 class="chapter-title" id="mgmt-summary-title">{{ _('Executive Summary') }}</h1>
+<article id="executive-summary" class="chapter">
+  <h1 class="chapter-title" id="executive-summary-title">{{ _('Executive Summary') }}</h1>
 
   {% trans %}
     This executive summary provides a high-level overview of the findings and recommendations from the recent
@@ -11,14 +11,14 @@
 </article>
 
 <article>
-  <section id="management-summary-evaluation">
+  <section id="executive-summary-evaluation">
     <h2>{{ _('Evaluation') }}</h2>
-    {% with section="#management-summary-evaluation" %}
+    {% with section="#executive-summary-evaluation" %}
       {% include './components/report_error_for_section.html' %}
     {% endwith %}
     {{ report_helpers.bleach_md(report_document.report.evaluation)|safe }}
   </section>
-  <section>
+  <section id="executive-summary-assessment-summary">
     <h2>{{ _('Assessment Summary') }}</h2>
     <p>
       {% trans %}
@@ -56,9 +56,9 @@
   </section>
 
   <section>
-    <h2 id="management-summary-recommendation">{{ _('Strategic Recommendations') }}</h2>
+    <h2 id="executive-summary-recommendation">{{ _('Recommendations') }}</h2>
     <p>
-      {% with section="#management-summary-recommendation" %}
+      {% with section="#executive-summary-recommendation" %}
         {% include './components/report_error_for_section.html' %}
       {% endwith %}
       {{ report_helpers.bleach_md(report_document.report.recommendation, allow_images=True)|safe }}
