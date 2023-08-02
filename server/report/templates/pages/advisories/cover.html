@@ -1,7 +1,9 @@
-<article id="cover">
-  <div class="title">{{ advisory.vulnerability.name }}</div>
-  <div class="project">{{ advisory.product }}</div>
-  <p class="date">{{ now }}</p>
+<div id="cover">
+  <div class="cover-container">
+    <div class="title">{{ _('Vulnerability Report') }}</div>
+    <div class="project">{{ advisory.product }}</div>
+    <p class="date">{{ now }}</p>
+  </div>
 
   <table class="footer">
     <tr>
@@ -19,12 +21,8 @@
       </tr>
     {% endif %}
     <tr>
-      <td>{{ _('Date') }}:</td>
-      <td>{{ now }}</td>
-    </tr>
-    <tr>
       <td>{{ _('Generator') }}:</td>
       <td><a href="https://pecoret.github.io" rel="noopener nofollow">PeCoReT</a></td>
     </tr>
   </table>
-</article>
+</div>

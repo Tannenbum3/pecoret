@@ -1,4 +1,5 @@
 from django.db import models
+from backend.models import User
 from .assets import AssetRelatedModel
 
 
@@ -32,3 +33,9 @@ class TimestampedModel(models.Model):
     class Meta:
         abstract = True
         ordering = ["-date_created", "-date_updated"]
+
+
+def CASCADE_USER_TO_GHOST(collector, field, sub_objs, using):
+    for obj in sub_objs:
+        obj.user = User.objects.get(username="Ghost")
+    models.CASCADE(collector, field, sub_objs, using)

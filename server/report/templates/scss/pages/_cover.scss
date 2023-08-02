@@ -21,7 +21,7 @@
   page: cover-page;
   margin-left: $page-margin-left;
   margin-right: $page-margin-right;
-  margin-top: 86mm;
+  margin-top: 80mm;
   color: $text-color-cover;
 
   a {
@@ -29,9 +29,10 @@
   }
 
   .title {
-    font-size: 40px;
+    font-size: 50px;
     text-transform: uppercase;
     font-weight: normal;
+    text-align: center;
   }
 
   .project {
@@ -39,17 +40,19 @@
     font-size: 40px;
     line-height: 1.2em;
     color: $text-color-cover-secondary;
+    text-align: center;
   }
 
   .date {
-    margin-top: 2em;
+    margin-top: 25mm;
     color: $text-color-cover-secondary;
+    text-align: end;
 
   }
 
   .footer {
     position: absolute;
-    bottom: 2cm;
+    bottom: 25mm;
     font-weight: 300;
     color: $text-color-cover-secondary;
 

@@ -18,11 +18,11 @@ $border-color: $black;
 $text-color-cover: $primary;
 $text-color-cover-secondary: $secondary;
 
-/* page margins */
-$page-margin-top: 30mm;
-$page-margin-bottom: 20mm;
-$page-margin-right: 16mm;
-$page-margin-left: 16mm;
+/* page margins - default to MS Word margins */
+$page-margin-top: 25mm;
+$page-margin-bottom: 25mm;
+$page-margin-right: 25mm;
+$page-margin-left: 25mm;
 $page-height: 297mm;
 
 $page-content-height: $page-height - $page-margin-bottom - $page-margin-top;
