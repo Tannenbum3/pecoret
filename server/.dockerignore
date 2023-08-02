@@ -3,5 +3,5 @@ db.sqlite3
 Dockerfile
 venv
 uploads
-local_settings.py
+conf/production.py
 __pycache__

@@ -1,5 +1,6 @@
+{% if project.host_set.count() %}
 <h4>{{ _('Hosts') }}</h4>
-
+{% endif %}
 {% for asset in project.host_set.all() %}
   <div class="scope-asset">
     <div class="header">

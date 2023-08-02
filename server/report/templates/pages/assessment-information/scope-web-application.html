@@ -1,4 +1,6 @@
-<h4>{{ _('Web Applications') }}</h4>
+{% if project.webapplication_set.count() %}
+  <h4>{{ _('Web Applications') }}</h4>
+{% endif %}
 
 {% for asset in project.webapplication_set.all() %}
   <div class="scope-asset">

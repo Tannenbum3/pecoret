@@ -215,7 +215,7 @@ export default {
                     <div class="col-12 md:col-3">
                         <DetailCardWithIcon title="Fixed Versions" icon="fa fa-screwdriver-wrench"
                                             class="surface-ground"
-                                            :text="advisory.fixed_versions || '-'">
+                                            :text="advisory.fixed_version || '-'">
                         </DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
