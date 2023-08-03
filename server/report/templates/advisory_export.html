@@ -55,8 +55,9 @@
     </thead>
     <tbody>
     <tr>
-      <td class="text-{{ advisory.get_severity_display().lower() }}">{{
-        advisory.get_severity_display().lower().capitalize() }}</td>
+      <td class="text-{{ advisory.get_severity_display().lower() }}">
+        <strong>{{ advisory.get_severity_display().lower().capitalize() }}</strong>
+      </td>
       <td>{% if advisory.vulnerability.category %}{{
         advisory.vulnerability.category}}{% else %}-{% endif %}</td>
       <td>{{ advisory.date_created.strftime("%B %d, %Y") }}</td>

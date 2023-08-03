@@ -5,13 +5,7 @@ from django_filters import rest_framework as filters
 from . import mixins as p_mixins
 
 
-class PeCoReTFilterBackendMixin:
-    """Mixin that adds basic filtering backends"""
-
-    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
-
-
-class PeCoReTModelViewSet(PeCoReTFilterBackendMixin, viewsets.ModelViewSet):
+class PeCoReTModelViewSet(p_mixins.PeCoReTFilterBackendMixin, viewsets.ModelViewSet):
     pass
 
 
@@ -19,7 +13,7 @@ class PeCoReTNoDestroyViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    PeCoReTFilterBackendMixin,
+    p_mixins.PeCoReTFilterBackendMixin,
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
@@ -42,28 +36,11 @@ class PeCoReTReadOnlyModelViewSet(
     filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
 
 
-class PeCoReTCreateUpdateDestroyModelViewSet(
-    mixins.CreateModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.UpdateModelMixin,
-    viewsets.GenericViewSet,
-):
-    pass
-
-
 class PeCoReTListUpdateRetrieveModelViewSet(
     mixins.ListModelMixin,
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
-):
-    pass
-
-
-class PeCoReTUpdateRetrieveModelViewSet(
-    mixins.UpdateModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
 ):
     pass
 
