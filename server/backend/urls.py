@@ -56,6 +56,7 @@ project_router.register("memberships", viewsets.MembershipViewSet, "membership")
 project_router.register(
     "contacts", viewsets.ProjectContactViewSet, "contact"
 )
+project_router.register("files", viewsets.ProjectFileViewSet, "file")
 #project_router.register("tasks", viewsets.AssetTaskViewSet, "task")
 #project_router.register("checklists", viewsets.ProjectChecklistViewSet, "checklist")
 

@@ -122,6 +122,15 @@ export default {
                                     projectId: this.$route.params.projectId
                                 }
                             })
+                        },
+                        {
+                            label: "Files",
+                            to: this.$router.resolve({
+                                name: "ProjectFileList",
+                                params: {
+                                    projectId: this.$route.params.projectId
+                                }
+                            })
                         }
                     ]
                 },

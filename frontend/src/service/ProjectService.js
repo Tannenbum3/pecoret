@@ -68,4 +68,34 @@ export default class ProjectService {
         let url = "/projects/available-languages/"
         return api.get(url)
     }
+
+    getProjectFiles(api, projectId, params) {
+        let url = "/projects/" + projectId + "/files/";
+        let config = {};
+        if (params) {
+            config["params"] = params;
+        }
+        return api.get(url, config);
+    }
+
+    downloadProjectFile(api, projectId, file_id) {
+        let url = "/projects/" + projectId + "/files/" + file_id + "/download/";
+        let config = {
+            responseType: "arraybuffer"
+        };
+        return api.get(url, config);
+    }
+
+    deleteProjectFile(api, projectId, id) {
+        let url = "/projects/" + projectId + "/files/" + id + "/";
+        return api.delete(url);
+    }
+
+    createProjectFile(api, projectId, data) {
+        let url = "/projects/" + projectId + "/files/";
+        let filedata = new FormData();
+        filedata.append("name", data.name);
+        filedata.append("file", data.file);
+        return api.post(url, filedata);
+    }
 }
