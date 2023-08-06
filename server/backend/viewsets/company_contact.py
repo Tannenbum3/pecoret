@@ -2,12 +2,18 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from backend.serializers.company_contact import CompanyContactSerializer
 from backend.models.company_contact import CompanyContact
 from backend.filters.company_contact import CompanyContactFilter
-from backend import permissions
+from pecoret.core import permissions
 
 
 class CompanyContactViewSet(PeCoReTModelViewSet):
     permission_classes = [
-        permissions.PRESET_GROUP_MANAGEMENT
+        permissions.CompanyPermission(
+            read_write_groups=[
+                permissions.Groups.GROUP_MANAGEMENT,
+                permissions.Groups.GROUP_PENTESTER
+            ],
+            read_only_groups=[]
+        )
     ]
     queryset = CompanyContact.objects.none()
     search_fields = ["first_name", "last_name"]
@@ -15,7 +21,7 @@ class CompanyContactViewSet(PeCoReTModelViewSet):
     serializer_class = CompanyContactSerializer
 
     def get_queryset(self):
-        return CompanyContact.objects.for_company(self.kwargs.get('company'))
+        return CompanyContact.objects.for_company(self.request.company)
 
     def perform_create(self, serializer):
-        serializer.save(company_id=self.kwargs.get('company'))
+        serializer.save(company=self.request.company)

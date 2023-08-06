@@ -8,3 +8,9 @@ class CWESerializer(serializers.ModelSerializer):
         fields = [
             "cwe_id", "name", "description", "pk"
         ]
+
+
+class CWEMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CWE
+        fields = ["cwe_id", "pk", "name"]

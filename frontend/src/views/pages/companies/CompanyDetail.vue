@@ -1,10 +1,11 @@
 <script>
-import markdown from "@/utils/markdown";
 import CompanyService from "@/service/CompanyService";
 import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
 import CompanyInformationCreateDialog from "@/components/dialogs/CompanyInformationCreateDialog.vue";
 import CompanyUpdateDialog from "@/components/dialogs/CompanyUpdateDialog.vue";
 import CompanyTabMenu from "../../../components/pages/CompanyTabMenu.vue";
+import BlankSlate from "@/components/BlankSlate.vue";
+import markdown from "@/utils/markdown";
 
 
 export default {
@@ -23,6 +24,9 @@ export default {
         };
     },
     methods: {
+        renderMarkdown(text) {
+            return markdown.renderMarkdown(text);
+        },
         getCompany() {
             this.companyService.getCompany(this.companyId).then((response) => {
                 this.company = response.data;
@@ -36,7 +40,7 @@ export default {
                 icon: "fa fa-trash",
                 acceptClass: "p-button-danger",
                 accept: () => {
-                    this.companyService.deleteCompanyInformation(this.$api, id).then(() => {
+                    this.companyService.deleteCompanyInformation(this.$api, this.companyId, id).then(() => {
                         this.getCompanyInformation();
                     });
                 }
@@ -49,7 +53,7 @@ export default {
             });
         },
         getCompanyInformation() {
-            this.companyService.getCompanyInformations(this.companyId).then((response) => {
+            this.companyService.getCompanyInformation(this.companyId).then((response) => {
                 this.companyInformation = response.data.results;
             });
         }
@@ -58,7 +62,7 @@ export default {
         this.getCompany();
         this.getCompanyInformation();
     },
-    components: { DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu }
+    components: { DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu, BlankSlate }
 
 };
 </script>
@@ -113,7 +117,7 @@ export default {
                             <p class="text-xl">Company Information</p>
                             <Card v-for="info in companyInformation" :key="info.pk" class="surface-ground mt-3">
                                 <template #content>
-                                    {{ info.text }}
+                                    <div v-html="renderMarkdown(info.text)"></div>
                                 </template>
                                 <template #footer>
                                     <hr />
@@ -130,6 +134,10 @@ export default {
                                     </div>
                                 </template>
                             </Card>
+                            <BlankSlate v-if="companyInformation.length < 1" icon="fa fa-circle-info"
+                                        text="No company information found!"
+                                        title="No company information!">
+                            </BlankSlate>
                         </div>
                     </div>
                 </template>

@@ -28,9 +28,8 @@ export default {
     create() {
       let data = {
         text: this.text,
-        company: this.companyId
       }
-      this.companyService.createCompanyInformation(this.$api, data).then(() => {
+        this.companyService.createCompanyInformation(this.$api, this.companyId, data).then(() => {
         this.$toast.add(
             {severity: 'success', summary: 'Created!', detail: 'Company Information created!', life: 3000}
         )

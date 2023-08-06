@@ -120,7 +120,7 @@ export default {
       <Button label="Projects" class="p-link layout-topbar-button"
               @click="this.$router.push({ name: 'ProjectList' })">
       </Button>
-      <Button label="Companies" class="p-link layout-topbar-button" v-if="this.authStore.groups.isManagement"
+        <Button label="Companies" class="p-link layout-topbar-button"
               @click="this.$router.push({ name: 'CompanyList' })">
       </Button>
       <Button label="Vulnerability Templates" class="p-link layout-topbar-button"

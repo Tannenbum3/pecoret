@@ -11,7 +11,7 @@ class CompanyContactListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.management1, self.management2
+            self.management1, self.management2, self.pentester1, self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -19,7 +19,8 @@ class CompanyContactListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.pentester1, self.read_only1, self.user1
+            self.pentester2, self.user1, self.vendor1, self.vendor2,
+            self.advisory_manager1
         ]
         for user in users:
             self.client.force_login(user)

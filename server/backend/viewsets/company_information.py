@@ -1,8 +1,8 @@
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 from backend.models.company_information import CompanyInformation
 from backend.serializers.company_information import CompanyInformationSerializer
 from backend.filters.company_information import CompanyInformationFilter
-from backend import permissions
 
 
 class CompanyInformationViewSet(PeCoReTModelViewSet):
@@ -10,11 +10,17 @@ class CompanyInformationViewSet(PeCoReTModelViewSet):
     filterset_class = CompanyInformationFilter
     serializer_class = CompanyInformationSerializer
     permission_classes = [
-        permissions.PRESET_GROUP_PENTESTER_MANAGEMENT
+        permissions.CompanyPermission(
+            read_write_groups=[
+                permissions.Groups.GROUP_PENTESTER,
+                permissions.Groups.GROUP_MANAGEMENT
+            ],
+            read_only_groups=[]
+        )
     ]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, company=self.request.company)
 
     def get_queryset(self):
-        return CompanyInformation.objects.all()
+        return CompanyInformation.objects.for_company(self.request.company)

@@ -26,15 +26,14 @@ router.register(
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
 router.register("advisories", viewsets.AdvisoryViewSet, "advisory")
-router.register(
-    "company-information", viewsets.CompanyInformationViewSet, "company-information"
-)
+
 router.register("pentest-types", viewsets.PentestTypeViewSet, "pentest-type")
 
 
 # company routes
 company_router = DefaultRouter()
 company_router.register("contacts", viewsets.CompanyContactViewSet, "contact")
+company_router.register("information", viewsets.CompanyInformationViewSet, "information")
 
 # project routes
 project_router = DefaultRouter()

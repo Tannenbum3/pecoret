@@ -79,6 +79,11 @@
         .layout-topbar-button {
             margin-left: 1rem;
         }
+
+      // overwrite default menubar border for topbar
+      .p-menubar {
+        border: inherit;
+      }
     }
 }
 
@@ -118,7 +123,8 @@
             animation: scalein 0.15s linear;
 
             &.layout-topbar-menu-mobile-active {
-                display: block
+              display: block;
+              z-index: 1;
             }
 
             .layout-topbar-button {

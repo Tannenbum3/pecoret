@@ -30,7 +30,7 @@ class BaseItem(PeCoReTBaseModel, TimestampedModel):
 
 class Item(BaseItem):
     """this is the model that is used for templating tasks.
-    Once a category item is mapped to an asset, it become a task
+    Once a category item is mapped to an asset, it becomes a task
     """
 
 

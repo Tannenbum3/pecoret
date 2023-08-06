@@ -32,6 +32,9 @@ class MembershipQuerySet(models.QuerySet):
     def for_report(self):
         return self.filter(display_in_report=True)
 
+    def is_active(self):
+        return self.filter(models.Q(active_until__isnull=True) | models.Q(active_until__gte=timezone.now()))
+
 
 class Membership(TimestampedModel, PeCoReTBaseModel):
     objects = MembershipManager.from_queryset(MembershipQuerySet)()

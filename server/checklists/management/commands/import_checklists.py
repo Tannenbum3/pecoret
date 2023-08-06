@@ -12,9 +12,9 @@ class Command(BaseCommand):
 
     def import_categories(self, directory):
         task_path = Path(directory) / "categories"
-        for path in Path(task_path).rglob("category.yaml"):
-            items_directory = str(path).replace("category.yaml", "items")
-            # read info.yaml category.file
+        for path in Path(task_path).rglob("*.yaml"):
+            items_directory = Path(directory) / "items"
+            # read category file
             with open(path, "r", encoding="utf-8") as my_file:
                 category_yaml = yaml.safe_load(my_file)
             category, _created = models.Category.objects.update_or_create(
@@ -30,7 +30,11 @@ class Command(BaseCommand):
 
     def import_category_items(self, item_ids, category, directory):
         for item_id in item_ids:
-            item_file = Path(directory) / f"{item_id}.md"
+            items_directory = Path(directory)
+            item_files = list(items_directory.rglob(f"{item_id}.md"))
+            if not item_files:
+                continue
+            item_file = item_files[0]
             with open(item_file, "r", encoding="utf-8") as my_file:
                 models.Item.objects.update_or_create(
                     category=category,

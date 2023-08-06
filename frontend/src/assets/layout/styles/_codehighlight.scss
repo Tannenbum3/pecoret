@@ -1,0 +1,27 @@
+
+.checklist-description {
+
+  code {
+    display: inline;
+    padding: 1px 2px;
+    font-family: monospace;
+    font-size: 12px;
+    background-color: var(--surface-card);
+    border-radius: 3px;
+    border: 1px solid var(--surface-border);
+  }
+
+  pre code {
+    display: block;
+    padding: 8px;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    line-height: 1.2em;
+    word-wrap: break-word;
+  }
+
+
+  .codehilite .linenos {
+    padding-right: 20px;
+  }
+}

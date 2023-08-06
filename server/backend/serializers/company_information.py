@@ -9,4 +9,4 @@ class CompanyInformationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompanyInformation
-        fields = ["pk", "date_created", "date_updated", "company", "text", "user"]
+        fields = ["pk", "date_created", "date_updated", "text", "user"]

@@ -90,11 +90,13 @@ class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.company = self.create_instance(Company)
+        self.project1.company = self.company
+        self.project1.save()
         self.url = self.get_url("backend:company-detail", pk=self.company.pk)
 
     def test_status_allowed(self):
         users = [
-            self.management2, self.management1, self.pentester1, self.pentester2, self.read_only1
+            self.management2, self.management1, self.pentester1, self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -102,8 +104,16 @@ class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_status_forbidden(self):
         users = [
-            self.user1
+            self.user1, self.advisory_manager1, self.vendor1, self.vendor2,
         ]
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_not_found(self):
+        users = [
+            self.pentester2
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 404)
