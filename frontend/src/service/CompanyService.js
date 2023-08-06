@@ -28,7 +28,7 @@ export default class CompanyService {
     }
 
 
-    patchCompany(companyId, data){
+  patchCompany(api, companyId, data) {
         let url = "/companies/" + companyId + "/"
         return api.patch(url, data)
     }

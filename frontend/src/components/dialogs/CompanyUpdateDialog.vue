@@ -34,7 +34,7 @@ export default {
                 country: this.model.country,
                 report_template: this.model.report_template
             };
-            this.companyService.patchCompany(this.company.pk, data).then((response) => {
+            this.companyService.patchCompany(this.$api, this.company.pk, data).then((response) => {
                 this.$emit("object-updated", this.model);
                 this.visible = false;
             });
