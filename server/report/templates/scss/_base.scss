@@ -2,7 +2,7 @@
 
 @page {
   size: a4 portrait;
-  margin: 3cm 1cm 2cm 1cm;
+  margin: $page-margin-top $page-margin-right $page-margin-bottom $page-margin-left;
 
   @top-right {
     content: " ";
@@ -12,8 +12,8 @@
     height: 12mm;
     width: 53mm;
     margin-bottom: 8mm;
-    margin-right: -6mm;
-    background-position: left center;
+    margin-right: -10mm;
+    background-position: right;
   }
 
 }
@@ -78,7 +78,7 @@ body {
 }
 
 h1 {
-  break-before: always;
+  page-break-before: always;
   font-size: 26px;
   color: $color-heading-1;
 
