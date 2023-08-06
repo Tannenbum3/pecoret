@@ -8,8 +8,8 @@ from backend.models.cwe import EntryType
 
 class Command(BaseCommand):
     help = "Import cwe entries"
-    cwe_version = "4.9"
-    namespace = "http://cwe.mitre.org/cwe-6"
+    cwe_version = "4.12"
+    namespace = "http://cwe.mitre.org/cwe-7"
 
     def handle(self, *args, **options):
         tree = ET.parse(
