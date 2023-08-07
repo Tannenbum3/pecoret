@@ -111,6 +111,16 @@ const router = createRouter({
                   component: () => import("@/views/pages/projects/assets/HostDetail.vue")
                 },
                 {
+                  path: "/projects/:projectId/mobile-applications",
+                  name: "MobileApplicationList",
+                  component: () => import("@/views/pages/projects/assets/MobileApplicationList.vue")
+                },
+                {
+                  path: "/projects/:projectId/mobile-applications/:assetId",
+                  name: "MobileApplicationDetail",
+                  component: () => import("@/views/pages/projects/assets/MobileApplicationDetail.vue")
+                },
+                {
                   path: "/projects/:projectId/team",
                   name: "ContributorList",
                   component: () => import("@/views/pages/projects/management/ContributorList.vue")

@@ -69,7 +69,13 @@ export default {
                             }).path
                         },
                         {
-                            label: 'Mobile Applications'
+                            label: "Mobile Applications",
+                            to: this.$router.resolve({
+                                name: "MobileApplicationList",
+                                params: {
+                                    projectId: this.$route.params.projectId
+                                }
+                            })
                         }
                     ]
                 },

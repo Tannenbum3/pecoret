@@ -52,7 +52,7 @@ export default {
       },
     },
   },
-  emits: ['blur', "update:modelValue", "input"],
+    emits: ["blur", "update:modelValue", "input", "initialized"],
   data() {
     return {
       isValueUpdateFromInner: false,
