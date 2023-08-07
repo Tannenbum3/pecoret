@@ -106,11 +106,11 @@ class PeCoReTTestCaseMixin:
                 print(response.json())
             self.assertEqual(response.status_code, status_code, msg="Usermap: %s" % str(u))
 
-    def basic_status_code_check(self, url, req_func, status_code, data=None, debug=False):
+    def basic_status_code_check(self, url, req_func, status_code, data=None, debug=False, format="json"):
         if data is None:
             response = req_func(url)
         else:
-            response = req_func(url, data, format="json")
+            response = req_func(url, data, format=format)
         if debug:
             print(response.json())
         self.assertEqual(response.status_code, status_code)
