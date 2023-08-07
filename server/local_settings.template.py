@@ -4,6 +4,14 @@ from pecoret.settings import *
 # SITE_NAME = "PeCoReT staging"
 # DOMAIN = "pecoret.example.com"
 # PROTOCOL = "https"
+#
+# REPORT_COMPANY_INFORMATION = {
+#    "name": "TCM Security, Inc.",
+#    "street": "North Carolina",
+#    "city": "Charlotte",
+#    "homepage": "https://tcm-sec.com",
+#    "email": "christian.poeschl@usd.de",
+# }
 
 # SECRET_KEY = "changeme!really!changeme!now"
 
@@ -34,4 +42,5 @@ from pecoret.settings import *
 
 
 # Misc
-# ADDITIONAL_PACKAGES = []
+# expire session after X minutes
+# SESSION_COOKIE_AGE = 15 * 60
