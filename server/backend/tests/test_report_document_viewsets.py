@@ -1,5 +1,5 @@
 from rest_framework.test import APITestCase
-from backend.models import Report, ReportRelease
+from backend.models import Report, ReportRelease, ReportTemplate
 from backend.models.reports.report_release import ReleaseType
 from pecoret.core.test import PeCoReTTestCaseMixin
 
@@ -64,8 +64,11 @@ class ReportDocumentUpdateTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ReportDocumentCreateTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.report1 = self.create_instance(Report, project=self.project1)
-        self.report2 = self.create_instance(Report, project=self.project2)
+        self.report_template = ReportTemplate.objects.get(
+            name="default_template"
+        )
+        self.report1 = self.create_instance(Report, project=self.project1, template=self.report_template)
+        self.report2 = self.create_instance(Report, project=self.project2, template=self.report_template)
         self.url = self.get_url(
             "backend:report-release-list",
             project=self.project1.pk,
@@ -141,7 +144,10 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ReportPreviewDocument(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.report1 = self.create_instance(Report, project=self.project1)
+        self.report_template = ReportTemplate.objects.get(
+            name="default_template"
+        )
+        self.report1 = self.create_instance(Report, project=self.project1, template=self.report_template)
         self.url = self.get_url("backend:report-release-list", project=self.project1.pk, report=self.report1.pk)
         self.data = {"release_type": "Preview", "name": "Preview"}
 
