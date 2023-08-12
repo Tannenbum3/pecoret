@@ -1,13 +1,13 @@
 <script>
-import ProjectService from '@/service/ProjectService'
-import { FilterMatchMode } from 'primevue/api';
+import ProjectService from "@/service/ProjectService";
+import { FilterMatchMode } from "primevue/api";
 import { useAuthStore } from "@/store/auth";
-import ProjectCreateDialog from '@/components/dialogs/ProjectCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue'
+import ProjectCreateDialog from "@/components/dialogs/ProjectCreateDialog.vue";
+import BlankSlate from "@/components/BlankSlate.vue";
 
 
-const projectService = new ProjectService()
-const authStore = useAuthStore()
+const projectService = new ProjectService();
+const authStore = useAuthStore();
 
 
 export default {
@@ -15,13 +15,15 @@ export default {
     mounted() {
         authStore.deactivateProject();
         this.getProjects();
+        this.getPinnedProjects();
     },
     data() {
         return {
             breadcrumbs: [
-                { label: "Projects", disabled: true },
+                { label: "Projects", disabled: true }
             ],
             projects: [],
+            pinnedProjects: [],
             loading: false,
             totalRecords: 0,
             selectedProjects: [],
@@ -32,10 +34,10 @@ export default {
             },
             statusChoices: [
                 {
-                    label: 'Open', value: 'Open'
+                    label: "Open", value: "Open"
                 },
                 {
-                    label: 'Closed', value: 'Closed'
+                    label: "Closed", value: "Closed"
                 }
             ]
         };
@@ -49,35 +51,46 @@ export default {
             projectService.getProjects(this.$api, params).then((response) => {
                 this.totalRecords = response.data.count;
                 this.projects = response.data.results;
-            }).finally(() => { this.loading = false; });
+            }).finally(() => {
+                this.loading = false;
+            });
         },
         deleteProject(id) {
-            projectService.deleteProject(this.$api, id).then(() => { })
+            projectService.deleteProject(this.$api, id).then(() => {
+            });
         },
         bulkDeleteConfirm() {
             this.$confirm.require({
-                message: 'Do you want all selected projects?',
-                header: 'Delete confirmation',
-                icon: 'fa fa-trash',
-                acceptClass: 'p-button-danger',
+                message: "Do you want all selected projects?",
+                header: "Delete confirmation",
+                icon: "fa fa-trash",
+                acceptClass: "p-button-danger",
                 accept: () => {
-                    this.deleteButtonLoading = true
-                    this.loading = true
-                    let itemsDeleted = 0
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
                     this.selectedProjects.forEach((item) => {
                         projectService.deleteProject(this.$api, item.pk).then(() => {
-                            itemsDeleted++
+                            itemsDeleted++;
                             if (itemsDeleted === this.selectedProjects.length) {
-                                this.loading = false
-                                this.deleteButtonLoading = false
-                                this.selectedProjects = []
-                                this.getProjects()
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedProjects = [];
+                                this.getProjects();
                             }
-                        })
+                        });
 
-                    })
+                    });
                 }
-            })
+            });
+        },
+        getPinnedProjects() {
+            let params = {
+                pinned: true
+            };
+            projectService.getProjects(this.$api, params).then((response) => {
+                this.pinnedProjects = response.data.results;
+            });
         },
         getProjects() {
             this.loading = true;
@@ -89,29 +102,33 @@ export default {
             projectService.getProjects(this.$api, params).then((response) => {
                 this.totalRecords = response.data.count;
                 this.projects = response.data.results;
-            }).finally(() => { this.loading = false; });
+            }).finally(() => {
+                this.loading = false;
+            });
         },
         onSort(event) {
-            this.loading = true
+            this.loading = true;
             let params = {
                 ordering: event.sortField
-            }
+            };
             if (event.sortOrder === -1) {
-                params['ordering'] = '-' + event.sortField
+                params["ordering"] = "-" + event.sortField;
             }
             projectService.getProjects(this.$api, params).then((response) => {
-                this.totalRecords = response.data.count
-                this.projects = response.data.results
-            }).finally(() => { this.loading = false })
+                this.totalRecords = response.data.count;
+                this.projects = response.data.results;
+            }).finally(() => {
+                this.loading = false;
+            });
         },
         onFilter(event) {
             let params = {
                 status: event.filters.status.value
-            }
+            };
             projectService.getProjects(this.$api, params).then((response) => {
-                this.totalRecords = response.data.count
-                this.projects = response.data.results
-            })
+                this.totalRecords = response.data.count;
+                this.projects = response.data.results;
+            });
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -119,7 +136,7 @@ export default {
         }
     },
     components: { ProjectCreateDialog, BlankSlate }
-}
+};
 
 </script>
 
@@ -140,32 +157,51 @@ export default {
         </div>
     </div>
 
+    <div class="grid" v-if="pinnedProjects.length > 0">
+        <div class="sm:col-6 md:col-4" v-for="project in pinnedProjects" v-bind:key="project.pk">
+            <div class="card">
+                <router-link class="text-color underline"
+                             :to="{ name: 'ProjectDetail', params: { projectId: project.pk } }">
+                    {{ project.name }}
+                </router-link>
+                <br>
+                <small>{{ project.status }}</small>
+            </div>
+        </div>
+    </div>
+
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable :paginator="true" dataKey="pk" :rowHover="true" :rows="pagination.limit"
-                    v-model:selection="selectedProjects" class="p-datatable-gridlines2" :value="projects"
-                    filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
-                    :loading="loading" @page="onPage($event)" removableSort filter v-model:filters="filters"
-                    v-if="this.projects.length > 0" @sort="onSort($event)" @filter="onFilter($event)">
+                <DataTable :paginator="true" dataKey="pk" :rowHover="this.projects.length > 0" :rows="pagination.limit"
+                           v-model:selection="selectedProjects" class="p-datatable-gridlines2" :value="projects"
+                           filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
+                           :loading="loading" @page="onPage($event)" removableSort filter v-model:filters="filters"
+                           @sort="onSort($event)" @filter="onFilter($event)">
+
+                    <template #empty>
+                        <BlankSlate title="No projects!" text="No projects found!" icon="fa fa-box"></BlankSlate>
+
+                    </template>
 
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search" />
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                                    style="width: 100%" />
+                                           style="width: 100%" />
                             </span>
                             <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined
-                                severity="danger" @click="bulkDeleteConfirm"></Button>
+                                    severity="danger" @click="bulkDeleteConfirm"></Button>
                         </div>
                     </template>
                     <Column selectionMode="multiple" headerStyle=""></Column>
                     <Column field="name" header="Name" sortable>
                         <template #body="slotProps">
                             <router-link class="text-color underline"
-                                :to="{ name: 'ProjectDetail', params: { projectId: slotProps.data.pk } }">[{{
-                                    slotProps.data.year }}] {{ slotProps.data.name }}</router-link>
+                                         :to="{ name: 'ProjectDetail', params: { projectId: slotProps.data.pk } }">[{{
+                                    slotProps.data.year }}] {{ slotProps.data.name }}
+                            </router-link>
 
                         </template>
                     </Column>
@@ -173,7 +209,7 @@ export default {
                     <Column field="status" header="Status" :showFilterMatchModes="false">
                         <template #filter="{ filterModel }">
                             <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One"
-                                class="p-column-filter" showClear optionLabel="label" optionValue="value">
+                                      class="p-column-filter" showClear optionLabel="label" optionValue="value">
 
                             </Dropdown>
                         </template>
@@ -183,7 +219,6 @@ export default {
                     <Column field="start_date" header="Start Date"></Column>
                     <Column field="end_date" header="End Date"></Column>
                 </DataTable>
-                <BlankSlate v-else title="No projects!" text="No projects found!" icon="fa fa-box"></BlankSlate>
             </div>
 
         </div>
