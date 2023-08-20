@@ -11,7 +11,7 @@ class ErrorMixin:
     def check_finding_errors(self):
         # check finding errors
         for finding in Finding.objects.for_report(self.get_project()):
-            if not finding.proof_set.all():
+            if not finding.proof_text:
                 error = ReportError("Missing proof!", f"#finding-{finding.pk}-proofs")
                 self._add_error(error)
             if self.get_project().require_cvss_base_score and finding.cvssbasescore.is_incomplete:

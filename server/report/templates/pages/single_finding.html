@@ -58,20 +58,8 @@
     {% with section="#finding-" + finding.pk|string + "-proofs" %}
       {% include './components/report_error_for_section.html' %}
     {% endwith %}
-    {% for proof in finding.proof_set.all() %}
-      {{ report_helpers.bleach_md(proof.text)|safe }}
-      {% if proof.image %}
-        <div class="image-proof">
-          <div class="image-container">
-            <img src="{{ proof.base64_encoded_image()|safe }}" style="width: 100%;max-width: 100%; height:auto;">
-          </div>
-          <div class="caption">
-            <span class="label">{{ _('Figure') }}</span>
-            <span>{{ proof.image_caption }}</span>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %}
+
+    {{ report_helpers.bleach_md(finding.report_proof_text, allow_images=True)|safe }}
   </div>
 
 </section>

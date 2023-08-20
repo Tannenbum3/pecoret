@@ -5,7 +5,6 @@ from .cwe import CWE
 from .vulnerability import VulnerabilityTemplate, ProjectVulnerability
 from .vulnerability_category import VulnerabilityCategory
 from .finding import Finding
-from .proof import Proof
 from .account import Account
 from .report_templates import ReportTemplate
 from .company import Company
@@ -25,6 +24,7 @@ from .cvss_score import CVSSBaseScore
 from .owasp_risk_rating import OWASPRiskRating
 from .pinned_project import PinnedProject
 from .project_file import ProjectFile
+from .finding_attachment import FindingImageAttachment
 
 
 # assets

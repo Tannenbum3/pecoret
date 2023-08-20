@@ -1,9 +1,11 @@
+import base64
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
-from backend.models import Finding, Proof
+from backend.models import FindingImageAttachment
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
-class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
+class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.finding1 = self.create_finding(
@@ -18,10 +20,10 @@ class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
-        self.proof1 = self.create_instance(Proof, finding=self.finding1, title="proof1")
-        self.proof2 = self.create_instance(Proof, finding=self.finding2, title="proof2")
+        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1, caption="proof1")
+        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2, caption="proof2")
         self.url = self.get_url(
-            "backend:findings:proof-list",
+            "backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding1.pk,
         )
@@ -39,13 +41,13 @@ class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_idor(self):
         self.client.force_login(self.pentester1)
         url = self.get_url(
-            "backend:findings:proof-list",
+            "backend:findings:attachment-list",
             project=self.project2.pk,
             finding=self.finding1.pk,
         )
         self.basic_status_code_check(url, self.client.get, 403)
         url = self.get_url(
-            "backend:findings:proof-list",
+            "backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding2.pk,
         )
@@ -53,7 +55,7 @@ class ProofListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(response.status_code, 403)
 
 
-class ProofCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
+class AttachmentCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.finding1 = self.create_finding(
@@ -69,28 +71,29 @@ class ProofCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
             vulnerability__project=self.project2,
         )
         self.url = self.get_url(
-            "backend:findings:proof-list",
+            "backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding1.pk,
         )
+        self.image64 = ("iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAA"
+                        "O9TXL0Y4OHwAAAABJRU5ErkJggg==")
         self.data = {
-            "text": "proof1",
-            "order": 1,
-            "title": "proof1",
+            "caption": "proof1",
         }
 
-    def test_allowed_stats_code(self):
+    def test_allowed(self):
         for user in [self.pentester1, self.management1]:
-            data = self.data
-            data["title"] = "proof-%s" % user.username
             self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.post, 201, data=data)
+            self.data["image"] = SimpleUploadedFile("file.png", base64.b64decode(self.image64),
+                                                    content_type="image/png")
+            self.basic_status_code_check(self.url, self.client.post, 201, data=self.data,
+                                         format="multipart")
 
-    def test_forbidden_status_code(self):
+    def test_forbidden(self):
         for user in [self.pentester2, self.read_only1, self.user1]:
             self.client.force_login(user)
             self.basic_status_code_check(
-                self.url, self.client.post, 403, data=self.data
+                self.url, self.client.post, 403, data=self.data, format="multipart"
             )
 
 
@@ -109,10 +112,10 @@ class ProofDestroyViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
-        self.proof1 = self.create_instance(Proof, finding=self.finding1, title="proof1")
-        self.proof2 = self.create_instance(Proof, finding=self.finding2, title="proof2")
+        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1, caption="proof1")
+        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2, caption="proof2")
         self.url = self.get_url(
-            "backend:findings:proof-detail",
+            "backend:findings:attachment-detail",
             project=self.project1.pk,
             pk=self.proof1.pk,
             finding=self.finding1.pk,

@@ -45,6 +45,9 @@ export default {
         getFileObject(event) {
             this.model.image = event.files[0];
         },
+        onImageFileUpload(event) {
+            console.log(event);
+        },
         createProof() {
             let data = {};
             if (this.model.image) {

@@ -68,7 +68,7 @@ class AdvisoryManager(models.Manager):
             advisory.recommendation = finding.recommendation
         else:
             advisory.recommendation = finding.vulnerability.recommendation
-        for proof in finding.proof_set.all():
+        for proof in finding.findingimageattachment_set.all():
             if proof.image:
                 with open(self.image.path, "rb") as image_f:
                     image_data = image_f.read()
@@ -121,6 +121,7 @@ class Advisory(TimestampedModel):
     labels = models.ManyToManyField('advisories.Label', blank=True)
     custom_report_title = models.CharField(max_length=255, null=True, blank=True)
     hide_advisory_id_in_report = models.BooleanField(default=False)
+    proof_text = models.TextField(blank=True, default="")
 
     def __str__(self):
         return self.advisory_id

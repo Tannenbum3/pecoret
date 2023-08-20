@@ -9,6 +9,12 @@
 
     .image-container {
         text-align: center;
+
+      img {
+        width: 100%;
+        max-weight: 100%;
+        height: auto;
+      }
     }
 
     img {
@@ -23,7 +29,7 @@
         counter-increment: figures;
         margin-top: 0.5em;
 
-        .label {
+      .figure-prefix {
             &:after {
                 content: counter(figures) ":";
                 margin-right: 5px;

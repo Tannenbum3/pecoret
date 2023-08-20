@@ -57,6 +57,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "severity": Severity.CRITICAL.label,
             "status": FindingStatus.OPEN.label,
             "recommendation": "",
+            "proof_text": "test",
             "imported": False,
             "component": {"type": "web_application", "pk": self.asset1.pk},
             "vulnerability_id": "path-traversal",

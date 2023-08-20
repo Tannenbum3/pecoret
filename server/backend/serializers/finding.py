@@ -53,7 +53,8 @@ class FindingSerializer(serializers.ModelSerializer):
             "retest_results",
             "date_retest",
             "exclude_from_report",
-            "component"
+            "component",
+            "proof_text"
         ]
 
 

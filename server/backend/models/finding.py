@@ -1,4 +1,5 @@
 import copy
+import re
 from django.db import models
 from django.db.models import signals
 from django.dispatch import receiver
@@ -115,6 +116,8 @@ class Finding(models.Model):
     component_object_id = models.PositiveSmallIntegerField()
     component = GenericForeignKey('component_content_type', 'component_object_id')
 
+    proof_text = models.TextField(default="", blank=True)
+
     class Meta:
         ordering = ["-severity"]
         indexes = [
@@ -165,6 +168,30 @@ class Finding(models.Model):
             vuln=self.vulnerability.pk,
             finding=self.pk,
         )
+
+    @property
+    def report_proof_text(self):
+        """
+        to allow captions in the reports, we will inject some HTML,
+        also we replace image with their base64 representation.
+        we inject all these stuff in the markdown - before being rendered.
+        This allows our injected data to be bleached before further used
+        :return:
+        """
+        image_re = r'(?P<alt>!\[[^\]]*\])\((?P<filename>.*/projects/\d+/findings/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
+
+        def attachment_replace(match):
+            attachment_pk = match.group("attachment")
+            qs = self.findingimageattachment_set.filter(pk=attachment_pk)
+            if not qs.exists():
+                # not an attachment for our finding! nice try!
+                return match.group()
+            attachment = qs.get()
+            template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{attachment.caption}</span></div></div>"
+            return template
+
+        proof_text = re.sub(image_re, attachment_replace, self.proof_text)
+        return proof_text
 
 
 @receiver(signals.post_save, sender=Finding)

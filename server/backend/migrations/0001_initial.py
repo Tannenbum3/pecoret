@@ -1,12 +1,9 @@
 import backend.models.advisory
-import backend.models.advisory_proof
-import backend.models.proof
 from django.conf import settings
 import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.core.validators
 from django.db import migrations, models
-import django.db.models.deletion
 import django.utils.timezone
 
 
@@ -1758,7 +1755,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         max_length=256,
                         null=True,
-                        upload_to=backend.models.proof.project_proof_path,
+                        upload_to="/dev/null",
                     ),
                 ),
                 (

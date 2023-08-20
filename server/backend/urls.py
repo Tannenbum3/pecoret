@@ -57,9 +57,6 @@ project_router.register(
     "contacts", viewsets.ProjectContactViewSet, "contact"
 )
 project_router.register("files", viewsets.ProjectFileViewSet, "file")
-#project_router.register("tasks", viewsets.AssetTaskViewSet, "task")
-#project_router.register("checklists", viewsets.ProjectChecklistViewSet, "checklist")
-
 
 # finding routes
 finding_router = DefaultRouter()
@@ -67,7 +64,7 @@ finding_router.register("cvss-scores", viewsets.CVSSBaseScoreViewSet, "cvss-scor
 finding_router.register("owasp-risk-ratings", viewsets.OWASPRiskRatingViewSet, "owasp-risk-rating")
 finding_router.register("timelines", viewsets.FindingTimelineViewSet, "timeline")
 finding_router.register("comments", viewsets.FindingCommentViewSet, "comment")
-finding_router.register("proofs", viewsets.ProofViewSet, "proof")
+finding_router.register("attachments", viewsets.FindingImageAttachmentViewSet, "attachment")
 
 
 # reports routes
