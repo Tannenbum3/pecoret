@@ -182,6 +182,7 @@ class Finding(models.Model):
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
+            print(attachment_pk)
             qs = self.findingimageattachment_set.filter(pk=attachment_pk)
             if not qs.exists():
                 # not an attachment for our finding! nice try!
@@ -189,7 +190,6 @@ class Finding(models.Model):
             attachment = qs.get()
             template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{attachment.caption}</span></div></div>"
             return template
-
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)
         return proof_text
 

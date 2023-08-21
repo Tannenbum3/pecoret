@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from backend import views
 from backend.viewsets import assets as asset_viewsets
+from advisories import viewsets as advisory_viewsets
 from . import viewsets
 
 
@@ -82,9 +83,8 @@ advisory_router.register("timelines", viewsets.AdvisoryTimelineViewSet, "timelin
 advisory_router.register(
     "memberships", viewsets.AdvisoryMembershipViewSet, "membership"
 )
-advisory_router.register("proofs", viewsets.AdvisoryProofViewSet, "proof")
 advisory_router.register("comments", viewsets.AdvisoryCommentViewSet, "comment")
-
+advisory_router.register("attachments", advisory_viewsets.ImageAttachmentViewSet, "attachment")
 
 urlpatterns = [
     path(

@@ -60,16 +60,6 @@ const router = createRouter({
                   component: () => import("@/views/pages/projects/findings/FindingCreate.vue")
                 },
                 {
-                  path: "/projects/:projectId/findings/:findingId/proofs/create",
-                  name: "FindingProofCreate",
-                  component: () => import("@/views/pages/projects/findings/ProofCreate.vue")
-                },
-                {
-                  path: "/projects/:projectId/findings/:findingId/proofs/:proofId/update",
-                  name: "FindingProofUpdate",
-                  component: () => import("@/views/pages/projects/findings/ProofUpdate.vue")
-                },
-                {
                   path: "/projects/:projectId/findings/:findingId",
                   name: "FindingDetail",
                   component: () => import("@/views/pages/projects/findings/FindingDetail.vue")

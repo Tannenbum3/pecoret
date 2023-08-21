@@ -1,6 +1,8 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService'
-import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue'
+import AdvisoryService from "@/service/AdvisoryService";
+import AdvisoryTabMenu from "@/components/pages/AdvisoryTabMenu.vue";
+import AdvisoryAttachmentFileDrop from "@/components/pages/advisories/AdvisoryAttachmentFileDrop.vue";
+import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
 
 
 export default {
@@ -31,52 +33,30 @@ export default {
                 }
             ],
             advisoryId: this.$route.params.advisoryId,
-            items: [],
-            pagination: { limit: 50, page: 1 },
-            editButtonDisabled: true,
-            editProofPk: null
+            model: {}
         };
     },
     methods: {
-        getItems() {
-            this.loading = true;
+        getAdvisory() {
+            this.service.getAdvisory(this.$api, this.advisoryId).then((response) => {
+                this.model = response.data;
+            });
+        },
+        patchAdvisory() {
             let data = {
-                limit: this.pagination.limit,
-                page: this.pagination.page
+                proof_text: this.model.proof_text
             };
-            this.service.getProofs(this.$api, this.advisoryId, data).then((response) => {
-                this.items = response.data.results;
-            }).finally(() => { this.loading = false; });
-        },
-        reorderProofs(event){
-            event.value.forEach((item, index) => {
-                let data = {order: index + 1}
-                this.service.patchProof(this.$api, this.advisoryId, item.pk, data)
-            })
-        },
-        onProofSelect(event){
-            if (event.length === 1){
-                this.editButtonDisabled = false
-                this.editProofPk = event[0].pk
-            } else {
-                this.editButtonDisabled = true
-            }
-        },
-        onEditButtonClick(){
-            this.$router.push({
-                name: 'AdvisoryProofUpdate',
-                params: {
-                    advisoryId: this.advisoryId,
-                    proofId: this.editProofPk
-                }
-            })
+            this.service.patchAdvisory(this.$api, this.advisoryId, data).then(() => {
+                this.$toast.add({ severity: "info", summary: "Updated", detail: "Proof was updated!", life: 3000 });
+
+            });
         }
     },
-    mounted(){
-        this.getItems()
+    mounted() {
+        this.getAdvisory();
     },
-    components: { AdvisoryTabMenu}
-}
+    components: { MarkdownEditor, AdvisoryAttachmentFileDrop, AdvisoryTabMenu }
+};
 </script>
 
 <template>
@@ -92,8 +72,6 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <Button :disabled="editButtonDisabled" label="Edit" icon="fa fa-pen-to-square" outlined @click="onEditButtonClick"></Button>
-                <Button @click="this.$router.push({name: 'AdvisoryProofCreate', params: {advisoryId: this.advisoryId}})" label="Proof" icon="fa fa-plus"></Button>
             </div>
         </div>
     </div>
@@ -101,12 +79,14 @@ export default {
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
             <div class="card">
-                <OrderList v-model="items" listStyle="height:auto" dataKey="pk" @reorder="reorderProofs" @update:selection="onProofSelect">
-                    <template #header>Proofs</template>
-                    <template #item="slotProps">
-                        {{ slotProps.item.title }}
-                    </template>
-                </OrderList>
+                <div class="grid formgrid p-fluid">
+                    <div class="col-12 field">
+                        <MarkdownEditor @blur="patchAdvisory" v-model="model.proof_text"></MarkdownEditor>
+                    </div>
+                    <div class="col-12 field">
+                        <AdvisoryAttachmentFileDrop></AdvisoryAttachmentFileDrop>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

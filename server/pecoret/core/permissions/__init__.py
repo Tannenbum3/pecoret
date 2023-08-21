@@ -2,6 +2,7 @@ from .group import Groups, GroupPermission
 from .company import CompanyPermission
 from .project import ProjectPermission
 from .finding import FindingPermission
+from .advisory import AdvisoryPermission
 from .presets import (
     PRESET_GROUP_MANAGEMENT,
     PRESET_GROUP_ADVISORY_MANAGEMENT,

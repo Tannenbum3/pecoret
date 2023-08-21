@@ -1597,7 +1597,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         max_length=256,
                         null=True,
-                        upload_to=backend.models.advisory_proof.advisory_proof_upload_path,
+                        upload_to="",
                     ),
                 ),
                 (

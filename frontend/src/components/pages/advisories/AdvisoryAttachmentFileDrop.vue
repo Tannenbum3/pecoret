@@ -1,20 +1,19 @@
 <script>
-import FindingService from "@/service/FindingService";
-import FindingImageAttachmentCaptionDialog from "@/components/dialogs/FindingImageAttachmentCaptionDialog.vue";
+import AdvisoryService from "@/service/AdvisoryService";
+import AdvisoryImageAttachmentCaptionDialog from "@/components/dialogs/AdvisoryImageAttachmentCaptionDialog.vue";
 
 
 export default {
-    name: "FileDrop",
-    components: { FindingImageAttachmentCaptionDialog },
+    name: "AdvisoryAttachmentFileDrop",
+    components: { AdvisoryImageAttachmentCaptionDialog },
     emits: ["onFileUpload"],
     data() {
         return {
             attachments: [],
             totalSize: 0,
             totalSizePercent: 0,
-            service: new FindingService(),
-            projectId: this.$route.params.projectId,
-            findingId: this.$route.params.findingId,
+            service: new AdvisoryService(),
+            advisoryId: this.$route.params.advisoryId,
             attachmentsLoading: false,
             uploadFileLoading: false
         };
@@ -25,7 +24,7 @@ export default {
     methods: {
         getAttachments() {
             this.attachmentsLoading = true;
-            this.service.findingImageAttachmentList(this.$api, this.projectId, this.findingId).then((response) => {
+            this.service.getImageAttachments(this.$api, this.advisoryId).then((response) => {
                 this.attachments = response.data.results;
             }).finally(() => {
                 this.attachmentsLoading = false;
@@ -35,14 +34,14 @@ export default {
             this.uploadFileLoading = true;
             let data = new FormData();
             data.append("image", event.files[event.files.length - 1]);
-            this.service.findingImageAttachmentCreate(this.$api, this.projectId, this.findingId, data).then((response) => {
+            this.service.attachmentCreate(this.$api, this.advisoryId, data).then((response) => {
                 this.attachments.push(response.data);
             }).finally(() => {
                 this.uploadFileLoading = false;
             });
         },
         deleteAttachment(file) {
-            this.service.findingImageAttachmentDelete(this.$api, this.projectId, this.findingId, file.pk).then(() => {
+            this.service.deleteAttachment(this.$api, this.advisoryId, file.pk).then(() => {
                 this.getAttachments();
             });
         },
@@ -87,7 +86,7 @@ export default {
                         <Button @click="deleteAttachment(file)" label="Delete Attachment" class="p-0 m-0"
                                 link severity="danger">
                         </Button>
-                        <FindingImageAttachmentCaptionDialog :attachment="file"></FindingImageAttachmentCaptionDialog>
+                        <AdvisoryImageAttachmentCaptionDialog :attachment="file"></AdvisoryImageAttachmentCaptionDialog>
                     </div>
                 </div>
             </div>

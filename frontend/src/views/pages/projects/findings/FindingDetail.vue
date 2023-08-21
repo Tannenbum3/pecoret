@@ -193,7 +193,8 @@ export default {
                     </div>
 
                     <div class="grid formgrid p-fluid mt-3">
-                        <div class="col-12">
+                        <div class="col-12 field">
+                            <label>Proof</label>
                             <MarkdownEditor @blur="patchFindingData({ proof_text: finding.proof_text})"
                                             v-model="finding.proof_text"></MarkdownEditor>
                         </div>

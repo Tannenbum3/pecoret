@@ -25,9 +25,9 @@
 {{ advisory.description|safe }}
 
 ## Details
-{% for proof in advisory.advisoryproof_set.all() %}
-{{ proof.text|safe }} {% if proof.image %}![]({{proof.base64_encoded_image()}}){% endif %}
-{% endfor %}
+
+{{ advisory.proof_text }}
+
 
 ## Recommendation
 {{ advisory.recommendation|safe}}

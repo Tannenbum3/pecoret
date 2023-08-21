@@ -105,21 +105,8 @@
 </section>
 <section id="proofs-{{ advisory.pk }}" class="proofs">
   <h4>Steps to reproduce:</h4>
-  {% for proof in advisory.advisoryproof_set.all() %}
-    {{ report_helpers.bleach_md(proof.text)|safe }}
-    {% if proof.image %}
-      <div class="image-proof">
-        <div class="image-container">
-          <img src="{{ proof.base64_encoded_image()|safe }}" alt=""
-               style="width: 100%;max-width: 100%; max-height:50vh;">
-        </div>
-        <div class="caption">
-          <span class="label">Figure</span>
-          <span>{{ proof.image_caption }}</span>
-        </div>
-      </div>
-    {% endif %}
-  {% endfor %}
+  {{ report_helpers.bleach_md(advisory.report_proof_text, allow_images=True)|safe }}
+
 </section>
 
 <section id="{{ advisory.pk }}-recommendation">

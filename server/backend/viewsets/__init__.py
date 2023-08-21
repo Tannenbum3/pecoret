@@ -23,7 +23,6 @@ from .company_contact import CompanyContactViewSet
 from .project_contact import ProjectContactViewSet
 from .finding_comment import FindingCommentViewSet
 from .company_information import CompanyInformationViewSet
-from .advisory_proof import AdvisoryProofViewSet
 from .pentest_type import PentestTypeViewSet
 from .cvss_score import CVSSBaseScoreViewSet
 from .owasp_risk_rating import OWASPRiskRatingViewSet

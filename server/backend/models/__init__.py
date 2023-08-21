@@ -35,7 +35,6 @@ from .assets.mobile_application import MobileApplication
 
 
 # advisory
-from .advisory_proof import AdvisoryProof
 from .advisory import Advisory
 from .advisory_timeline import AdvisoryTimeline
 from .advisory_membership import AdvisoryMembership

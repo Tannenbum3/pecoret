@@ -6,6 +6,7 @@ app_name = "advisories"
 
 router = DefaultRouter()
 
+# management routes
 router.register("inbox", viewsets.AdvisoryManagementInboxViewSet, "inbox")
 router.register("labels", viewsets.LabelViewSet, "label")
 
