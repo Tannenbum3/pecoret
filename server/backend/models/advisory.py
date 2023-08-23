@@ -152,7 +152,6 @@ class Advisory(TimestampedModel):
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)
         return proof_text
 
-
     class Meta:
         ordering = ["-advisory_id", "date_updated"]
 

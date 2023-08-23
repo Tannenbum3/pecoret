@@ -1,6 +1,6 @@
 <script>
-import CompanyService from '@/service/CompanyService'
-import ReportTemplateSelectField from '../elements/forms/ReportTemplateSelectField.vue'
+import CompanyService from "@/service/CompanyService";
+import ReportTemplateSelectField from "../elements/forms/ReportTemplateSelectField.vue";
 
 
 export default {
@@ -25,6 +25,9 @@ export default {
         open() {
             this.visible = true;
         },
+        getFileObject(event) {
+            this.model.logo = event.files[0];
+        },
         patch() {
             let data = {
                 name: this.model.name,
@@ -34,7 +37,13 @@ export default {
                 country: this.model.country,
                 report_template: this.model.report_template
             };
-            this.companyService.patchCompany(this.$api, this.company.pk, data).then((response) => {
+            this.companyService.patchCompany(this.$api, this.company.pk, data).then(() => {
+
+                if (this.model.logo) {
+                    this.companyService.uploadCompanyLogo(this.$api, this.company.pk, this.model.logo).then(() => {
+
+                    });
+                }
                 this.$emit("object-updated", this.model);
                 this.visible = false;
             });
@@ -50,7 +59,7 @@ export default {
         }
     },
     components: { ReportTemplateSelectField }
-}
+};
 </script>
 
 <template>
@@ -58,29 +67,33 @@ export default {
 
     <Dialog header="Update Company" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
 
-        <div class="flex flex-column gap-2">
-            <label for="name">Name</label>
-            <InputText id="name" type="text" v-model="model.name"></InputText>
-        </div>
-
-        <div class="flex flex-column gap-2">
-            <label for="street">Street</label>
-            <InputText id="street" type="text" v-model="model.street"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="city">City</label>
-            <InputText id="city" type="text" v-model="model.city"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="zipcode">Zipcode</label>
-            <InputText id="zipcode" type="text" v-model="model.zipcode"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="country">Country</label>
-            <InputText id="country" type="text" v-model="model.country"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
+        <div class="grid formgrid p-fluid">
+            <div class="col-12 field">
+                <label for="name">Name</label>
+                <InputText id="name" type="text" v-model="model.name"></InputText>
+            </div>
+            <div class="col-12 field">
+                <label for="street">Street</label>
+                <InputText id="street" type="text" v-model="model.street"></InputText>
+            </div>
+            <div class="col-12 md:col-6 field">
+                <label for="city">City</label>
+                <InputText id="city" type="text" v-model="model.city"></InputText>
+            </div>
+            <div class="col-12 md:col-6 field">
+                <label for="zipcode">Zipcode</label>
+                <InputText id="zipcode" type="text" v-model="model.zipcode"></InputText>
+            </div>
+            <div class="col-12 field">
+                <label for="country">Country</label>
+                <InputText id="country" type="text" v-model="model.country"></InputText>
+            </div>
+            <div class="col-12 field">
+                <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
+            </div>
+            <div class="col-12 field">
+                <FileUpload @select="getFileObject" mode="basic" accept="image/*"></FileUpload>
+            </div>
         </div>
 
         <template #footer>

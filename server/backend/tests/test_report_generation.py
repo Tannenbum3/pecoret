@@ -43,6 +43,18 @@ class ReportGenerationTask(APITestCase, PeCoReTTestCaseMixin):
             1,
         )
 
+    def test_report_generation_task_german(self):
+        self.report.project.language = "de"
+        task_id = async_task(
+            create_report_document_task, self.report_document.pk, sync=True
+        )
+        task_result = result(task_id, 200)
+        self.assertIsNotNone(task_result)
+        self.assertEqual(
+            models.ReportRelease.objects.filter(compiled_source__isnull=False).count(),
+            1,
+        )
+
 
 class SingleFindingExportTask(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):

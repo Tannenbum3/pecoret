@@ -18,4 +18,10 @@ class CompanySerializer(serializers.ModelSerializer):
             "city",
             "country",
             "report_template",
+            "logo"
         ]
+        extra_kwargs = {
+            "logo": {
+                "write_only": True
+            }
+        }

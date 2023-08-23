@@ -53,6 +53,8 @@ class CompanyPermission(BasePermission):
         if not user.is_authenticated:
             return False
         company = self.company_from_request(request)
+        if not company:
+            return False
         company = Company.objects.for_user(user).filter(pk=company.pk)
         if not company.exists():
             return False

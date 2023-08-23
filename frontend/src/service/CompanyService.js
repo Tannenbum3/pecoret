@@ -1,69 +1,76 @@
-import {api} from '@/plugins/axios'
+import { api } from "@/plugins/axios";
 
 
 export default class CompanyService {
-    getCompanies(params){
-        let url = "/companies/"
-        let config = {}
-        if (params ) {
-            config["params"] = params
+    getCompanies(params) {
+        let url = "/companies/";
+        let config = {};
+        if (params) {
+            config["params"] = params;
         }
-        return api.get(url, config)
+        return api.get(url, config);
     }
 
-    search(query){
-        let url = "/companies/"
-        let config = {params: {search: query}}
-        return api.get(url, config)
+    search(query) {
+        let url = "/companies/";
+        let config = { params: { search: query } };
+        return api.get(url, config);
     }
 
-    getCompany(companyId){
-        let url = "/companies/" + companyId + "/"
-        return api.get(url)
+    getCompany(companyId) {
+        let url = "/companies/" + companyId + "/";
+        return api.get(url);
     }
 
-    createCompany(api, data){
-        let url = "/companies/"
-        return api.post(url, data)
+    createCompany(api, data) {
+        let url = "/companies/";
+        return api.post(url, data);
     }
 
 
-  patchCompany(api, companyId, data) {
-        let url = "/companies/" + companyId + "/"
-        return api.patch(url, data)
+    patchCompany(api, companyId, data) {
+        let url = "/companies/" + companyId + "/";
+        return api.patch(url, data);
     }
 
-  getCompanyInformation(companyId) {
-    let url = "/companies/" + companyId + "/information/";
-    return api.get(url);
+    getCompanyInformation(companyId) {
+        let url = "/companies/" + companyId + "/information/";
+        return api.get(url);
     }
 
-  createCompanyInformation(api, companyId, data) {
-    let url = "/companies/" + companyId + "/information/";
-        return api.post(url, data)
+    createCompanyInformation(api, companyId, data) {
+        let url = "/companies/" + companyId + "/information/";
+        return api.post(url, data);
     }
 
-  deleteCompanyInformation(api, companyId, id) {
-    let url = "/companies/" + companyId + "/information/" + id + "/";
-        return api.delete(url)
+    deleteCompanyInformation(api, companyId, id) {
+        let url = "/companies/" + companyId + "/information/" + id + "/";
+        return api.delete(url);
     }
 
     getContacts(companyId, params) {
-        let url = "/companies/" + companyId + "/contacts/"
-        let config = {}
+        let url = "/companies/" + companyId + "/contacts/";
+        let config = {};
         if (params) {
-            config["params"] = params
+            config["params"] = params;
         }
-        return api.get(url, config)
+        return api.get(url, config);
     }
 
-    createContact(api, companyId, data){
-        let url = "/companies/" + companyId + "/contacts/"
-        return api.post(url, data)
+    createContact(api, companyId, data) {
+        let url = "/companies/" + companyId + "/contacts/";
+        return api.post(url, data);
     }
 
-    deleteContact(api, companyId, contactId){
-        let url = "/companies/" + companyId + "/contacts/" + contactId + "/"
-        return api.delete(url)
+    deleteContact(api, companyId, contactId) {
+        let url = "/companies/" + companyId + "/contacts/" + contactId + "/";
+        return api.delete(url);
+    }
+
+    uploadCompanyLogo(api, companyId, logo) {
+        let url = "/companies/" + companyId + "/";
+        let data = new FormData();
+        data.append("logo", logo);
+        return api.patch(url, data);
     }
 }

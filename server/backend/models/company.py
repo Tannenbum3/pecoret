@@ -1,5 +1,11 @@
+from pathlib import Path
 from django.db import models
 from .membership import Membership
+
+
+def upload_path(instance, filename):
+    extension = Path(filename).suffix
+    return f"uploads/companies/{instance.pk}/logo{extension}"
 
 
 class CompanyQuerySet(models.QuerySet):
@@ -23,6 +29,7 @@ class Company(models.Model):
     city = models.CharField(max_length=256)
     country = models.CharField(max_length=256)
     report_template = models.ForeignKey('backend.ReportTemplate', on_delete=models.PROTECT)
+    logo = models.ImageField(max_length=256, upload_to=upload_path, null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
