@@ -1,5 +1,6 @@
 import copy
 import re
+from django.core.files.images import ImageFile
 from django.db import models
 from django.db.models import signals
 from django.dispatch import receiver
@@ -67,11 +68,15 @@ class FindingManager(models.Manager):
         obj = self.model.objects.get(pk=finding.pk)
         obj.pk = None
         obj.save()
-        for proof in finding.proof_set.all():
+        for proof in finding.findingimageattachment_set.all():
+            image_file = ImageFile(proof.image)
             new_proof = copy.copy(proof)
             new_proof.pk = None
             new_proof.finding = obj
+            new_proof.image = image_file
             new_proof.save()
+            obj.proof_text = obj.proof_text.replace(proof.get_preview_url(), new_proof.get_preview_url())
+            obj.save()
         return obj
 
 
@@ -182,7 +187,6 @@ class Finding(models.Model):
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
-            print(attachment_pk)
             qs = self.findingimageattachment_set.filter(pk=attachment_pk)
             if not qs.exists():
                 # not an attachment for our finding! nice try!

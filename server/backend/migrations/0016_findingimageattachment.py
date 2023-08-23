@@ -14,12 +14,13 @@ def migrate_proofs(apps, schema_editor):
         proof_text = ""
         for proof in proofs:
             proof_text += f"{proof.text}\n"
-            image_file = ImageFile(proof.image)
-            attachment = Attachment.objects.create(finding=finding, image=image_file,
-                                                   caption=proof.image_caption)
-            attachment.name = proof.title
-            attachment.save()
-            proof_text += f"![{proof.title}]({attachment.image})\n"
+            if proof.image:
+                image_file = ImageFile(proof.image)
+                attachment = Attachment.objects.create(finding=finding, image=image_file,
+                                                       caption=proof.image_caption)
+                attachment.name = proof.title
+                attachment.save()
+                proof_text += f"![{proof.title}]({attachment.image})\n"
         finding.proof_text = proof_text
         finding.save()
 

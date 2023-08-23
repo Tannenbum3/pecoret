@@ -63,6 +63,7 @@ class AdvisoryManager(models.Manager):
         data["user"] = finding.user
         data["proof_text"] = finding.proof_text
         data["internal_name"] = finding.name
+        data["recommendation"] = finding.vulnerability.recommendation
         data["vulnerability"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=finding.vulnerability.vulnerability_id
         )

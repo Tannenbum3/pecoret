@@ -11,7 +11,6 @@ export default {
     name: "AdvisoryDetail",
     mounted() {
         this.getAdvisory();
-        console.log(this.$router.options.history.state.back);
     },
     data() {
         return {
