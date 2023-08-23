@@ -15038,44 +15038,6 @@
     }
   },
   {
-    "model": "backend.cvssbasescore",
-    "pk": 1,
-    "fields": {
-      "finding": 1,
-      "av": null,
-      "ac": null,
-      "pr": null,
-      "ui": null,
-      "s": null,
-      "a": null,
-      "i": null,
-      "c": null
-    }
-  },
-  {
-    "model": "backend.owaspriskrating",
-    "pk": 1,
-    "fields": {
-      "finding": 1,
-      "skill_level": 0,
-      "motive": 0,
-      "opportunity": 0,
-      "size": 0,
-      "ease_of_discovery": 0,
-      "ease_of_exploit": 0,
-      "awareness": 0,
-      "intrusion_detection": 0,
-      "loss_of_confidentiality": 0,
-      "loss_of_availability": 0,
-      "loss_of_integrity": 0,
-      "loss_of_accountability": 0,
-      "financial_damage": 0,
-      "reputation_damage": 0,
-      "non_compliance": 0,
-      "privacy_violation": 0
-    }
-  },
-  {
     "model": "backend.finding",
     "pk": 1,
     "fields": {

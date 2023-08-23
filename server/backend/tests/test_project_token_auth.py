@@ -20,9 +20,20 @@ class ProjectTokenAuth(APITestCase, PeCoReTTestCaseMixin):
         self.client.defaults["HTTP_AUTHORIZATION"] = "ProjectToken " + str(
             self.token1.key
         )
+        self.url = self.get_url("backend:host-list", project=self.project1.pk)
+
+    def test_allowed(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
     def test_foreign_project_asset_denied(self):
         self.url = self.get_url("backend:host-list", project=self.project2.pk)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_token_expired(self):
+        self.token1.date_expire = self.token1.date_expire - timezone.timedelta(days=5)
+        self.token1.save()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 403)
 

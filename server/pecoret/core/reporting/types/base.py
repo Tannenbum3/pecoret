@@ -4,6 +4,7 @@ from jinja2 import FileSystemLoader
 from jinja2.sandbox import SandboxedEnvironment
 from backend.models.reports.change_history import ChangeHistory
 from pecoret.core.utils.markdown import bleach_md
+from pecoret.core.utils import image64
 from pecoret.core.reporting.jinja.utils import dynamic_trans
 
 
@@ -72,7 +73,13 @@ class BaseReportType:
         Returns:
             dict: the context that is passed to jinja2
         """
-        return {"report_helpers": {"bleach_md": bleach_md}, "variant": self}
+        return {
+            "report_helpers": {
+                "bleach_md": bleach_md,
+                "image64": image64
+            },
+            "variant": self
+        }
 
     def get_template_name(self):
         """just get the template name
