@@ -45,11 +45,14 @@ export default class AdvisoryService {
         return api.delete(url);
     }
 
-    downloadAdvisoryAsPDF(api, advisoryId) {
+    downloadAdvisoryAsPDF(api, advisoryId, params) {
         let url = "/advisories/" + advisoryId + "/export_pdf/";
         let config = {
             responseType: "arraybuffer"
         };
+        if (params) {
+            config["params"] = params;
+        }
         return api.get(url, config);
     }
 

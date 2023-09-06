@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField
+from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateField
 from backend.models.advisory import Advisory, Severity, AdvisoryStatusChoices
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
 from backend.serializers.user import MinimalUserSerializer
@@ -49,3 +49,12 @@ class AdvisoryUpdateSerializer(AdvisorySerializer):
 
     class Meta(AdvisorySerializer.Meta):
         fields = AdvisorySerializer.Meta.fields
+
+
+class AdvisoryDownloadSerializer(serializers.Serializer):
+    template = ActiveReportTemplateField(required=False)
+
+    class Meta:
+        fields = [
+            "template"
+        ]

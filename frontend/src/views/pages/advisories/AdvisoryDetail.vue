@@ -5,6 +5,7 @@ import AdvisoryTabMenu from "@/components/pages/AdvisoryTabMenu.vue";
 import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
 import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
 import { useAuthStore } from "@/store/auth";
+import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
 
 
 export default {
@@ -18,6 +19,8 @@ export default {
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
             advisory: { vulnerability: {} },
+            templateSelectDialogVisible: false,
+            exportTemplate: null,
             downloadPending: false,
             dataLoaded: false,
             breadcrumbs: [
@@ -44,15 +47,21 @@ export default {
             ],
             downloadMenuItems: [
                 {
-                    label: "As PDF",
+                    label: "Default PDF",
                     command: () => {
                         this.downloadAsPDF();
                     }
                 },
                 {
-                    label: "As Markdown",
+                    label: "Default Markdown",
                     command: () => {
                         this.downloadAsMarkdown();
+                    }
+                },
+                {
+                    label: "PDF with template",
+                    command: () => {
+                        this.openTemplateSelectDialog();
                     }
                 }
             ]
@@ -68,6 +77,12 @@ export default {
             return this.$router.resolve({
                 name: "AdvisoryList"
             });
+        },
+        closeTemplateSelectDialog() {
+            this.templateSelectDialogVisible = false;
+        },
+        openTemplateSelectDialog() {
+            this.templateSelectDialogVisible = true;
         },
         toggleDownloadMenu(event) {
             this.$refs.downloadMenu.toggle(event);
@@ -136,9 +151,15 @@ export default {
         },
         downloadAsPDF() {
             this.downloadPending = true;
-            this.service.downloadAdvisoryAsPDF(this.$api, this.advisoryId).then((response) => {
+            this.closeTemplateSelectDialog();
+            let params = {};
+            if (this.exportTemplate) {
+                params["template"] = this.exportTemplate;
+            }
+            this.service.downloadAdvisoryAsPDF(this.$api, this.advisoryId, params).then((response) => {
                 const filename = "advisory_" + this.advisoryId + ".pdf";
                 this.forceMarkdownFileDownload(response, filename);
+                this.exportTemplate = null;
             }).finally(() => {
                 this.downloadPending = false;
             });
@@ -165,7 +186,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu }
+    components: { ReportTemplateSelectField, DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu }
 };
 </script>
 
@@ -275,4 +296,17 @@ export default {
             </div>
         </div>
     </div>
+
+    <Dialog header="Advisory Export Template" v-model:visible="templateSelectDialogVisible" modal
+            :style="{ width: '70vw'}">
+        <div class="grid formgrid p-fluid">
+            <div class="field col-12">
+                <ReportTemplateSelectField v-model="exportTemplate"></ReportTemplateSelectField>
+            </div>
+        </div>
+        <template #footer>
+            <Button label="Cancel" @click="closeTemplateSelectDialog()" class="p-button-outlined"></Button>
+            <Button label="Save" @click="this.downloadAsPDF" icon="pi pi-check" class="p-button-outlined"></Button>
+        </template>
+    </Dialog>
 </template>

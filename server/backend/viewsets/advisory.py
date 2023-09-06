@@ -6,13 +6,16 @@ from backend.serializers.advisory import (
     AdvisorySerializer,
     AdvisoryCreateSerializer,
     AdvisoryUpdateSerializer,
+    AdvisoryDownloadSerializer
 )
 from backend.serializers.advisory_timeline import AdvisoryTimelineSerializer
 from backend import permissions
 from backend.filters.advisory import AdvisoryFilter
 from backend.models import ReportTemplate
 from backend.tasks.finding_export import export_advisory, export_advisory_markdown
-from advisories.serializers.advisory import AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
+from advisories.serializers.advisory import (
+    AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
+)
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
@@ -130,16 +133,21 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
                 return AdvisoryManagementUpdateSerializer
         return AdvisoryUpdateSerializer
 
-    @action(detail=True, methods=["get"])
-    # pylint: disable=unused-argument
-    def export_pdf(self, _request, **kwargs):
+    @action(detail=True, methods=["get"], serializer_class=AdvisoryDownloadSerializer)
+    def export_pdf(self, request, **kwargs):
         """export the advisory details as PDF attachment
 
         Returns:
             HttpResponse: PDF Response
         """
         advisory = self.get_object()
-        template = ReportTemplate.objects.get(name=settings.ADVISORY_TEMPLATE)
+        serializer = AdvisoryDownloadSerializer(data=request.GET)
+        serializer.is_valid(raise_exception=True)
+        if not serializer.data.get('template'):
+            template = ReportTemplate.objects.get(name=settings.ADVISORY_TEMPLATE)
+        else:
+            template = serializer.data["template"]
+
         result = export_advisory(advisory, template)
         response = HttpResponse(result, content_type="application/pdf")
         filename = f"advisory_{advisory.pk}"
