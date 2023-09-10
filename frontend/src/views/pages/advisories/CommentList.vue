@@ -80,7 +80,7 @@ export default {
   <div class="grid">
     <div class="col-12">
       <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-      <div class="card">
+        <div class="card border-noround-top">
         <Card v-for="comment in items" :key="comment.pk" class="surface-ground border-200 border-1 border-round mt-3">
           <template #header>
             <div class="col-12 surface-card border-200 border-1 border-round">

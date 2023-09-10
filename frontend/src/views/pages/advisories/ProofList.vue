@@ -78,7 +78,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card">
+            <div class="card border-noround-top">
                 <div class="grid formgrid p-fluid">
                     <div class="col-12 field">
                         <MarkdownEditor @blur="patchAdvisory" v-model="model.proof_text"></MarkdownEditor>

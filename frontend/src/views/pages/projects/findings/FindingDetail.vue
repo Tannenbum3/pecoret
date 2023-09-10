@@ -144,7 +144,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
-            <Card>
+            <Card class="border-noround-top">
                 <template #content>
                     <div class="grid">
                         <div class="col-12 md:col-4">

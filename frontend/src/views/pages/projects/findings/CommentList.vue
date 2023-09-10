@@ -73,7 +73,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
-            <div class="card" v-if="items.length > 1">
+            <div class="card border-noround-top" v-if="items.length > 1">
                 <div class="card" v-for="comment in items" :key="comment.pk">
                     {{ comment.comment }}
                 </div>

@@ -229,7 +229,7 @@ export default {
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
 
-            <Card>
+            <Card class="border-noround-top">
                 <template #content>
                     <p class="text-xl">CVSS Base-Score</p>
 

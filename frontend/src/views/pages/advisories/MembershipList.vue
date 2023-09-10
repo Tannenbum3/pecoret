@@ -104,7 +104,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card">
+            <div class="card border-noround-top">
                 <DataTable paginator lazy rowHover dataKey="pk" :totalRecords="totalRecords" :value="items"
                     v-if="items.length > 0"
                     :rows="pagination.limit" filterDisplay="menu" :loading="loading" @sort="onSort" @filter="onFilter"
