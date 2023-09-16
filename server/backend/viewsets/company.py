@@ -7,6 +7,7 @@ from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
 class CompanyViewSet(PeCoReTNoDestroyViewSet):
     queryset = Company.objects.none()
     search_fields = ["name"]
+    api_scope = "scope_companies"
     serializer_class = CompanySerializer
 
     def get_permissions(self):

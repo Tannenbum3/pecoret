@@ -29,6 +29,7 @@ router.register("groups", viewsets.GroupViewSet, "group")
 router.register("advisories", viewsets.AdvisoryViewSet, "advisory")
 
 router.register("pentest-types", viewsets.PentestTypeViewSet, "pentest-type")
+router.register("api-tokens", viewsets.APITokenViewSet, "api-token")
 
 
 # company routes
@@ -51,7 +52,6 @@ project_router.register(
 )
 project_router.register("findings", viewsets.FindingViewSet, "finding")
 project_router.register("accounts", viewsets.AccountViewSet, "account")
-project_router.register("api-tokens", viewsets.ProjectTokenViewSet, "api-token")
 project_router.register("reports", viewsets.ProjectReportViewSet, "report")
 project_router.register("memberships", viewsets.MembershipViewSet, "membership")
 project_router.register(

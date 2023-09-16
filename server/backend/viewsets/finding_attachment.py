@@ -9,6 +9,7 @@ from backend.serializers.finding_attachment import FindingImageAttachmentSeriali
 class FindingImageAttachmentViewSet(PeCoReTModelViewSet):
     queryset = FindingImageAttachment.objects.none()
     search_fields = ["caption"]
+    api_scope = "scope_all_projects"
     serializer_class = FindingImageAttachmentSerializer
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY,

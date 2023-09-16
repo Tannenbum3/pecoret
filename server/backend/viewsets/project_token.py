@@ -7,6 +7,7 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 class ProjectTokenViewSet(PeCoReTModelViewSet):
     serializer_class = ProjectTokenSerializer
     queryset = ProjectToken.objects.none()
+    api_scope = None
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
 
     def get_queryset(self):

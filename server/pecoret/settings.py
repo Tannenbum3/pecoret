@@ -129,6 +129,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "backend.authentication.ProjectTokenAuthentication",
+        "pecoret.core.authentication.APITokenAuthentication"
     ],
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
     "DEFAULT_PAGINATION_CLASS": "pecoret.core.pagination.PeCoReTPageNumberPagination",

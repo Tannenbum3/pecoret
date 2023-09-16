@@ -15,7 +15,7 @@ export default {
                     to: this.$router.resolve({
                         name: "UserProfileSettings"
                     })
-                }
+                },
             ]
         };
     }

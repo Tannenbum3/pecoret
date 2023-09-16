@@ -11,3 +11,6 @@ from .presets import (
     PRESET_OWNER_OR_READ_ONLY,
     PRESET_GROUP_PENTESTER_MANAGEMENT
 )
+
+# token permissions
+from .token import BaseAPITokenPermission

@@ -1,7 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import ProjectToken
+from backend.models import ProjectToken, APIToken
 from .base import BasePermission
-
+from .token.base import TokenPermissionMixin
 
 class Groups(object):
     GROUP_PENTESTER = "Pentester"
@@ -10,7 +10,7 @@ class Groups(object):
     VENDOR = "Vendor"
 
 
-class GroupPermission(BasePermission):
+class GroupPermission(BasePermission, TokenPermissionMixin):
     def __init__(self, read_write_groups=[], read_only_groups=[]):
         super().__init__()
         self.read_write_groups = read_write_groups
@@ -20,14 +20,20 @@ class GroupPermission(BasePermission):
         # required because `permission_class` requires a class and not an instance
         return self
 
-    def _check_read_write(self, request, _view):
+    def _check_read_write(self, request, view):
         if request.user.groups.filter(name__in=self.read_write_groups):
+            if isinstance(request.auth, APIToken):
+                if not self.has_token_permission(request, view, None):
+                    return False
             return True
         return False
 
-    def _check_read_only(self, request, _view):
+    def _check_read_only(self, request, view):
         read_both = self.read_only_groups + self.read_write_groups
         if request.user.groups.filter(name__in=read_both):
+            if isinstance(request.auth, APIToken):
+                if not self.has_token_permission(request, view, None):
+                    return False
             return True
         return False
 

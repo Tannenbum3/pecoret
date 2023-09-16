@@ -10,7 +10,7 @@ class CompanyListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_status_allowed(self):
         users = [
-            self.management2, self.management1,  self.read_only1, self.pentester2, self.pentester1
+            self.management2, self.management1, self.read_only1, self.pentester2, self.pentester1
         ]
         for user in users:
             self.client.force_login(user)
@@ -117,3 +117,63 @@ class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 404)
+
+
+class APITokenReadTestCase(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.token1, self.key1 = self.create_api_token(self.pentester1, scope_companies=self.api_access_choices.READ,
+                                                       date_expire=None)
+        self.token2, self.key2 = self.create_api_token(self.pentester1,
+                                                       scope_companies=self.api_access_choices.NO_ACCESS,
+                                                       date_expire=None)
+        self.token3, self.key3 = self.create_api_token(self.advisory_manager1,
+                                                       scope_companies=self.api_access_choices.READ,
+                                                       date_expire=None)
+        self.url = self.get_url("backend:company-detail", pk=self.project1.company.pk)
+
+    def test_valid(self):
+        self.set_token_header(self.key1)
+        self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_no_access_token(self):
+        self.set_token_header(self.key2)
+        self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_forbidden_user(self):
+        self.set_token_header(self.key3)
+        self.basic_status_code_check(self.url, self.client.get, 403)
+
+
+class APITokenWriteTestCase(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.token1, self.key1 = self.create_api_token(self.pentester1, scope_companies=self.api_access_choices.READ,
+                                                       date_expire=None)
+        self.token2, self.key2 = self.create_api_token(self.pentester1,
+                                                       scope_companies=self.api_access_choices.NO_ACCESS,
+                                                       date_expire=None)
+        self.token3, self.key3 = self.create_api_token(self.advisory_manager1,
+                                                       scope_companies=self.api_access_choices.READ,
+                                                       date_expire=None)
+        self.url = self.get_url("backend:company-detail",
+                                pk=self.project1.company.pk)
+        self.data = {"name": "test123"}
+
+    def test_valid(self):
+        self.set_token_header(self.key1)
+        self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
+
+    def test_read_write(self):
+        self.token1.scope_companies = self.api_access_choices.READ_WRITE
+        self.token1.save()
+        self.set_token_header(self.key1)
+        self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+
+    def test_invalid(self):
+        self.set_token_header(self.key2)
+        self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
+
+    def test_forbidden(self):
+        self.set_token_header(self.key3)
+        self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)

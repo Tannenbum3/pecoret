@@ -9,6 +9,7 @@ class ServiceViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY
     ]
+    api_scope = "scope_all_projects"
     queryset = Service.objects.none()
     serializer_class = ServiceSerializer
     filterset_class = ServiceFilter

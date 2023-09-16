@@ -9,7 +9,7 @@ from backend.models.membership import Roles
 from backend.filters.project import ProjectFilter
 from backend.serializers.project import ProjectSerializer
 from backend.serializers.pinned_project import PinnedProjectSerializer
-from backend import permissions
+from pecoret.core import permissions
 from backend.models.project_token import ProjectToken
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
@@ -19,6 +19,7 @@ class ProjectViewSet(PeCoReTModelViewSet):
     filterset_class = ProjectFilter
     search_fields = ["name"]
     ordering_fields = ["name", "date_updated", "date_created"]
+    api_scope = "scope_all_projects"
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
@@ -32,7 +33,9 @@ class ProjectViewSet(PeCoReTModelViewSet):
         if self.action == "create":
             return [permissions.PRESET_GROUP_MANAGEMENT()]
         elif self.action == "list":
-            return [permissions.PRESET_GROUP_PENTESTER_MANAGEMENT()]
+            return [
+                permissions.PRESET_GROUP_PENTESTER_MANAGEMENT(),
+            ]
         elif self.action == "destroy":
             return [permissions.PRESET_GROUP_MANAGEMENT()]
         elif self.action == "retrieve":

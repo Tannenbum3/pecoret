@@ -1,9 +1,10 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Company
+from backend.models import Company, APIToken
 from .base import BasePermission
+from .token.base import TokenPermissionMixin
 
 
-class CompanyPermission(BasePermission):
+class CompanyPermission(BasePermission, TokenPermissionMixin):
     def __init__(self, read_write_groups=[], read_only_groups=[]):
         super().__init__()
         self.read_only_groups = read_only_groups
@@ -62,11 +63,19 @@ class CompanyPermission(BasePermission):
         if request.method not in SAFE_METHODS:
             allowed = self._check_read_write(request)
             if allowed:
+                if isinstance(request.auth, APIToken):
+                    if not self.has_token_permission(request, view, None):
+                        return False
+                    request.company = company
+                    return True
                 request.company = company
                 return True
         else:
             allowed = self._check_read_only(request)
             if allowed:
+                if isinstance(request.auth, APIToken):
+                    if not self.has_token_permission(request, view, None):
+                        return False
                 request.company = company
                 return True
         return False

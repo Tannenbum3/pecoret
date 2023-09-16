@@ -14,6 +14,7 @@ class AdvisoryTimelineViewSet(PeCoReTModelViewSet):
     """
 
     queryset = AdvisoryTimeline.objects.none()
+    api_scope = "scope_advisories"
     permission_classes = [
         permissions.AdvisoryPermission(
             read_write_roles=[Roles.CREATOR],

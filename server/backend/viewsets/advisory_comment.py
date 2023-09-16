@@ -9,6 +9,7 @@ class AdvisoryCommentViewSet(PeCoReTNoDestroyViewSet):
     """manage advisory comments"""
 
     queryset = AdvisoryComment.objects.none()
+    api_scope = "scope_advisories"
     permission_classes = [
         permissions.AdvisoryPermission(
             read_write_roles=[Roles.CREATOR, Roles.VENDOR],

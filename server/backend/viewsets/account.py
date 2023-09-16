@@ -10,6 +10,7 @@ class AccountViewSet(PeCoReTModelViewSet):
     filterset_class = None
     search_fields = ["username"]
     serializer_class = AccountSerializer
+    api_scope = "scope_all_projects"
 
     def get_queryset(self):
         return Account.objects.for_project(self.request.project)

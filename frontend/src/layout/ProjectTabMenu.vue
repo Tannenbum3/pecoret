@@ -103,15 +103,6 @@ export default {
                             })
                         },
                         {
-                            label: 'API-Tokens',
-                            to: this.$router.resolve({
-                                name: 'APITokenList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            })
-                        },
-                        {
                             label: 'User Accounts',
                             to: this.$router.resolve({
                                 name: 'UserAccountList',

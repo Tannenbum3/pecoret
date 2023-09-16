@@ -5,7 +5,10 @@ from backend.serializers.assets.mobile_application import MobileApplicationSeria
 
 
 class MobileApplicationViewSet(PeCoReTModelViewSet):
-    permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
+    permission_classes = [
+        permissions.PRESET_PENTESTER_OR_READONLY
+    ]
+    api_scope = "scope_all_projects"
     queryset = MobileApplication.objects.none()
     serializer_class = MobileApplicationSerializer
     filterset_class = None

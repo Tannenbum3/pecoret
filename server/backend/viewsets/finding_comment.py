@@ -9,6 +9,7 @@ class FindingCommentViewSet(PeCoReTNoDestroyViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, FindingPermission]
     queryset = FindingComment.objects.none()
     serializer_class = FindingCommentSerializer
+    api_scope = "scope_all_projects"
 
     def get_queryset(self):
         return FindingComment.objects.for_project(self.request.project).for_finding(

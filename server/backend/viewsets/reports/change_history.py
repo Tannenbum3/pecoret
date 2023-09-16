@@ -10,6 +10,7 @@ class ChangeHistoryViewSet(PeCoReTModelViewSet):
     queryset = ChangeHistory.objects.none()
     filterset_class = None
     search_fields = []
+    api_scope = "scope_all_projects"
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, ReportPermission]
 
     def get_queryset(self):

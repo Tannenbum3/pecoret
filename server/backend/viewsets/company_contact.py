@@ -15,6 +15,7 @@ class CompanyContactViewSet(PeCoReTModelViewSet):
             read_only_groups=[]
         )
     ]
+    api_scope = "scope_companies"
     queryset = CompanyContact.objects.none()
     search_fields = ["first_name", "last_name"]
     filterset_class = CompanyContactFilter

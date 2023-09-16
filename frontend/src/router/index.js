@@ -126,11 +126,6 @@ const router = createRouter({
                                     component: () => import("@/views/pages/projects/management/UserAccountList.vue")
                                 },
                                 {
-                                    path: "/projects/:projectId/api-tokens",
-                                    name: "APITokenList",
-                                    component: () => import("@/views/pages/projects/management/APITokenList.vue")
-                                },
-                                {
                                     path: "/projects/:projectId/vulnerabilities",
                                     name: "VulnerabilityList",
                                     component: () => import("@/views/pages/projects/vulnerabilities/VulnerabilityList.vue")
@@ -296,6 +291,11 @@ const router = createRouter({
                     path: "/user/settings/profile",
                     name: "UserProfileSettings",
                     component: () => import("@/views/pages/settings/UserProfileSettings.vue")
+                },
+                {
+                    path: "/user/api-tokens",
+                    name: "APITokenList",
+                    component: () => import("@/views/pages/APITokenList.vue")
                 }
 
             ]

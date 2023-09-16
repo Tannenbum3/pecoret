@@ -16,6 +16,7 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
     filterset_class = None
     search_fields = []
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, ReportPermission]
+    api_scope = "scope_all_projects"
 
     def get_queryset(self):
         qs = ReportRelease.objects.for_project(self.request.project).for_report(self.request.report)

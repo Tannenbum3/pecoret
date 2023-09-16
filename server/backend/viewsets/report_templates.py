@@ -8,6 +8,7 @@ class ReportTemplateViewSet(PeCoReTModelViewSet):
     serializer_class = ReportTemplateSerializer
     queryset = ReportTemplate.objects.none()
     search_fields = ["name"]
+    api_scope = None
     permission_classes = [permissions.PRESET_GROUP_SUPERUSER_OR_READ_ONLY]
 
     def get_queryset(self):

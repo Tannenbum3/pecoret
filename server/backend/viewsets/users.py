@@ -18,6 +18,7 @@ class UserViewSet(PeCoReTModelViewSet):
     queryset = User.objects.all()
     filterset_class = None
     search_fields = ["username", "first_name", "last_name"]
+    api_scope = None
     permission_classes = [
         permissions.GroupPermission(
             read_write_groups=[], read_only_groups=[permissions.Groups.GROUP_MANAGEMENT]

@@ -8,6 +8,7 @@ class UserSettingsViewSet(PeCoReTListUpdateRetrieveModelViewSet):
     serializer_class = UserSettingsSerializer
     queryset = UserSettings.objects.none()
     permission_classes = [IsAuthenticated]
+    api_scope = "scope_user"
 
     def get_object(self):
         return UserSettings.objects.for_user(self.request.user).get()

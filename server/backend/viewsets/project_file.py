@@ -10,6 +10,7 @@ from backend.models.project_file import ProjectFile
 class ProjectFileViewSet(PeCoReTModelViewSet):
     queryset = ProjectFile.objects.none()
     search_fields = ["name"]
+    api_scope = "scope_all_projects"
     serializer_class = ProjectFileSerializer
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
 

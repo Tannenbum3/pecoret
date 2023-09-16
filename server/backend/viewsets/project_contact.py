@@ -7,6 +7,7 @@ from backend import permissions
 class ProjectContactViewSet(PeCoReTModelViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
     filterset_class = None
+    api_scope = "scope_all_projects"
     search_fields = ["contact__first_name", "contact__last_name"]
     ordering_fields = ["date_created", "date_updated"]
     serializer_class = ProjectContactSerializer

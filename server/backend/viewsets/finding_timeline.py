@@ -9,6 +9,7 @@ class FindingTimelineViewSet(PeCoReTReadOnlyModelViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, FindingPermission]
     serializer_class = FindingTimelineSerializer
     search_fields = []
+    api_scope = "scope_all_projects"
     queryset = FindingTimeline.objects.none()
 
     def get_queryset(self):

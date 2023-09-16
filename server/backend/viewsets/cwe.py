@@ -13,3 +13,4 @@ class CWEViewSet(PeCoReTReadOnlyModelViewSet):
     queryset = CWE.objects.all()
     search_fields = ["cwe_id", "name"]
     filterset_class = CWEFilter
+    api_scope = "scope_misc"

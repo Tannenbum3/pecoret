@@ -8,6 +8,7 @@ from pecoret.core.viewsets import PeCoReTListUpdateRetrieveModelViewSet
 class CVSSBaseScoreViewSet(PeCoReTListUpdateRetrieveModelViewSet):
     queryset = CVSSBaseScore.objects.none()
     serializer_class = CVSSBaseScoreSerializer
+    api_scope = "scope_all_projects"
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, FindingPermission]
 
     def get_queryset(self):

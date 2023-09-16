@@ -9,6 +9,7 @@ class CompanyInformationViewSet(PeCoReTModelViewSet):
     queryset = CompanyInformation.objects.none()
     filterset_class = CompanyInformationFilter
     serializer_class = CompanyInformationSerializer
+    api_scope = "scope_companies"
     permission_classes = [
         permissions.CompanyPermission(
             read_write_groups=[

@@ -11,6 +11,13 @@ export default {
             authStore: useAuthStore(),
             userMenuItems: [
                 {
+                    label: "API-Tokens",
+                    icon: "fa fa-fingerprint",
+                    to: this.$router.resolve({
+                        name: "APITokenList"
+                    })
+                },
+                {
                     label: "Settings",
                     icon: "fa fa-gear",
                     to: this.$router.resolve({

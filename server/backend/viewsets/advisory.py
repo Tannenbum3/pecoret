@@ -26,6 +26,7 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
 
     queryset = Advisory.objects.none()
     filterset_class = AdvisoryFilter
+    api_scope = "scope_advisories"
     search_fields = [
         "vulnerability__vulnerability_id",
         "product",

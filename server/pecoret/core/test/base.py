@@ -6,6 +6,7 @@ from backend.models import (
     User, Project, Membership, ReportTemplate, WebApplication,
     Finding
 )
+from backend.models.api_token import APIToken, AccessChoices
 from checklists.models import (
     AssetChecklist
 )
@@ -15,6 +16,8 @@ from backend.models.advisory_membership import AdvisoryMembership
 
 
 class PeCoReTTestCaseMixin:
+    api_access_choices = AccessChoices
+
     def init_mixin(self):
         self.pentester1 = self.create_user("pentester1", "changeme", group="Pentester")
         self.project1 = self.create_project()
@@ -44,6 +47,9 @@ class PeCoReTTestCaseMixin:
         self.asset2 = self.create_instance(WebApplication, project=self.project2)
         self.init_advisory_users()
 
+    def set_token_header(self, token):
+        self.client.defaults["HTTP_AUTHORIZATION"] = "Bearer " + token
+
     def init_advisory_users(self):
         self.vendor1 = self.create_user("testvendor1", "changeme1234", group="Vendor")
         self.read_only_vendor = self.create_user("readonlyvendor1", "changeme1234", group="Vendor")
@@ -52,6 +58,9 @@ class PeCoReTTestCaseMixin:
         self.advisory2 = self.create_instance(advisory.Advisory, is_draft=True, user=self.pentester2)
         self.assign_advisory_role(self.vendor1, advisory.Roles.VENDOR, self.advisory1)
         self.assign_advisory_role(self.read_only_vendor, advisory.Roles.READ_ONLY, self.advisory1)
+
+    def create_api_token(self, user, **kwargs):
+        return APIToken.objects.create_token(user=user, **kwargs)
 
     def assign_advisory_role(self, user, role, advisory):
         return G(AdvisoryMembership, user=user, role=role, advisory=advisory)

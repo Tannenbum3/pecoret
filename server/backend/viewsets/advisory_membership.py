@@ -12,6 +12,7 @@ from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 
 class AdvisoryMembershipViewSet(PeCoReTNoUpdateViewSet):
     queryset = AdvisoryMembership.objects.none()
+    api_scope = "scope_advisories"
     permission_classes = [
         permissions.AdvisoryPermission(
             read_only_roles=[Roles.CREATOR, Roles.READ_ONLY, Roles.VENDOR]

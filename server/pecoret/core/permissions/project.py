@@ -1,18 +1,15 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Project, ProjectToken
+from backend.models import Project, ProjectToken, APIToken
 from backend.models.membership import Membership
 from .base import BasePermission
+from .token.base import TokenPermissionMixin
 
 
-class ProjectPermission(BasePermission):
+class ProjectPermission(BasePermission, TokenPermissionMixin):
     def __init__(self, read_write_roles=[], read_only_roles=[]):
         super().__init__()
         self.read_only_roles = read_only_roles
         self.read_write_roles = read_write_roles
-
-    def __call__(self):
-        # required because `permission_class` requires a class and not an instance
-        return self
 
     def _check_project_membership(self, user, project):
         return Membership.objects.for_project(project).for_user(user)
@@ -44,10 +41,6 @@ class ProjectPermission(BasePermission):
             return None
         return project
 
-    def has_permission(self, request, view):
-        """ensure that we always check object permissions"""
-        return self.has_object_permission(request, view, None)
-
     def has_object_permission(self, request, view, obj):
         project = self.project_from_request(request)
         if not project:
@@ -71,10 +64,21 @@ class ProjectPermission(BasePermission):
             both_values = self.read_write_roles + self.read_only_roles
             allowed = membership.for_roles(both_values).exists()
             if allowed:
+                if isinstance(request.auth, APIToken):
+                    if self.has_token_permission(request, view, obj):
+                        request.project = project
+                        return True
+                    else:
+                        return False
                 request.project = project
             return allowed
-        # if method is not safe, than only members for specified roles are allowed to continue
+        # if method is not safe, then only members for specified roles are allowed to continue
         allowed = membership.for_roles(self.read_write_roles).exists()
         if allowed:
+            if isinstance(request.auth, APIToken):
+                if self.has_token_permission(request, view, obj):
+                    request.project = project
+                    return True
+                return False
             request.project = project
         return allowed

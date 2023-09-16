@@ -1,10 +1,11 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Advisory, AdvisoryMembership
+from backend.models import Advisory, AdvisoryMembership, APIToken
 from backend.models.advisory_membership import Roles
 from .base import BasePermission
+from .token.base import TokenPermissionMixin
 
 
-class AdvisoryPermission(BasePermission):
+class AdvisoryPermission(BasePermission, TokenPermissionMixin):
     def __init__(self, read_write_roles=[], read_only_roles=[]):
         super().__init__()
         self.read_only_roles = read_only_roles
@@ -106,6 +107,9 @@ class AdvisoryPermission(BasePermission):
             # if advisory is not a draft, the advisory management group
             # has access to the advisory by default
             if request.user.groups.filter(name="Advisory Management").exists():
+                if isinstance(request.auth, APIToken):
+                    if not self.has_token_permission(request, view, obj):
+                        return False
                 request.advisory = advisory
                 return True
             # other users should have membership checks
@@ -123,9 +127,15 @@ class AdvisoryPermission(BasePermission):
             both_values = self.read_only_roles + self.read_write_roles
             allowed = membership.filter(role__in=both_values).exists()
             if allowed:
+                if isinstance(request.auth, APIToken):
+                    if not self.has_token_permission(request, view, obj):
+                        return False
                 request.advisory = advisory
             return allowed
         allowed = membership.filter(role__in=self.read_write_roles).exists()
         if allowed:
+            if isinstance(request.auth, APIToken):
+                if not self.has_token_permission(request, view, obj):
+                    return False
             request.advisory = advisory
         return allowed

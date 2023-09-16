@@ -8,6 +8,7 @@ from pecoret.core.viewsets import PeCoReTListUpdateRetrieveModelViewSet
 class OWASPRiskRatingViewSet(PeCoReTListUpdateRetrieveModelViewSet):
     queryset = OWASPRiskRating.objects.none()
     serializer_class = OWASPRiskRatingSerializer
+    api_scope = "scope_all_projects"
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY,
         FindingPermission
