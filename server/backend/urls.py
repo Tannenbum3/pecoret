@@ -58,6 +58,7 @@ project_router.register(
     "contacts", viewsets.ProjectContactViewSet, "contact"
 )
 project_router.register("files", viewsets.ProjectFileViewSet, "file")
+project_router.register("commands", viewsets.ProjectCommandViewSet, "command")
 
 # finding routes
 finding_router = DefaultRouter()

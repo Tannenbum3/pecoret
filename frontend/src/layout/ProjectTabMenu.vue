@@ -140,6 +140,16 @@ export default {
                             projectId: this.$route.params.projectId
                         }
                     })
+                },
+                {
+                    label: "Commands",
+                    icon: "fa fa-terminal",
+                    to: this.$router.resolve({
+                        name: "ProjectCommandList",
+                        params: {
+                            projectId: this.$route.params.projectId
+                        }
+                    })
                 }
             ]
         }

@@ -30,3 +30,4 @@ from .user_settings import UserSettingsViewSet
 from .project_file import ProjectFileViewSet
 from .finding_attachment import FindingImageAttachmentViewSet
 from .api_token import APITokenViewSet
+from .project_command import ProjectCommandViewSet

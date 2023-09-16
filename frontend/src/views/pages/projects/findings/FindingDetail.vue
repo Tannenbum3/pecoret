@@ -149,7 +149,7 @@ export default {
                     <div class="grid">
                         <div class="col-12 md:col-4">
                             <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground"
-                                                :text="finding.component.name">
+                                                :text="finding.component.display_name">
                             </DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-4">

@@ -26,6 +26,7 @@ from .pinned_project import PinnedProject
 from .project_file import ProjectFile
 from .finding_attachment import FindingImageAttachment
 from .api_token import APIToken
+from .project_command import ProjectCommand
 
 
 # assets
