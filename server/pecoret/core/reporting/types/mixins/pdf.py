@@ -50,6 +50,7 @@ class PDFExportMixin:
         ).render(self.get_context())
         weasy_html = HTML(string=rendered_template, url_fetcher=self.url_fetcher)
         weasy_pdf = weasy_html.write_pdf(
-            stylesheets=self.get_stylesheets(), font_config=self.font_config
+            stylesheets=self.get_stylesheets(), font_config=self.font_config,
+            optimize_images=True  # Required to prevent weasyprint crashes in >=v59
         )
         return weasy_pdf
