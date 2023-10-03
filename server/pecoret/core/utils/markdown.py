@@ -1,6 +1,6 @@
 import re
 import markdown
-import bleach
+import nh3
 from markdown.extensions import Extension
 from markdown.postprocessors import Postprocessor
 from markdown.extensions.codehilite import CodeHiliteExtension
@@ -8,19 +8,14 @@ from django.utils.safestring import mark_safe
 
 
 class HighlightCodeBlockProcessor(Postprocessor):
-    line = re.compile(r"(<span.*>.*)§§(.*)§§(.*<\/span>)*", re.MULTILINE)
-    highlited_code = re.compile(r"§§(.*?)§§")
+    line = re.compile(r"(<span.*>.*)§§(.*)§§(.*</span>)*", re.MULTILINE)
 
     @staticmethod
     def match_bold(code):
         if code.group(3) is not None:
-            replaced_code = "%s<b>%s</b>%s" % (
-                code.group(1),
-                code.group(2),
-                code.group(3),
-            )
+            replaced_code = f"{code.group(1)}<b>{code.group(2)}</b>{code.group(3)}"
             return replaced_code
-        return "%s<b>%s</b>" % (code.group(1), code.group(2))
+        return f"{code.group(1)}<b>{code.group(2)}</b>"
 
     def run(self, text):
         return self.line.sub(self.match_bold, text)
@@ -29,7 +24,7 @@ class HighlightCodeBlockProcessor(Postprocessor):
 class HighlightCodeBlockExtension(Extension):
     def extendMarkdown(self, md):
         md.postprocessors.register(
-            HighlightCodeBlockProcessor(md), "highlightcodeblockprocessor", 30
+            HighlightCodeBlockProcessor(md), "custom-highlighter", 30
         )
 
 
@@ -49,28 +44,26 @@ def bleach_md(markdown_content, allow_images=False):
         "li",
         "div",
         "span",
-        "h1", "h2", "h3",
-        "h4",
-        "h5",
+        "h1", "h2", "h3", "h4", "h5", "h6"
         "sup",
         "ol",
         "hr",
     ]
     allowed_attributes = {
-        "code": ["class"],
-        "a": "href",
-        "div": ["class"],
-        "span": ["class"],
-        "sup": ["id"],
+        "code": {"class"},
+        "a": {"href"},
+        "div": {"class"},
+        "span": {"class"},
+        "sup": {"id"},
     }
-    protocols = []
+    protocols = set()
     if not markdown_content:
         return ""
     if allow_images:
         allowed_tags.append("img")
-        allowed_attributes["img"] = ["alt", "src"]
-        protocols.append("data")
-    cleaned = bleach.clean(
+        allowed_attributes["img"] = {"alt", "src"}
+        protocols.add("data")
+    cleaned = nh3.clean(
         markdown.markdown(
             markdown_content,
             extensions=[
@@ -86,9 +79,9 @@ def bleach_md(markdown_content, allow_images=False):
                 HighlightCodeBlockExtension(),
             ],
         ),
-        tags=allowed_tags,
+        tags=set(allowed_tags),
         attributes=allowed_attributes,
-        protocols=protocols,
+        url_schemes=protocols,
     )
     return cleaned
 
