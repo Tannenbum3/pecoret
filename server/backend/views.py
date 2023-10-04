@@ -28,6 +28,7 @@ class LogoutSerializer(serializers.Serializer):
     """empty serializer. required to make spectacular happy
     """
 
+
 class LoginView(APIView):
     """this view handles the login process
     similar to:
@@ -100,12 +101,6 @@ class AuthCheckView(APIView):
 
     @extend_schema(request={}, responses=LoginResponseSerializer)
     def get(self, request, **kwargs):
-        """handle incoming GET requests.
-        If a user is not authenticated, the response does not contain the user object.
-        Instead it returns None.
-        Also, a valid CSRF_COOKIE is provided, to allow the application to perform 
-        POST/PATCH/PUT/DELETE requests.
-        """
         if not request.user.is_authenticated:
             user = None
         else:

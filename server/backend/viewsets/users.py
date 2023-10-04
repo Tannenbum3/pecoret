@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from django.contrib.auth import logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django_q.tasks import async_task
@@ -58,6 +59,7 @@ class UserViewSet(PeCoReTModelViewSet):
         throttle_classes=[AuthFlowThrottle],
     )
     def reset_password(self, request, *args, **kwargs):
+        logout(request)
         serializer = serializers.PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.get_user()

@@ -1,5 +1,6 @@
 <script>
 import AuthService from '@/service/AuthService'
+import { useAuthStore } from "@/store/auth";
 
 
 export default {
@@ -10,7 +11,8 @@ export default {
                 email: null
             },
             loading: false,
-            service: new AuthService()
+            service: new AuthService(),
+            authStore: useAuthStore()
         }
     },
     methods: {
@@ -20,12 +22,14 @@ export default {
                 email: this.model.email
             }
             this.service.resetPassword(this.$api, data).then((response) => {
+                this.authStore.unsetMe();
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Password Reset',
                     detail: 'Check your inbox for further instructions!',
                     life: 3000
                 })
+
             }).finally(() => {this.loading = false})
         }
     }
