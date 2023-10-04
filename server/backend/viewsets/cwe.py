@@ -1,8 +1,8 @@
 from backend.serializers.cwe import CWESerializer
-from backend import permissions
 from backend.models.cwe import CWE
 from backend.filters.cwe import CWEFilter
 from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet
+from pecoret.core import permissions
 
 
 class CWEViewSet(PeCoReTReadOnlyModelViewSet):

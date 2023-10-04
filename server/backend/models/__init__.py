@@ -12,7 +12,6 @@ from .reports.report import Report
 from .reports.report_release import ReportRelease
 from .reports.change_history import ChangeHistory
 from .membership import Membership
-from .project_token import ProjectToken
 from .finding_timeline import FindingTimeline
 from .auth_token import AuthToken
 from .company_contact import CompanyContact

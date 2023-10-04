@@ -2,7 +2,6 @@ from django.http.response import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-from backend import permissions
 from backend.models import Finding, FindingTimeline
 from backend.serializers.finding import (
     FindingSerializer,
@@ -14,6 +13,7 @@ from backend.filters.finding import FindingFilter
 from backend.tasks.finding_export import export_single_finding
 from backend.models.advisory import Advisory
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 
 
 class FindingViewSet(PeCoReTModelViewSet):

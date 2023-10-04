@@ -1,6 +1,6 @@
 from backend.serializers.reports import ReportSerializer
 from backend.models.reports.report import Report
-from backend import permissions
+from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 

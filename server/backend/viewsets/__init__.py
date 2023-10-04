@@ -3,7 +3,6 @@ from .vulnerability import VulnerabilityTemplateViewSet, ProjectVulnerabilityVie
 from .findings import FindingViewSet
 from .account import AccountViewSet
 from .company import CompanyViewSet
-from .project_token import ProjectTokenViewSet
 from .reports import (
     ProjectReportViewSet, ReportReleaseViewSet, ChangeHistoryViewSet
 )

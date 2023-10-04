@@ -1,12 +1,11 @@
-from backend import permissions
-from backend.permissions.finding import FindingPermission
 from backend.serializers.finding_timeline import FindingTimelineSerializer
 from backend.models import FindingTimeline
 from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet
+from pecoret.core import permissions
 
 
 class FindingTimelineViewSet(PeCoReTReadOnlyModelViewSet):
-    permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, FindingPermission]
+    permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, permissions.FindingPermission]
     serializer_class = FindingTimelineSerializer
     search_fields = []
     api_scope = "scope_all_projects"

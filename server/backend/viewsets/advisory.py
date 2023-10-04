@@ -9,7 +9,6 @@ from backend.serializers.advisory import (
     AdvisoryDownloadSerializer
 )
 from backend.serializers.advisory_timeline import AdvisoryTimelineSerializer
-from backend import permissions
 from backend.filters.advisory import AdvisoryFilter
 from backend.models import ReportTemplate
 from backend.tasks.finding_export import export_advisory, export_advisory_markdown
@@ -17,6 +16,7 @@ from advisories.serializers.advisory import (
     AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
 )
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 
 
 class AdvisoryViewSet(PeCoReTModelViewSet):

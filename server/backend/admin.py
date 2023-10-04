@@ -4,7 +4,6 @@ from . import models
 
 
 admin.site.register(models.Project)
-admin.site.register(models.ProjectToken)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.CWE)
 admin.site.register(models.VulnerabilityTemplate)

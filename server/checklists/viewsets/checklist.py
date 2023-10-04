@@ -1,4 +1,3 @@
-from backend import permissions
 from checklists.models import Checklist, AssetChecklist
 from checklists.serializers.checklist import (
     ChecklistSerializer,
@@ -7,6 +6,7 @@ from checklists.serializers.checklist import (
 )
 from checklists.filters.checklists import AssetChecklistFilter
 from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet, PeCoReTNoUpdateViewSet
+from pecoret.core import permissions
 
 
 class ChecklistViewSet(PeCoReTReadOnlyModelViewSet):

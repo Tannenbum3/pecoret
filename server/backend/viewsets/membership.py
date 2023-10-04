@@ -3,9 +3,9 @@ from rest_framework.serializers import ValidationError
 from rest_framework.response import Response
 from backend.models import Membership
 from backend.models.membership import Roles
-from backend import permissions
 from backend.serializers.memberships import MembershipSerializer, MembershipCreateUpdateSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 
 
 class MembershipViewSet(PeCoReTModelViewSet):

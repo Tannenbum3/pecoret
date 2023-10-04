@@ -1,8 +1,7 @@
-from backend import permissions
-from backend.permissions.finding import FindingPermission
 from backend.serializers.owasp_risk_rating import OWASPRiskRatingSerializer
 from backend.models.owasp_risk_rating import OWASPRiskRating
 from pecoret.core.viewsets import PeCoReTListUpdateRetrieveModelViewSet
+from pecoret.core import permissions
 
 
 class OWASPRiskRatingViewSet(PeCoReTListUpdateRetrieveModelViewSet):
@@ -11,7 +10,7 @@ class OWASPRiskRatingViewSet(PeCoReTListUpdateRetrieveModelViewSet):
     api_scope = "scope_all_projects"
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY,
-        FindingPermission
+        permissions.FindingPermission
     ]
 
     def get_queryset(self):

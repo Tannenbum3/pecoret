@@ -1,8 +1,8 @@
 from pecoret.core.viewsets import GenericViewSet
 from pecoret.core import mixins
+from pecoret.core import permissions
 from backend.models import Advisory
 from backend.filters.advisory import AdvisoryFilter
-from backend import permissions
 from advisories.serializers.advisory import AdvisoryAdvisoryManagementSerializer
 
 

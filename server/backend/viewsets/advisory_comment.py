@@ -1,8 +1,8 @@
-from backend import permissions
 from backend.models.advisory_comment import AdvisoryComment
 from backend.models.advisory_membership import Roles
 from backend.serializers.advisory_comment import AdvisoryCommentSerializer
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
+from pecoret.core import permissions
 
 
 class AdvisoryCommentViewSet(PeCoReTNoDestroyViewSet):

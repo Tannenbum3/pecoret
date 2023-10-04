@@ -1,5 +1,5 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Project, ProjectToken, APIToken
+from backend.models import Project, APIToken
 from backend.models.membership import Membership
 from .base import BasePermission
 from .token.base import TokenPermissionMixin
@@ -45,12 +45,6 @@ class ProjectPermission(BasePermission, TokenPermissionMixin):
         project = self.project_from_request(request)
         if not project:
             return False
-        if isinstance(request.auth, ProjectToken):
-            # if authentication was done using a project token, we want to only allow access to this
-            # specific project
-            token_project = request.auth.project
-            if token_project.pk != project.pk:
-                return False
         if not request.user.is_authenticated:
             return False
         membership = self._check_project_membership(request.user, project)

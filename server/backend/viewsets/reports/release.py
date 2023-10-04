@@ -4,10 +4,9 @@ from rest_framework.decorators import action
 from django_q.tasks import async_task
 from backend.serializers.reports.release import ReportReleaseSerializer
 from backend.models.reports.report_release import ReportRelease, ReleaseType
-from backend import permissions
-from backend.permissions.report import ReportPermission
 from backend.tasks.reporting import create_report_document_task
 from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
+from pecoret.core import permissions
 
 
 class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
@@ -15,7 +14,7 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
     queryset = ReportRelease.objects.none()
     filterset_class = None
     search_fields = []
-    permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, ReportPermission]
+    permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, permissions.ReportPermission]
     api_scope = "scope_all_projects"
 
     def get_queryset(self):

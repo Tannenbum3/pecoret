@@ -1,7 +1,8 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import ProjectToken, APIToken
+from backend.models import APIToken
 from .base import BasePermission
 from .token.base import TokenPermissionMixin
+
 
 class Groups(object):
     GROUP_PENTESTER = "Pentester"
@@ -39,8 +40,6 @@ class GroupPermission(BasePermission, TokenPermissionMixin):
 
     def has_permission(self, request, view):
         # do not allow project tokens on global endpoints that are not safe
-        if isinstance(request.auth, ProjectToken) and request.method not in SAFE_METHODS:
-            return False
         if request.user.is_superuser:
             return True
         if request.method not in SAFE_METHODS:

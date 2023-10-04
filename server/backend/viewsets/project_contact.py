@@ -1,7 +1,7 @@
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 from backend.models.project_contact import ProjectContact
 from backend.serializers.project_contact import ProjectContactSerializer
-from backend import permissions
 
 
 class ProjectContactViewSet(PeCoReTModelViewSet):

@@ -1,6 +1,6 @@
 from backend.models import ReportTemplate
 from backend.serializers.report_templates import ReportTemplateSerializer, ReportTemplateMinimalSerializer
-from backend import permissions
+from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 

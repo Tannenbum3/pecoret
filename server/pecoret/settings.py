@@ -128,7 +128,6 @@ AUTH_USER_MODEL = "backend.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
-        "backend.authentication.ProjectTokenAuthentication",
         "pecoret.core.authentication.APITokenAuthentication"
     ],
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",

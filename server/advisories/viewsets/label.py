@@ -1,7 +1,7 @@
 from pecoret.core.viewsets import ModelViewSet
+from pecoret.core import permissions
 from advisories.models.label import Label
 from advisories.serializers.label import LabelSerializer
-from backend import permissions
 
 
 class LabelViewSet(ModelViewSet):

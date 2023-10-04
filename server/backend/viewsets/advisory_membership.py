@@ -1,6 +1,5 @@
 from django_q.tasks import async_task
 from backend.models.advisory_membership import AdvisoryMembership
-from backend import permissions
 from backend.tasks import mail
 from backend.models.advisory_membership import Roles
 from backend.serializers.advisory_membership import (
@@ -8,6 +7,7 @@ from backend.serializers.advisory_membership import (
     AdvisoryMembershipCreateSerializer,
 )
 from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
+from pecoret.core import permissions
 
 
 class AdvisoryMembershipViewSet(PeCoReTNoUpdateViewSet):

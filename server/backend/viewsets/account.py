@@ -1,7 +1,7 @@
-from backend import permissions
 from backend.models import Account
 from backend.serializers.account import AccountSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core import permissions
 
 
 class AccountViewSet(PeCoReTModelViewSet):

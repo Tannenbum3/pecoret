@@ -3,6 +3,7 @@ from .company import CompanyPermission
 from .project import ProjectPermission
 from .finding import FindingPermission
 from .advisory import AdvisoryPermission
+from .report import ReportPermission
 from .presets import (
     PRESET_GROUP_MANAGEMENT,
     PRESET_GROUP_ADVISORY_MANAGEMENT,
@@ -11,6 +12,3 @@ from .presets import (
     PRESET_OWNER_OR_READ_ONLY,
     PRESET_GROUP_PENTESTER_MANAGEMENT
 )
-
-# token permissions
-from .token import BaseAPITokenPermission

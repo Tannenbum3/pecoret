@@ -1,8 +1,8 @@
-from backend import permissions
 from checklists.models import AssetItem
 from checklists.serializers.item import AssetItemSerializer, AssetItemUpdateSerializer
 from checklists.filters.item import AssetItemFilter
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
+from pecoret.core import permissions
 
 
 class AssetItemViewSet(PeCoReTNoDestroyViewSet):

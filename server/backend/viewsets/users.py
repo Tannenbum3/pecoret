@@ -7,11 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from backend.models import User
-from backend import permissions
 from backend.serializers import user as serializers
 from backend.throttle import AuthFlowThrottle
 from backend.tasks import mail
 from pecoret.core.viewsets import PeCoReTModelViewSet, PeCoReTReadOnlyModelViewSet
+from pecoret.core import permissions
 
 
 class UserViewSet(PeCoReTModelViewSet):

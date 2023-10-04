@@ -1,5 +1,5 @@
 from pecoret.core.viewsets import PeCoReTModelViewSet
-from backend import permissions
+from pecoret.core import permissions
 from backend.models.assets.service import Service
 from backend.serializers.assets.service import ServiceSerializer
 from backend.filters.service import ServiceFilter

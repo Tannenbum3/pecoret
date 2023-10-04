@@ -1,8 +1,8 @@
-from backend import permissions
 from checklists.models import AssetCategory
 from checklists.serializers.category import AssetCategorySerializer
 from checklists.filters.category import AssetCategoryFilter
 from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet
+from pecoret.core import permissions
 
 
 class AssetCategoryViewSet(PeCoReTReadOnlyModelViewSet):

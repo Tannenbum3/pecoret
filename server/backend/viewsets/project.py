@@ -10,7 +10,6 @@ from backend.filters.project import ProjectFilter
 from backend.serializers.project import ProjectSerializer
 from backend.serializers.pinned_project import PinnedProjectSerializer
 from pecoret.core import permissions
-from backend.models.project_token import ProjectToken
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
@@ -75,13 +74,6 @@ class ProjectViewSet(PeCoReTModelViewSet):
         for finding in findings:
             data[Severity(finding["severity"]).label] = finding["count"]
         return Response(data, status=status.HTTP_200_OK)
-
-    @action(methods=["get"], detail=False)
-    def token_check(self, request, *args, **kwargs):
-        if isinstance(self.request.auth, ProjectToken):
-            serializer = self.get_serializer(self.request.auth.project)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=["get"], url_path="available-languages")
     def available_languages(self, request, *args, **kwargs):
