@@ -64,10 +64,10 @@
   <h2>{{ _('Scope') }}</h2>
   <p>
     {% trans %}
-      The following listing describes the scope that was defined for the assessment.
+      This section provides an overview of the agreed scope of the project and the analysed components.
     {% endtrans %}
   </p>
-  {% if scopes.forbidden() %}
+  {% if scopes.forbidden().exists() %}
     <p>
       {% trans %}
         The following items have been agreed as out of scope:
@@ -80,7 +80,7 @@
     </p>
   {% endif %}
 
-  {% if scopes.allowed() %}
+  {% if scopes.allowed().exists() %}
     <p>
       {% trans %}
         During the preparations, the following permits were granted for the project:
