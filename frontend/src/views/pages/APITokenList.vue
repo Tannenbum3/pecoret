@@ -45,6 +45,15 @@ export default {
             this.tokenKey = data.token;
             this.getItems();
         },
+        copyToClipboard() {
+            navigator.clipboard.writeText(this.tokenKey);
+            this.$toast.add({
+                severity: "info",
+                summary: "Copied",
+                detail: "Token copied to clipboard!",
+                life: 3000
+            });
+        },
         onDeleteConfirmDialog(id) {
             this.$confirm.require({
                 message: "Do you want to delete this api token?",
@@ -91,7 +100,15 @@ export default {
 
     <div class="grid" v-if="tokenKey">
         <div class="col-12">
-            <Message @close="() => {this.tokenKey = null}">{{ tokenKey }}</Message>
+            <Message @close="() => {this.tokenKey = null}">
+                <div class="row">
+                    <div class="col">
+                        {{ tokenKey }}
+
+                        <Button class="ml-5 p-0" icon="fa fa-copy" outlined @click="copyToClipboard"></Button>
+                    </div>
+                </div>
+            </Message>
         </div>
     </div>
 

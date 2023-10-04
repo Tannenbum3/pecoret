@@ -116,7 +116,8 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" label="Edit" @click="open()" outlined></Button>
 
-    <Dialog header="Dialog" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }"
+    <Dialog header="Edit Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }"
+            :style="{ width: '70vw' }"
             :modal="true">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
@@ -139,6 +140,7 @@ export default {
                           optionValue="value"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
+                <label for="project_type">Project Type</label>
                 <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
             </div>
             <div class="field col-12 md:col-6">

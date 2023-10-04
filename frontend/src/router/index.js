@@ -194,6 +194,11 @@ const router = createRouter({
                                     path: "/projects/:projectId/commands",
                                     name: "ProjectCommandList",
                                     component: () => import("@/views/pages/projects/commands/CommandList.vue")
+                                },
+                                {
+                                    path: "/projects/:projectId/scopes",
+                                    name: "ProjectScopeList",
+                                    component: () => import("@/views/pages/projects/scope/ScopeList.vue")
                                 }
                             ]
                         }

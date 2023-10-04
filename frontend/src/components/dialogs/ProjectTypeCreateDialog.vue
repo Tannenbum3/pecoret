@@ -1,15 +1,18 @@
 <script>
 import AdminService from '@/service/AdminService'
+import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
 
 
 export default {
     name: "ProjectTypeCreateDialog",
+    components: { MarkdownEditor },
     emits: ["object-created"],
     data() {
         return {
             visible: false,
             model: {
-                name: null
+                name: null,
+                description: null
             },
             service: new AdminService(),
         };
@@ -23,7 +26,8 @@ export default {
         },
         create() {
             let data = {
-                name: this.model.name
+                name: this.model.name,
+                description: this.model.description
             }
             this.service.createProjectType(this.$api, data).then((response) => {
                 this.$toast.add({
@@ -49,9 +53,15 @@ export default {
     <Button icon="fa fa-plus" label="Project Type" outlined @click="open"></Button>
 
     <Dialog header="Create Project Type" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="flex flex-column gap-2">
-            <label for="name">Name</label>
-            <InputText id="name" v-model="model.name"></InputText>
+        <div class="formgrid grid p-fluid">
+            <div class="field col-12">
+                <label for="name">Name</label>
+                <InputText id="name" v-model="model.name"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="description">Description</label>
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+            </div>
         </div>
 
         <template #footer>

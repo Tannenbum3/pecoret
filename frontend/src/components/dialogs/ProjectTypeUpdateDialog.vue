@@ -1,9 +1,11 @@
 <script>
 import AdminService from '@/service/AdminService'
+import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
 
 
 export default {
     name: "ProjectTypeUpdateDialog",
+    components: { MarkdownEditor },
     props: {
         pentestType: {
             required: true
@@ -13,7 +15,7 @@ export default {
     data() {
         return {
             visible: false,
-            model: this.user,
+            model: this.pentestType,
             service: new AdminService(),
         };
     },
@@ -27,6 +29,7 @@ export default {
         patch() {
             let data = {
                 name: this.model.name,
+                description: this.model.description
             }
             this.service.patchProjectType(this.$api, this.pentestType.pk, data).then(() => {
                 this.$emit("object-updated", this.model);
@@ -51,9 +54,19 @@ export default {
 
     <Dialog header="Update Project Type" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
 
+        <div class="formgrid grid p-fluid">
+            <div class="field col-12">
+                <label for="name">Name</label>
+                <InputText id="name" v-model="model.name"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="description">Description</label>
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+            </div>
+        </div>
+
         <div class="flex flex-column gap-2">
-            <label for="name">Name</label>
-            <InputText id="name" v-model="model.name"></InputText>
+
         </div>
 
         <template #footer>

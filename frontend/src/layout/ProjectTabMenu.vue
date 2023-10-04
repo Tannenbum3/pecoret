@@ -150,6 +150,16 @@ export default {
                             projectId: this.$route.params.projectId
                         }
                     })
+                },
+                {
+                    label: "Scopes",
+                    icon: "fa fa-star",
+                    to: this.$router.resolve({
+                        name: "ProjectScopeList",
+                        params: {
+                            projectId: this.$route.params.projectId
+                        }
+                    })
                 }
             ]
         }
