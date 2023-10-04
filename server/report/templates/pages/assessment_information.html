@@ -67,6 +67,31 @@
       The following listing describes the scope that was defined for the assessment.
     {% endtrans %}
   </p>
+  {% if scopes.forbidden() %}
+    <p>
+      {% trans %}
+        The following items have been agreed as out of scope:
+      {% endtrans %}
+    <ul>
+      {% for scope in scopes.forbidden() %}
+        <li>{{ scope.details }}</li>
+      {% endfor %}
+    </ul>
+    </p>
+  {% endif %}
+
+  {% if scopes.allowed() %}
+    <p>
+      {% trans %}
+        During the preparations, the following permits were granted for the project:
+      {% endtrans %}
+    <ul>
+      {% for scope in scopes.allowed() %}
+        <li>{{ scope.details }}</li>
+      {% endfor %}
+    </ul>
+    </p>
+  {% endif %}
 
   {% include './pages/assessment-information/scope-web-application.html' %}
   {% include './pages/assessment-information/scope-host.html' %}

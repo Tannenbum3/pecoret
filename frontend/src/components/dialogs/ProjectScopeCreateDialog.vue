@@ -21,7 +21,7 @@ export default {
                     label: "Allowed", value: "Allowed"
                 },
                 {
-                    label: "Forbidden", value: "Forbidden"
+                    label: "Denied", value: "Denied"
                 }
             ]
         };

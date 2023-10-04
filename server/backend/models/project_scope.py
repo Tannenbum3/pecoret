@@ -11,6 +11,12 @@ class ProjectScopeQuerySet(models.QuerySet):
     def for_project(self, project):
         return self.filter(project=project)
 
+    def allowed(self):
+        return self.filter(permission=ScopePermission.ALLOWED)
+
+    def forbidden(self):
+        return self.filter(permission=ScopePermission.DENIED)
+
 
 class ProjectScope(PeCoReTBaseModel):
     objects = ProjectScopeQuerySet.as_manager()

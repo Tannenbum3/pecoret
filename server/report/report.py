@@ -1,7 +1,7 @@
 import datetime
 from django.db.models import Count, Max, Q
 from django.conf import settings
-from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership
+from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
 from pecoret.core.reporting.error import ReportError
@@ -33,6 +33,7 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
         context["REPORT_COMPANY_INFORMATION"] = settings.REPORT_COMPANY_INFORMATION
         context["findings"] = Finding.objects.for_report(self.get_project())
         context["members"] = Membership.objects.for_project(self.get_project()).for_report()
+        context["scopes"] = ProjectScope.objects.for_project(self.get_project())
         return context
 
     def get_unique_vulnerabilities_by_severity(self):
