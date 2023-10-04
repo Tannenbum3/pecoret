@@ -8,7 +8,12 @@ export default {
     components: { APITokenCreate, BlankSlate },
     data() {
         return {
-            breadcrumbs: [],
+            breadcrumbs: [
+                {
+                    label: "API-Tokens",
+                    disabled: true
+                }
+            ],
             tokenKey: null,
             service: new UserService(),
             items: [],
