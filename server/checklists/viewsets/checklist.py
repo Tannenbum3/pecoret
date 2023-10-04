@@ -27,7 +27,7 @@ class ChecklistViewSet(PeCoReTReadOnlyModelViewSet):
 
 
 class AssetChecklistViewSet(PeCoReTNoUpdateViewSet):
-    queryet = AssetChecklist.objects.none()
+    queryset = AssetChecklist.objects.none()
     filterset_class = AssetChecklistFilter
     search_fields = ["name"]
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]

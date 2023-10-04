@@ -2,7 +2,7 @@ version: '3'
 
 services:
   backend:
-    image: codeberg.org/pecoret/pecoret-server:dev
+    image: codeberg.org/pecoret/pecoret-server:latest
     environment:
       DB_NAME: pecoret
       DB_USER: pecoret
@@ -37,7 +37,7 @@ services:
 
 
   frontend:
-    image: codeberg.org/pecoret/pecoret-frontend:dev
+    image: codeberg.org/pecoret/pecoret-frontend:latest
     environment:
       VITE_APP_API_URL: http://localhost/api
     ports:
@@ -46,7 +46,7 @@ services:
       - backend
 
   worker:
-    image: codeberg.org/pecoret/pecoret-server:dev
+    image: codeberg.org/pecoret/pecoret-server:latest
     entrypoint: python3 manage.py qcluster
     environment:
       DB_NAME: pecoret
