@@ -80,6 +80,13 @@ export default {
                     </Button>
                 </template>
             </Card>
+            <DetailCardWithIcon title="Next Disclosure" :text="statistics.inbox_next_disclosure_date"
+                                style-class="mt-3"
+                                icon="fa fa-clock"></DetailCardWithIcon>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+
+
         </div>
     </div>
 </template>

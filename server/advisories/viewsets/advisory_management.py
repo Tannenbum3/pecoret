@@ -27,8 +27,11 @@ class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
             "inbox_count": qs.count(),
             "inbox_open_count": qs.open().count(),
             "inbox_fixed_count": qs.fixed().count(),
-            "inbox_wontfix_count": qs.wont_fix().count()
+            "inbox_wontfix_count": qs.wont_fix().count(),
+            "inbox_next_disclosure_date": None
         }
+        if qs.count() > 0:
+            data["inbox_next_disclosure_date"] = qs.order_by("-date_planned_disclosure").first().date_planned_disclosure
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["get"])
