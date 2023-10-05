@@ -2,7 +2,7 @@
 import AdvisoryService from "@/service/AdvisoryService";
 
 export default {
-    name: "TopSubmitterDashboard",
+    name: "TopProductsDashboard",
     data() {
         return {
             service: new AdvisoryService(),
@@ -26,7 +26,7 @@ export default {
                 labels: [],
                 datasets: [
                     {
-                        label: "Submissions",
+                        label: "Products",
                         data: [],
                         borderWidth: 1,
                         backgroundColor: [
@@ -49,9 +49,9 @@ export default {
     methods: {
         getData() {
             this.loading = true;
-            this.service.getTopSubmitters(this.$api).then((response) => {
+            this.service.getTopProducts(this.$api).then((response) => {
                 response.data.forEach((item) => {
-                    this.chartData.labels.push(item["user__username"]);
+                    this.chartData.labels.push(item["product"] + " (by " + item["vendor_name"] + ")");
                     this.chartData.datasets[0].data.push(item["count"]);
 
                 });
@@ -63,8 +63,8 @@ export default {
 };
 </script>
 <template>
-    <Card class="card mb-3">
-        <template #title>Top Submitters</template>
+    <Card class="card">
+        <template #title>Top Products</template>
         <template #content>
             <div class="flex justify-content-center">
                 <Skeleton v-if="loading"></Skeleton>

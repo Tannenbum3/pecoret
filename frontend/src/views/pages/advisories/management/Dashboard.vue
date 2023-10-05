@@ -4,10 +4,21 @@ import AdvisoryService from "@/service/AdvisoryService";
 import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
 import TopSubmitterDashboard from "@/components/pages/advisories/management/TopSubmitterDashboard.vue";
 import TopVulnerabilitiesDashboard from "@/components/pages/advisories/management/TopVulnerabilitiesDashboard.vue";
+import TopProductsDashboard from "@/components/pages/advisories/management/TopProductsDashboard.vue";
+import TopVendorsDashboard from "@/components/pages/advisories/management/TopVendorsDashboard.vue";
+import LatestSubmissionsDashboard from "@/components/pages/advisories/management/LatestSubmissionsDashboard.vue";
 
 export default {
     name: "AdvisoryManagementDashboard",
-    components: { TopVulnerabilitiesDashboard, TopSubmitterDashboard, DetailCardWithIcon, CustomBreadcrumb },
+    components: {
+        LatestSubmissionsDashboard,
+        TopVendorsDashboard,
+        TopProductsDashboard,
+        TopVulnerabilitiesDashboard,
+        TopSubmitterDashboard,
+        DetailCardWithIcon,
+        CustomBreadcrumb
+    },
     data() {
         return {
             breadcrumbs: [
@@ -67,12 +78,19 @@ export default {
     <div class="grid">
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
             <TopSubmitterDashboard></TopSubmitterDashboard>
+
+            <div class="mt-3">
+                <TopVendorsDashboard></TopVendorsDashboard>
+            </div>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
             <TopVulnerabilitiesDashboard></TopVulnerabilitiesDashboard>
+            <div class="mt-3">
+                <LatestSubmissionsDashboard></LatestSubmissionsDashboard>
+            </div>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
-            <Card>
+            <Card class="card mb-3">
                 <template #title>Quick Links</template>
                 <template #content>
                     <Button @click="this.$router.push(this.$router.resolve({name: 'AdvisoryInbox'}))"
@@ -81,8 +99,12 @@ export default {
                 </template>
             </Card>
             <DetailCardWithIcon title="Next Disclosure" :text="statistics.inbox_next_disclosure_date"
-                                style-class="mt-3"
+                                style-class=""
                                 icon="fa fa-clock"></DetailCardWithIcon>
+
+            <div class="mt-3">
+                <TopProductsDashboard></TopProductsDashboard>
+            </div>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
 

@@ -209,4 +209,14 @@ export default class AdvisoryService {
         let url = "/advisory-management/inbox/top_vulnerabilities/";
         return api.get(url);
     }
+
+    getTopProducts(api) {
+        let url = "/advisory-management/inbox/top_products/";
+        return api.get(url);
+    }
+
+    getTopVendors(api) {
+        let url = "/advisory-management/inbox/top_vendors/";
+        return api.get(url);
+    }
 }

@@ -43,3 +43,13 @@ class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
     def top_vulnerabilities(self, request, *args, **kwargs):
         qs = self.get_queryset().values("vulnerability__name").annotate(count=Count('pk'))
         return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"])
+    def top_products(self, request, *args, **kwargs):
+        qs = self.get_queryset().values("product", "vendor_name").annotate(count=Count('pk'))
+        return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"])
+    def top_vendors(self, request, *args, **kwargs):
+        qs = self.get_queryset().values("vendor_name").annotate(count=Count('pk'))
+        return Response(list(qs)[:10])

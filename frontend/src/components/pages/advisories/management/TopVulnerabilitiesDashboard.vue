@@ -64,7 +64,7 @@ export default {
 };
 </script>
 <template>
-    <Card>
+    <Card class="card mb-3">
         <template #title>Top Vulnerabilities</template>
         <template #content>
             <div class="flex justify-content-center">
