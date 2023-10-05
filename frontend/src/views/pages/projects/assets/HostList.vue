@@ -2,6 +2,7 @@
 import AssetService from '@/service/AssetService'
 import HostCreateDialog from '@/components/dialogs/HostCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue'
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -11,21 +12,6 @@ export default {
             assetService: new AssetService(),
             projectId: this.$route.params.projectId,
             breadcrumbs: [
-                {
-                    label: "Projects",
-                    to: this.$router.resolve({
-                        name: "ProjectList"
-                    })
-                },
-                {
-                    label: "Project Detail",
-                    to: this.$router.resolve({
-                        name: "ProjectDetail",
-                        params: {
-                            projectId: this.$route.params.projectId
-                        }
-                    })
-                },
                 {
                     label: "Hosts",
                     disabled: true
@@ -88,14 +74,14 @@ export default {
     mounted() {
         this.getItems();
     },
-    components: { HostCreateDialog, BlankSlate }
+    components: { HostCreateDialog, BlankSlate, CustomBreadcrumb }
 }
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">

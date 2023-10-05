@@ -3,6 +3,7 @@ import AssetService from "@/service/AssetService";
 import MobileApplicationUpdateDialog from "@/components/dialogs/MobileApplicationUpdateDialog.vue";
 import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
 import markdown from "@/utils/markdown";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -19,7 +20,7 @@ export default {
             breadcrumbs: [
                 {
                     label: "Mobile Applications",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "MobileApplicationList",
                         params: {
                             projectId: this.$route.params.projectId
@@ -64,7 +65,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, MobileApplicationUpdateDialog }
+    components: { DetailCardWithIcon, MobileApplicationUpdateDialog, CustomBreadcrumb }
 
 };
 
@@ -73,7 +74,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">

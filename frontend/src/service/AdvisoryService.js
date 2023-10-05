@@ -194,4 +194,19 @@ export default class AdvisoryService {
         let url = "/advisory-management/labels/" + id + "/";
         return api.patch(url, data);
     }
+
+    getInboxStatistics(api) {
+        let url = "/advisory-management/inbox/inbox_statistics/";
+        return api.get(url);
+    }
+
+    getTopSubmitters(api) {
+        let url = "/advisory-management/inbox/top_submitters/";
+        return api.get(url);
+    }
+
+    getTopVulnerabilities(api) {
+        let url = "/advisory-management/inbox/top_vulnerabilities/";
+        return api.get(url);
+    }
 }

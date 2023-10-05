@@ -13,14 +13,14 @@ export default {
                 {
                     label: "API-Tokens",
                     icon: "fa fa-fingerprint",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "APITokenList"
                     })
                 },
                 {
                     label: "Settings",
                     icon: "fa fa-gear",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "UserSettingsDetail"
                     })
                 },
@@ -36,19 +36,19 @@ export default {
             adminMenuItems: [
                 {
                     label: "Users",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "UserList"
                     })
                 },
                 {
                     label: "Report Templates",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "ReportTemplateList"
                     })
                 },
                 {
                     label: "Project Types",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "ProjectTypeList"
                     })
                 }
@@ -84,21 +84,21 @@ export default {
             let items = [
                 {
                     label: "My Advisories",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "AdvisoryList"
                     })
                 }
             ];
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 items.push({
-                    label: "Inbox",
-                    to: this.$router.resolve({
-                        name: "AdvisoryInbox"
+                    label: "Dashboard",
+                    route: this.$router.resolve({
+                        name: "AdvisoryManagementDashboard"
                     })
                 });
                 items.push({
                     label: "Labels",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "AdvisoryManagementLabelList"
                     })
                 });
@@ -155,17 +155,46 @@ export default {
                     v-if="showVulnerabilityTemplatesButton === true"
                     @click="this.$router.push({ name: 'VulnerabilityTemplateList' })">
             </Button>
-            <Menu ref="advisoryMenu" :model="advisoryMenuItems" :popup="true"></Menu>
+            <Menu ref="advisoryMenu" :model="advisoryMenuItems" :popup="true">
+                <template #item="{ item, label, props }">
+                    <router-link class="flex" v-bind="props.action" :to="item.route">
+                        <span v-bind="props.icon" />
+                        <span v-bind="props.label">{{ label }}</span>
+                    </router-link>
+                </template>
+            </Menu>
             <Button type="button" label="Advisories" icon="pi pi-angle-down" @click="toggleAdvisoryMenu"
                     class="p-link layout-topbar-button"></Button>
             <Button if="authStore.groups.isAdmin" label="Admin" v-if="this.authStore.groups.isAdmin"
                     icon="pi pi-angle-down"
                     @click="toggleAdminMenu" class="p-link layout-topbar-button"></Button>
             <Menu ref="adminMenu" :model="adminMenuItems" v-if="this.authStore.groups.isAdmin" :popup="true"
-                  if="authStore.groups.isAdmin"></Menu>
+                  if="authStore.groups.isAdmin">
+                <template #item="{ item, label, props }">
+                    <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
+                        <span v-bind="props.icon" />
+                        <span v-bind="props.label">{{ label }}</span>
+                    </router-link>
+                    <span v-else class="flex" v-bind="props.action">
+                        <span v-bind="props.icon" />
+                        <span v-bind="props.label">{{ label }}</span>
+                    </span>
+                </template>
+            </Menu>
 
             <div v-if="authStore.isAuthenticated">
-                <Menu ref="menu" :model="userMenuItems" :popup="true"></Menu>
+                <Menu ref="menu" :model="userMenuItems" :popup="true">
+                    <template #item="{ item, label, props }">
+                        <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
+                            <span v-bind="props.icon" />
+                            <span v-bind="props.label">{{ label }}</span>
+                        </router-link>
+                        <span v-else class="flex" v-bind="props.action">
+                            <span v-bind="props.icon" />
+                            <span v-bind="props.label">{{ label }}</span>
+                        </span>
+                    </template>
+                </Menu>
                 <Button type="button" :label="authStore.me.username" icon="pi pi-angle-down" @click="toggleMenu"
                         class="p-link layout-topbar-button"></Button>
             </div>

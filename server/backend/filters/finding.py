@@ -9,4 +9,4 @@ class FindingFilter(filters.FilterSet):
 
     class Meta:
         model = Finding
-        fields = ["status", "severity"]
+        fields = ["status", "severity", "needs_review"]

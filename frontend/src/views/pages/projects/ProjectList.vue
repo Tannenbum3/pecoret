@@ -4,6 +4,7 @@ import { FilterMatchMode } from "primevue/api";
 import { useAuthStore } from "@/store/auth";
 import ProjectCreateDialog from "@/components/dialogs/ProjectCreateDialog.vue";
 import BlankSlate from "@/components/BlankSlate.vue";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 const projectService = new ProjectService();
@@ -135,7 +136,7 @@ export default {
             this.getProjects();
         }
     },
-    components: { ProjectCreateDialog, BlankSlate }
+    components: { ProjectCreateDialog, BlankSlate, CustomBreadcrumb }
 };
 
 </script>
@@ -143,7 +144,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs" />
+            <CustomBreadcrumb v-model="breadcrumbs" />
         </div>
     </div>
 

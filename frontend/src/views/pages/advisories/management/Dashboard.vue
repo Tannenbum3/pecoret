@@ -1,0 +1,85 @@
+<script>
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
+import AdvisoryService from "@/service/AdvisoryService";
+import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
+import TopSubmitterDashboard from "@/components/pages/advisories/management/TopSubmitterDashboard.vue";
+import TopVulnerabilitiesDashboard from "@/components/pages/advisories/management/TopVulnerabilitiesDashboard.vue";
+
+export default {
+    name: "AdvisoryManagementDashboard",
+    components: { TopVulnerabilitiesDashboard, TopSubmitterDashboard, DetailCardWithIcon, CustomBreadcrumb },
+    data() {
+        return {
+            breadcrumbs: [
+                {
+                    label: "Dashboard",
+                    disabled: true
+                }
+            ],
+            statistics: {},
+            service: new AdvisoryService()
+        };
+    },
+    mounted() {
+        this.getStatistics();
+    },
+    methods: {
+        getStatistics() {
+            this.service.getInboxStatistics(this.$api).then((response) => {
+                this.statistics = response.data;
+            });
+        }
+    }
+};
+</script>
+
+<template>
+    <div class="grid mt-3">
+        <div class="col-12">
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="flex justify-content-end"></div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+            <DetailCardWithIcon title="Inbox" :text="statistics.inbox_count" icon="fa fa-inbox"></DetailCardWithIcon>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+            <DetailCardWithIcon title="Open" :text="statistics.inbox_open_count"
+                                icon="fa fa-bookmark"></DetailCardWithIcon>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+            <DetailCardWithIcon title="Fixed" :text="statistics.inbox_fixed_count"
+                                icon="fa fa-check"></DetailCardWithIcon>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+            <DetailCardWithIcon title="Won't Fix" :text="statistics.inbox_wontfix_count"
+                                icon="fa fa-clipboard-question"></DetailCardWithIcon>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+            <TopSubmitterDashboard></TopSubmitterDashboard>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+            <TopVulnerabilitiesDashboard></TopVulnerabilitiesDashboard>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+            <Card>
+                <template #title>Quick Links</template>
+                <template #content>
+                    <Button @click="this.$router.push(this.$router.resolve({name: 'AdvisoryInbox'}))"
+                            outlined>Inbox
+                    </Button>
+                </template>
+            </Card>
+        </div>
+    </div>
+</template>

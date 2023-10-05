@@ -7,6 +7,7 @@ import ProjectUpdateDialog from "@/components/dialogs/ProjectUpdateDialog.vue";
 import markdown from "@/utils/markdown";
 import DashboardSeverityChart from "@/components/pages/projects/DashboardSeverityChart.vue";
 import DashboardFindingsCount from "@/components/pages/projects/DashboardFindingsCount.vue";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 const projectService = new ProjectService();
@@ -22,7 +23,7 @@ export default {
             latestFindings: [],
             role: {},
             breadcrumbs: [
-                { label: "Projects", to: this.$router.resolve({ name: "ProjectList" }) },
+                { label: "Projects", route: this.$router.resolve({ name: "ProjectList" }) },
                 { label: "Project Detail", disabled: true }
             ],
             statusChoices: [
@@ -93,7 +94,8 @@ export default {
         DetailCardWithIcon,
         ProjectUpdateDialog,
         InfoCardWithForm,
-        DashboardSeverityChart
+        DashboardSeverityChart,
+        CustomBreadcrumb
     }
 };
 </script>
@@ -101,7 +103,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
 

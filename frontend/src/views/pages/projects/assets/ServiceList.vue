@@ -2,30 +2,17 @@
 import AssetService from '@/service/AssetService'
 import BlankSlate from '@/components/BlankSlate.vue'
 import ServiceCreateDialog from '@/components/dialogs/ServiceCreateDialog.vue';
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
+
 
 export default {
     name: "ServiceList",
-    components: { BlankSlate, ServiceCreateDialog },
+    components: { BlankSlate, ServiceCreateDialog, CustomBreadcrumb },
     data() {
         return {
             assetService: new AssetService(),
             projectId: this.$route.params.projectId,
             breadcrumbs: [
-                {
-                    label: "Projects",
-                    to: this.$router.resolve({
-                        name: "ProjectList"
-                    })
-                },
-                {
-                    label: "Project Detail",
-                    to: this.$router.resolve({
-                        name: "ProjectDetail",
-                        params: {
-                            projectId: this.$route.params.projectId
-                        }
-                    })
-                },
                 {
                     label: "Services",
                     disabled: true
@@ -94,7 +81,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">

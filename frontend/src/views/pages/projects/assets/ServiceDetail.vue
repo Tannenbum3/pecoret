@@ -3,6 +3,7 @@ import AssetService from '@/service/AssetService'
 import ServiceUpdateDialog from '@/components/dialogs/ServiceUpdateDialog.vue'
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue'
 import markdown from '@/utils/markdown'
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -18,23 +19,8 @@ export default {
             service: new AssetService(),
             breadcrumbs: [
                 {
-                    label: "Projects",
-                    to: this.$router.resolve({
-                        name: "ProjectList"
-                    })
-                },
-                {
-                    label: "Project Detail",
-                    to: this.$router.resolve({
-                        name: "ProjectDetail",
-                        params: {
-                            projectId: this.$route.params.projectId
-                        }
-                    })
-                },
-                {
                     label: "Services",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'ServiceList',
                         params: {
                             projectId: this.$route.params.projectId,
@@ -79,7 +65,7 @@ export default {
             })
         }
     },
-    components: { DetailCardWithIcon, ServiceUpdateDialog }
+    components: { DetailCardWithIcon, ServiceUpdateDialog, CustomBreadcrumb }
 
 }
 
@@ -88,7 +74,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">

@@ -47,6 +47,18 @@ class AdvisoryQuerySet(models.QuerySet):
             models.Q(advisorymembership__user=include_user) | models.Q(is_draft=False)
         ).distinct()
 
+    def open(self):
+        return self.filter(status=AdvisoryStatusChoices.OPEN)
+
+    def fixed(self):
+        return self.filter(status=AdvisoryStatusChoices.FIXED)
+
+    def wont_fix(self):
+        return self.filter(status=AdvisoryStatusChoices.WONT_FIX)
+
+    def count_by_user(self):
+        return self.values("user__username").annotate(count=models.Count('pk'))
+
 
 class AdvisoryManager(models.Manager):
     def create_from_template(self, **data):

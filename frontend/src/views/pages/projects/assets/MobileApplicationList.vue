@@ -2,6 +2,7 @@
 import AssetService from "@/service/AssetService";
 import BlankSlate from "@/components/BlankSlate.vue";
 import MobileApplicationCreateDialog from "@/components/dialogs/MobileApplicationCreateDialog.vue";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -79,14 +80,14 @@ export default {
     mounted() {
         this.getItems();
     },
-    components: { MobileApplicationCreateDialog, BlankSlate }
+    components: { MobileApplicationCreateDialog, BlankSlate, CustomBreadcrumb }
 };
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">

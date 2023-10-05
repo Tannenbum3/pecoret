@@ -6,7 +6,7 @@ from backend.models.report_templates import ReportTemplate
 
 def patch_django_translation():
     """patch django translation to not use LOCALE_DIRS setting.
-    Instead we use the path stored in the ``ReportTemplate``.
+    Instead, we use the path stored in the ``ReportTemplate``.
 
     Source: https://stackoverflow.com/a/60221067
     """

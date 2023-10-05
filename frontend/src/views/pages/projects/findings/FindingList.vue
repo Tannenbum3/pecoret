@@ -3,6 +3,7 @@ import FindingService from "@/service/FindingService";
 import SeverityBadge from "@/components/SeverityBadge.vue";
 import BlankSlate from "@/components/BlankSlate.vue";
 import FindingCopyDialog from "@/components/dialogs/FindingCopyDialog.vue";
+import { FilterMatchMode } from "primevue/api";
 
 
 export default {
@@ -17,6 +18,9 @@ export default {
                     label: "Findings", disabled: true
                 }
             ],
+            filters: {
+                needs_review: { value: null, matchMode: FilterMatchMode.EQUALS }
+            },
             projectId: this.$route.params.projectId,
             findingService: new FindingService(),
             findings: [],
@@ -44,6 +48,16 @@ export default {
         onSort(event) {
         },
         onFilter(event) {
+            this.loading = true;
+            let params = {
+                needs_review: event.filters.needs_review.value
+            };
+            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
+                this.totalRecords = response.data.count;
+                this.findings = response.data.results;
+            }).finally(() => {
+                this.loading = false;
+            });
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -116,6 +130,7 @@ export default {
                 <DataTable :paginator="true" dataKey="pk" :rows="pagination.limit" :value="findings"
                            :rowHover="findings.length > 0"
                            v-model:selection="selectedItems"
+                           v-model:filters="filters"
                            filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
                            :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
 
@@ -154,7 +169,11 @@ export default {
                     <Column field="vulnerability.name" header="Vulnerability"></Column>
                     <Column field="status" header="Status"></Column>
                     <Column field="finding_date" header="Date"></Column>
-                    <Column field="needs_review" header="Needs Review"></Column>
+                    <Column field="needs_review" header="Needs Review" :showFilterMatchModes="false">
+                        <template #filter="{ filterModel }">
+                            <TriStateCheckbox v-model="filterModel.value"></TriStateCheckbox>
+                        </template>
+                    </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
                             <FindingCopyDialog :finding="slotProps.data.pk"
