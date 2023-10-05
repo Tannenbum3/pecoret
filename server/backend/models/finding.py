@@ -167,10 +167,8 @@ class Finding(models.Model):
 
     @property
     def internal_id(self):
-        return "{year}{project}{vuln}{finding}".format(
-            year=self.project.year,
-            project=self.project.pk,
-            vuln=self.vulnerability.pk,
+        return "{year}{finding:05d}".format(
+            year=self.finding_date.year,
             finding=self.pk,
         )
 

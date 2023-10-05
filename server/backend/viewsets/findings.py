@@ -24,6 +24,7 @@ class FindingViewSet(PeCoReTModelViewSet):
         "vulnerability__vulnerability_id",
         "vulnerability__name",
         "needs_review",
+        "internal_id"
     ]
     api_scope = "scope_all_projects"
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
