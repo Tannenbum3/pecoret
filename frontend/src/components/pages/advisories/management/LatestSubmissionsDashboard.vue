@@ -38,7 +38,8 @@ export default {
                     <div class="col-12">
                         <div class="flex p-4 gap-4">
                             <div class="flex justify-content-start w-full">
-                                {{ slotProps.data.vulnerability.name }} / {{ slotProps.data.name }}
+                                {{ slotProps.data.vulnerability.name }} / {{ slotProps.data.internal_name }} in
+                                {{ slotProps.data.product }}
                             </div>
 
                             <div class="flex align-items-center justify-content-end">
