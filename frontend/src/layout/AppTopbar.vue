@@ -32,31 +32,86 @@ export default {
                     icon: "fa fa-right-from-bracket",
                     command: this.onLogout
                 }
-            ],
-            adminMenuItems: [
-                {
-                    label: "Users",
-                    route: this.$router.resolve({
-                        name: "UserList"
-                    })
-                },
-                {
-                    label: "Report Templates",
-                    route: this.$router.resolve({
-                        name: "ReportTemplateList"
-                    })
-                },
-                {
-                    label: "Project Types",
-                    route: this.$router.resolve({
-                        name: "ProjectTypeList"
-                    })
-                }
             ]
         };
-
     },
     computed: {
+        items() {
+            let items = [];
+            if (this.showProjectButton === true) {
+                items.push({
+                    label: "Projects",
+                    route: this.$router.resolve({ name: "ProjectList" })
+                });
+            }
+            if (this.showCompanyButton === true) {
+                items.push({
+                    label: "Companies",
+                    route: this.$router.resolve({ name: "CompanyList" })
+                });
+            }
+            if (this.showVulnerabilityTemplatesButton === true) {
+                items.push({
+                    label: "Vulnerability Templates",
+                    route: this.$router.resolve({ name: "VulnerabilityTemplateList" })
+                });
+            }
+            let advisories = { label: "Advisories", items: [] };
+            advisories.items.push({
+                label: "My Advisories",
+                route: this.$router.resolve({
+                    name: "AdvisoryList"
+                })
+            });
+            if (this.authStore.groups.isAdvisoryManagement === true) {
+                advisories.items.push({
+                    label: "Dashboard",
+                    route: this.$router.resolve({
+                        name: "AdvisoryManagementDashboard"
+                    })
+                });
+                advisories.items.push({
+                    label: "Labels",
+                    route: this.$router.resolve({
+                        name: "AdvisoryManagementLabelList"
+                    })
+                });
+            }
+            items.push(advisories);
+
+            if (this.authStore.groups.isAdmin === true) {
+                items.push({
+                    label: "Admin",
+                    items: [
+                        {
+                            label: "Users",
+                            route: this.$router.resolve({
+                                name: "UserList"
+                            })
+                        },
+                        {
+                            label: "Report Templates",
+                            route: this.$router.resolve({
+                                name: "ReportTemplateList"
+                            })
+                        },
+                        {
+                            label: "Project Types",
+                            route: this.$router.resolve({
+                                name: "ProjectTypeList"
+                            })
+                        }
+                    ]
+                });
+            }
+            if (this.authStore.isAuthenticated) {
+                let user = { label: this.authStore.me.username, items: [] };
+                user.items = this.userMenuItems;
+                items.push(user);
+            }
+            return items;
+        },
+
         showCompanyButton() {
             if (this.authStore.groups.isVendor === true) {
                 return false;
@@ -79,32 +134,8 @@ export default {
             return {
                 "layout-topbar-menu-mobile-active": this.topbarMenuActive
             };
-        },
-        advisoryMenuItems() {
-            let items = [
-                {
-                    label: "My Advisories",
-                    route: this.$router.resolve({
-                        name: "AdvisoryList"
-                    })
-                }
-            ];
-            if (this.authStore.groups.isAdvisoryManagement === true) {
-                items.push({
-                    label: "Dashboard",
-                    route: this.$router.resolve({
-                        name: "AdvisoryManagementDashboard"
-                    })
-                });
-                items.push({
-                    label: "Labels",
-                    route: this.$router.resolve({
-                        name: "AdvisoryManagementLabelList"
-                    })
-                });
-            }
-            return items;
         }
+
     },
     methods: {
 
@@ -115,16 +146,7 @@ export default {
             });
         },
         toggleMenu(event) {
-            this.$refs.menu.toggle(event);
-        },
-        onTopBarMenuButton() {
             this.topbarMenuActive = !this.topbarMenuActive;
-        },
-        toggleAdvisoryMenu(event) {
-            this.$refs.advisoryMenu.toggle(event);
-        },
-        toggleAdminMenu(event) {
-            this.$refs.adminMenu.toggle(event);
         }
     },
     components: { ProjectTabMenu }
@@ -132,73 +154,27 @@ export default {
 </script>
 
 <template>
-    <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
-            <img src="/images/logo-icon.svg" alt="logo" />
-            <span>PeCoReT</span>
-        </router-link>
 
-        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
-            <i class="pi pi-ellipsis-v"></i>
-        </button>
-
-        <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <Button label="Projects" class="p-link layout-topbar-button"
-                    v-if="showProjectButton === true"
-                    @click="this.$router.push({ name: 'ProjectList' })">
-            </Button>
-            <Button label="Companies" class="p-link layout-topbar-button"
-                    v-if="showCompanyButton === true"
-                    @click="this.$router.push({ name: 'CompanyList' })">
-            </Button>
-            <Button label="Vulnerability Templates" class="p-link layout-topbar-button"
-                    v-if="showVulnerabilityTemplatesButton === true"
-                    @click="this.$router.push({ name: 'VulnerabilityTemplateList' })">
-            </Button>
-            <Menu ref="advisoryMenu" :model="advisoryMenuItems" :popup="true">
-                <template #item="{ item, label, props }">
-                    <router-link class="flex" v-bind="props.action" :to="item.route">
-                        <span v-bind="props.icon" />
-                        <span v-bind="props.label">{{ label }}</span>
-                    </router-link>
-                </template>
-            </Menu>
-            <Button type="button" label="Advisories" icon="pi pi-angle-down" @click="toggleAdvisoryMenu"
-                    class="p-link layout-topbar-button"></Button>
-            <Button if="authStore.groups.isAdmin" label="Admin" v-if="this.authStore.groups.isAdmin"
-                    icon="pi pi-angle-down"
-                    @click="toggleAdminMenu" class="p-link layout-topbar-button"></Button>
-            <Menu ref="adminMenu" :model="adminMenuItems" v-if="this.authStore.groups.isAdmin" :popup="true"
-                  if="authStore.groups.isAdmin">
-                <template #item="{ item, label, props }">
-                    <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
-                        <span v-bind="props.icon" />
-                        <span v-bind="props.label">{{ label }}</span>
-                    </router-link>
-                    <span v-else class="flex" v-bind="props.action">
-                        <span v-bind="props.icon" />
-                        <span v-bind="props.label">{{ label }}</span>
-                    </span>
-                </template>
-            </Menu>
-
-            <div v-if="authStore.isAuthenticated">
-                <Menu ref="menu" :model="userMenuItems" :popup="true">
-                    <template #item="{ item, label, props }">
-                        <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
-                            <span v-bind="props.icon" />
-                            <span v-bind="props.label">{{ label }}</span>
-                        </router-link>
-                        <span v-else class="flex" v-bind="props.action">
-                            <span v-bind="props.icon" />
-                            <span v-bind="props.label">{{ label }}</span>
-                        </span>
-                    </template>
-                </Menu>
-                <Button type="button" :label="authStore.me.username" icon="pi pi-angle-down" @click="toggleMenu"
-                        class="p-link layout-topbar-button"></Button>
-            </div>
-        </div>
-    </div>
+    <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{menu: {class: 'top-menu'}}">
+        <template #start>
+            <router-link to="/" class="layout-topbar-logo">
+                <img src="/images/logo-icon.svg" alt="logo" />
+                <span>PeCoReT</span>
+            </router-link>
+        </template>
+        <template #item="{ label, item, props, root, hasSubmenu }">
+            <router-link class="flex" v-bind="props.action" v-slot="routerProps" :to="item.route"
+                         v-if="item.route">
+                <span v-bind="props.icon" />
+                <span v-bind="props.label">{{ label }}</span>
+            </router-link>
+            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+                <span v-bind="props.icon" />
+                <span v-bind="props.label">{{ label }}</span>
+                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]"
+                      v-bind="props.submenuicon" />
+            </a>
+        </template>
+    </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
 </template>
