@@ -57,7 +57,7 @@ class AdvisoryQuerySet(models.QuerySet):
         return self.filter(status=AdvisoryStatusChoices.WONT_FIX)
 
     def count_by_user(self):
-        return self.values("user__username").annotate(count=models.Count('pk'))
+        return self.values("user__username").annotate(count=models.Count('pk')).order_by("-count")
 
 
 class AdvisoryManager(models.Manager):
