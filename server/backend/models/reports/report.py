@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 class ReportVariant(models.IntegerChoices):
     PENTEST_PDF_REPORT = 0, "Pentest PDF"
     VULNERABILITY_CSV_REPORT = 1, "Vulnerability CSV"
+    PENTEST_EXCEL = 2, "Pentest Excel"
 
     @property
     def variant_report_class_name(self):

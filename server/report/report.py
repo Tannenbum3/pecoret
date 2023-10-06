@@ -92,3 +92,7 @@ class AdvisoryPDFExport(report_types.AdvisoryPDFExport):
 
 class VulnerabilityCSVReport(report_types.VulnerabilityCSVReport):
     pass
+
+
+class PentestExcelReport(report_types.PentestExcelReport):
+    pass

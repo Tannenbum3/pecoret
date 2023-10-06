@@ -27,7 +27,7 @@ class ReportTemplate(models.Model):
 
     @property
     def template_path(self):
-        """the path of the ``templates`` sub directory of the report template.
+        """the path of the ``templates`` subdirectory of the report template.
 
         Returns:
             str: path of the ``templates`` directory containing the jinja2 templates. 

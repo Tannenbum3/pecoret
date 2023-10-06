@@ -18,7 +18,8 @@ export default {
             templateChoices: null,
             variantChoices: [
                 { label: "Vulnerability CSV", value: "Vulnerability CSV" },
-                { label: "Pentest PDF Report", value: "Pentest PDF" }
+                { label: "Pentest PDF Report", value: "Pentest PDF" },
+                { label: "Pentest Excel", value: "Pentest Excel" }
             ],
             authorChoices: null,
             service: new ReportService()
