@@ -3,6 +3,9 @@ name: Generate API Schema
 on:
   push:
     branches: [ main ]
+    tags:
+      - '*'
+
 
 jobs:
   build:
@@ -30,5 +33,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: Upload schema
+          name: schema.yaml
           path: /dist/schema.yaml
