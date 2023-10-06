@@ -140,7 +140,6 @@ export default {
                           optionValue="value"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
-                <label for="project_type">Project Type</label>
                 <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
             </div>
             <div class="field col-12 md:col-6">

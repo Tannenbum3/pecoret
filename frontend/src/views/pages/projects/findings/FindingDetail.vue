@@ -6,6 +6,7 @@ import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
 import FindingAsAdvisoryDialog from "@/components/dialogs/FindingAsAdvisoryDialog.vue";
 import FileDrop from "@/components/elements/forms/FileDrop.vue";
 import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -22,7 +23,7 @@ export default {
             breadcrumbs: [
                 {
                     label: "Findings",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "FindingList",
                         params: { projectId: this.$route.params.projectId }
                     }).path
@@ -107,7 +108,8 @@ export default {
         DetailCardWithIcon,
         InfoCardWithForm,
         FindingAsAdvisoryDialog,
-        FileDrop
+        FileDrop,
+        CustomBreadcrumb
     }
 };
 </script>
@@ -115,7 +117,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
 

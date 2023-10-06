@@ -1,11 +1,12 @@
 <script>
 import FindingService from '@/service/FindingService'
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue'
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
     name: 'ScoreList',
-    components: {FindingTabMenu},
+    components: { FindingTabMenu, CustomBreadcrumb },
     mounted() {
         this.getCVSS()
         this.getOWASP()
@@ -40,14 +41,17 @@ export default {
             breadcrumbs: [
                 {
                     label: "Findings",
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: "FindingList",
                         params: { projectId: this.$route.params.projectId }
                     }).path
                 },
                 {
                     label: 'Finding Detail',
-                    to: this.$router.resolve({ name: 'FindingDetail', params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId } })
+                    route: this.$router.resolve({
+                        name: "FindingDetail",
+                        params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId }
+                    })
                 },
                 {
                     label: 'Scores',
@@ -221,7 +225,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
 

@@ -1,6 +1,7 @@
 <script>
 import FindingService from '@/service/FindingService'
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue'
+import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
 
 
 export default {
@@ -14,11 +15,17 @@ export default {
             breadcrumbs: [
                 {
                     label: 'Findings',
-                    to: this.$router.resolve({ name: 'FindingList', params: { projectId: this.$route.params.projectId } })
+                    route: this.$router.resolve({
+                        name: "FindingList",
+                        params: { projectId: this.$route.params.projectId }
+                    })
                 },
                 {
                     label: 'Finding Detail',
-                    to: this.$router.resolve({ name: 'FindingDetail', params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId } })
+                    route: this.$router.resolve({
+                        name: "FindingDetail",
+                        params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId }
+                    })
                 },
                 {
                     label: 'Timeline',
@@ -37,14 +44,14 @@ export default {
     mounted() {
         this.getTimeline()
     },
-    components: { FindingTabMenu }
+    components: { FindingTabMenu, CustomBreadcrumb }
 }
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
         </div>
     </div>
     <div class="grid">
