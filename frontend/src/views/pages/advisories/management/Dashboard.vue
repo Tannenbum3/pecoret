@@ -1,29 +1,27 @@
 <script>
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-import AdvisoryService from "@/service/AdvisoryService";
-import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
-import TopSubmitterDashboard from "@/components/pages/advisories/management/TopSubmitterDashboard.vue";
-import TopVulnerabilitiesDashboard from "@/components/pages/advisories/management/TopVulnerabilitiesDashboard.vue";
-import TopProductsDashboard from "@/components/pages/advisories/management/TopProductsDashboard.vue";
-import TopVendorsDashboard from "@/components/pages/advisories/management/TopVendorsDashboard.vue";
-import LatestSubmissionsDashboard from "@/components/pages/advisories/management/LatestSubmissionsDashboard.vue";
+import AdvisoryService from '@/service/AdvisoryService';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import TopSubmitterDashboard from '@/components/pages/advisories/management/TopSubmitterDashboard.vue';
+import TopVulnerabilitiesDashboard from '@/components/pages/advisories/management/TopVulnerabilitiesDashboard.vue';
+import TopProductsDashboard from '@/components/pages/advisories/management/TopProductsDashboard.vue';
+import TopVendorsDashboard from '@/components/pages/advisories/management/TopVendorsDashboard.vue';
+import LatestSubmissionsDashboard from '@/components/pages/advisories/management/LatestSubmissionsDashboard.vue';
 
 export default {
-    name: "AdvisoryManagementDashboard",
+    name: 'AdvisoryManagementDashboard',
     components: {
         LatestSubmissionsDashboard,
         TopVendorsDashboard,
         TopProductsDashboard,
         TopVulnerabilitiesDashboard,
         TopSubmitterDashboard,
-        DetailCardWithIcon,
-        CustomBreadcrumb
+        DetailCardWithIcon
     },
     data() {
         return {
             breadcrumbs: [
                 {
-                    label: "Dashboard",
+                    label: 'Dashboard',
                     disabled: true
                 }
             ],
@@ -47,7 +45,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -62,16 +60,13 @@ export default {
             <DetailCardWithIcon title="Inbox" :text="statistics.inbox_count" icon="fa fa-inbox"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Open" :text="statistics.inbox_open_count"
-                                icon="fa fa-bookmark"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Open" :text="statistics.inbox_open_count" icon="fa fa-bookmark"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Fixed" :text="statistics.inbox_fixed_count"
-                                icon="fa fa-check"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Fixed" :text="statistics.inbox_fixed_count" icon="fa fa-check"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Won't Fix" :text="statistics.inbox_wontfix_count"
-                                icon="fa fa-clipboard-question"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Won't Fix" :text="statistics.inbox_wontfix_count" icon="fa fa-clipboard-question"></DetailCardWithIcon>
         </div>
     </div>
 
@@ -93,22 +88,15 @@ export default {
             <Card class="card mb-3">
                 <template #title>Quick Links</template>
                 <template #content>
-                    <Button @click="this.$router.push(this.$router.resolve({name: 'AdvisoryInbox'}))"
-                            outlined>Inbox
-                    </Button>
+                    <Button @click="this.$router.push(this.$router.resolve({ name: 'AdvisoryInbox' }))" outlined>Inbox </Button>
                 </template>
             </Card>
-            <DetailCardWithIcon title="Next Disclosure" :text="statistics.inbox_next_disclosure_date"
-                                style-class=""
-                                icon="fa fa-clock"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Next Disclosure" :text="statistics.inbox_next_disclosure_date" style-class="" icon="fa fa-clock"></DetailCardWithIcon>
 
             <div class="mt-3">
                 <TopProductsDashboard></TopProductsDashboard>
             </div>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
-
-
-        </div>
+        <div class="col-12 md:col-6 lg:col-6 xl:col-4"></div>
     </div>
 </template>

@@ -1,19 +1,17 @@
 <script>
-import AssetService from '@/service/AssetService'
-import WebApplicationCreateDialog from '@/components/dialogs/WebApplicationCreateDialog.vue'
-import BlankSlate from '@/components/BlankSlate.vue'
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import AssetService from '@/service/AssetService';
+import WebApplicationCreateDialog from '@/components/dialogs/WebApplicationCreateDialog.vue';
+import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {
-    name: "WebApplicationList",
+    name: 'WebApplicationList',
     data() {
         return {
             assetService: new AssetService(),
             projectId: this.$route.params.projectId,
             breadcrumbs: [
                 {
-                    label: "Web Applications",
+                    label: 'Web Applications',
                     disabled: true
                 }
             ],
@@ -25,14 +23,19 @@ export default {
     },
     methods: {
         onGlobalSearch(query) {
-            this.loading = true
+            this.loading = true;
             let params = {
                 search: query
-            }
-            this.assetService.getWebApplications(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count
-                this.items = response.data.results
-            }).finally(() => { this.loading = false })
+            };
+            this.assetService
+                .getWebApplications(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         getItems() {
             this.loading = true;
@@ -40,13 +43,18 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.assetService.getWebApplications(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.items = response.data.results;
-            }).finally(() => { this.loading = false; });
+            this.assetService
+                .getWebApplications(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        onSort(event) { },
-        onFilter(event) { },
+        onSort(event) {},
+        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -64,30 +72,29 @@ export default {
                             summary: 'Deleted',
                             detail: 'Web application was deleted!',
                             life: 3000
-                        })
-                        this.getItems()
-                    })
+                        });
+                        this.getItems();
+                    });
                 }
-            })
+            });
         }
     },
     mounted() {
         this.getItems();
     },
-    components: { WebApplicationCreateDialog, BlankSlate, CustomBreadcrumb }
-}
+    components: { WebApplicationCreateDialog, BlankSlate }
+};
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
         <div class="col-6">
-            <div class="flex justify-content-start">
-            </div>
+            <div class="flex justify-content-start"></div>
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
@@ -98,30 +105,36 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginator dataKey="pk" lazy :rows="pagination.limit" :value="items" filterDisplay="menu"
-                    :rowHover="items.length > 0" responsiveLayout="scroll" @sort="onSort" @filter="onFilter" @page="onPage"
-                    :totalRecords="totalRecords" :loading="loading">
+                <DataTable
+                    paginator
+                    dataKey="pk"
+                    lazy
+                    :rows="pagination.limit"
+                    :value="items"
+                    filterDisplay="menu"
+                    :rowHover="items.length > 0"
+                    responsiveLayout="scroll"
+                    @sort="onSort"
+                    @filter="onFilter"
+                    @page="onPage"
+                    :totalRecords="totalRecords"
+                    :loading="loading"
+                >
                     <template #empty>
-                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!"
-                            text="No web applications found!">
-                        </BlankSlate>
+                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!"> </BlankSlate>
                     </template>
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search" />
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                                    style="width: 100%" />
+                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                             </span>
                         </div>
                     </template>
 
                     <Column field="name" header="Name">
                         <template #body="slotProps">
-                            <router-link class="text-color underline"
-                                :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }">
-                                    {{ slotProps.data.name }}</router-link>
-
+                            <router-link class="text-color underline" :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }"> {{ slotProps.data.name }}</router-link>
                         </template>
                     </Column>
                     <Column field="base_url" header="Base URL"></Column>
@@ -129,13 +142,10 @@ export default {
                     <Column field="accessible" header="Accessible"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger"
-                                @click="onDeleteConfirmDialog(slotProps.data.pk)">
-                            </Button>
+                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"> </Button>
                         </template>
                     </Column>
                 </DataTable>
-
             </div>
         </div>
     </div>

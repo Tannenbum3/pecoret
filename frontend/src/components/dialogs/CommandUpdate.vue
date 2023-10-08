@@ -1,16 +1,15 @@
 <script>
-import ProjectCommandService from "@/service/ProjectCommandService";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import ProjectCommandService from '@/service/ProjectCommandService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "CommandUpdate",
+    name: 'CommandUpdate',
     props: {
         command: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
@@ -32,7 +31,7 @@ export default {
                 date_run: this.model.date_run
             };
             this.service.patchCommand(this.$api, this.$route.params.projectId, this.command.pk, data).then(() => {
-                this.$emit("object-updated", this.model);
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
         }
@@ -54,7 +53,6 @@ export default {
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <Dialog header="Update Command" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="command">Command</label>

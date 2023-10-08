@@ -1,12 +1,12 @@
 <script>
 export default {
     name: 'CompanyTabMenu',
-    data(){
+    data() {
         return {
             items: [
                 {
                     label: 'Details',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'CompanyDetail',
                         params: {
                             companyId: this.$route.params.companyId
@@ -15,19 +15,19 @@ export default {
                 },
                 {
                     label: 'Contacts',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'CompanyContactList',
                         params: {
                             companyId: this.$route.params.companyId
                         }
                     })
-                },
+                }
             ]
-        }
+        };
     }
-}
+};
 </script>
 
 <template>
-    <TabMenu :model="items"></TabMenu>
+    <pTabMenu v-model="items"></pTabMenu>
 </template>

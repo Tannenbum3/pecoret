@@ -1,34 +1,33 @@
 <script>
-import AdvisoryService from "@/service/AdvisoryService";
-import AdvisoryTabMenu from "@/components/pages/AdvisoryTabMenu.vue";
-import AdvisoryAttachmentFileDrop from "@/components/pages/advisories/AdvisoryAttachmentFileDrop.vue";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import AdvisoryService from '@/service/AdvisoryService';
+import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
+import AdvisoryAttachmentFileDrop from '@/components/pages/advisories/AdvisoryAttachmentFileDrop.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "ProofList",
+    name: 'ProofList',
     data() {
         return {
             service: new AdvisoryService(),
             loading: false,
             breadcrumbs: [
                 {
-                    label: "Advisories",
+                    label: 'Advisories',
                     to: this.$router.resolve({
-                        name: "AdvisoryList"
+                        name: 'AdvisoryList'
                     })
                 },
                 {
-                    label: "Advisory Detail",
+                    label: 'Advisory Detail',
                     to: this.$router.resolve({
-                        name: "AdvisoryDetail",
+                        name: 'AdvisoryDetail',
                         params: {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
                 },
                 {
-                    label: "Proofs",
+                    label: 'Proofs',
                     disabled: true
                 }
             ],
@@ -47,8 +46,7 @@ export default {
                 proof_text: this.model.proof_text
             };
             this.service.patchAdvisory(this.$api, this.advisoryId, data).then(() => {
-                this.$toast.add({ severity: "info", summary: "Updated", detail: "Proof was updated!", life: 3000 });
-
+                this.$toast.add({ severity: 'info', summary: 'Updated', detail: 'Proof was updated!', life: 3000 });
             });
         }
     },
@@ -62,7 +60,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -71,8 +69,7 @@ export default {
             <div class="flex justify-content-start"></div>
         </div>
         <div class="col-6">
-            <div class="flex justify-content-end">
-            </div>
+            <div class="flex justify-content-end"></div>
         </div>
     </div>
     <div class="grid">

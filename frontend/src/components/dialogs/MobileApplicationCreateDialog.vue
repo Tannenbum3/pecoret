@@ -1,13 +1,12 @@
 <script>
-import AssetService from "@/service/AssetService";
-import AssetEnvironmentSelectField from "../elements/forms/AssetEnvironmentSelectField.vue";
-import AssetAccessibleSelectField from "../elements/forms/AssetAccessibleSelectField.vue";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import AssetService from '@/service/AssetService';
+import AssetEnvironmentSelectField from '../elements/forms/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '../elements/forms/AssetAccessibleSelectField.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "MobileApplicationCreateDialog",
-    emits: ["object-created"],
+    name: 'MobileApplicationCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -16,19 +15,22 @@ export default {
                 name: null,
                 os: null,
                 certificate_pinning: null,
-                environment: "Unknown",
-                accessible: "Unknown",
+                environment: 'Unknown',
+                accessible: 'Unknown',
                 description: null
             },
             osChoices: [
                 {
-                    label: "Unknown", value: "Unknown"
+                    label: 'Unknown',
+                    value: 'Unknown'
                 },
                 {
-                    label: "Android", value: "Android"
+                    label: 'Android',
+                    value: 'Android'
                 },
                 {
-                    label: "iOS", value: "iOS"
+                    label: 'iOS',
+                    value: 'iOS'
                 }
             ],
             service: new AssetService()
@@ -44,12 +46,12 @@ export default {
         create() {
             this.service.createMobileApplication(this.$api, this.projectId, this.model).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Created!",
+                    severity: 'success',
+                    summary: 'Created!',
                     life: 3000,
-                    detail: "Mobile application created!"
+                    detail: 'Mobile application created!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }

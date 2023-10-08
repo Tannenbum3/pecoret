@@ -1,25 +1,24 @@
 <script>
-import AdvisoryService from "@/service/AdvisoryService";
-import VulnerabilityTemplateService from "@/service/VulnerabilityTemplateService";
-import SeveritySelectField from "@/components/elements/forms/SeveritySelectField.vue";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import AdvisoryService from '@/service/AdvisoryService';
+import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
+import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "AdvisoryCreate",
+    name: 'AdvisoryCreate',
     data() {
         return {
             service: new AdvisoryService(),
             templateService: new VulnerabilityTemplateService(),
             breadcrumbs: [
                 {
-                    label: "Advisories",
+                    label: 'Advisories',
                     to: this.$router.resolve({
-                        name: "AdvisoryList"
+                        name: 'AdvisoryList'
                     })
                 },
                 {
-                    label: "Create",
+                    label: 'Create',
                     disabled: true
                 }
             ],
@@ -51,13 +50,13 @@ export default {
             };
             this.service.createAdvisory(this.$api, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Advisory created!",
+                    severity: 'success',
+                    summary: 'Advisory created!',
                     life: 3000,
-                    detail: "Advisory was created successfully!"
+                    detail: 'Advisory was created successfully!'
                 });
                 this.$router.push({
-                    name: "AdvisoryDetail",
+                    name: 'AdvisoryDetail',
                     params: {
                         advisoryId: response.data.pk
                     }
@@ -86,15 +85,14 @@ export default {
             });
         }
     },
-    mounted() {
-    },
+    mounted() {},
     components: { SeveritySelectField, MarkdownEditor }
 };
 </script>
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
@@ -107,10 +105,7 @@ export default {
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="template">Vulnerability Template</label>
-                        <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id"
-                                  @change="preSelectTemplateValues"
-                                  @focus="onFocusTemplate" filter @filter="onFilterTemplate"
-                                  v-model="model.template"></Dropdown>
+                        <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @change="preSelectTemplateValues" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <SeveritySelectField v-model="model.severity"></SeveritySelectField>

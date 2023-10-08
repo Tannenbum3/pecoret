@@ -1,14 +1,14 @@
 <script>
-import SettingsTabMenu from "@/components/pages/SettingsTabMenu.vue";
+import SettingsTabMenu from '@/components/pages/SettingsTabMenu.vue';
 
 export default {
-    name: "UserSettingsDetail",
+    name: 'UserSettingsDetail',
     components: { SettingsTabMenu },
     data() {
         return {
             breadcrumbs: [
                 {
-                    label: "Settings",
+                    label: 'Settings',
                     disabled: true
                 }
             ],
@@ -17,19 +17,19 @@ export default {
     },
     methods: {
         getItem() {
-            let url = "/users/user-settings/";
+            let url = '/users/user-settings/';
             this.$api.get(url).then((response) => {
                 this.model = response.data;
             });
         },
         patch() {
-            let url = "/users/user-settings/";
+            let url = '/users/user-settings/';
             this.$api.patch(url, this.model).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Updated",
-                    detail: "Settings were updated successfully!",
+                    severity: 'success',
+                    summary: 'Updated',
+                    detail: 'Settings were updated successfully!',
                     life: 3000
                 });
             });
@@ -43,7 +43,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -56,13 +56,10 @@ export default {
                     <div class="grid formgrid p-fluid">
                         <div class="field col-12">
                             <div class="flex align-items-center">
-                                <Checkbox v-model="model.show_real_name_in_report"
-                                          id="show_real_name_in_report" binary
-                                />
+                                <Checkbox v-model="model.show_real_name_in_report" id="show_real_name_in_report" binary />
                                 <label for="show_real_name_in_report" class="ml-2"> Show real name in report? </label>
                             </div>
-                            <small class="text-color-secondary">If checked, show your first and last name in several
-                                reports. Otherwise use username.</small>
+                            <small class="text-color-secondary">If checked, show your first and last name in several reports. Otherwise use username.</small>
                         </div>
                     </div>
                 </template>
@@ -74,19 +71,14 @@ export default {
                     <div class="grid formgrid p-fluid">
                         <div class="field col-12">
                             <div class="flex align-items-center">
-                                <Checkbox v-model="model.notify_critical_findings"
-                                          id="notify_critical_findings" binary
-                                />
-                                <label for="notify_critical_findings" class="ml-2"> Notify me on new critical
-                                    findings? </label>
+                                <Checkbox v-model="model.notify_critical_findings" id="notify_critical_findings" binary />
+                                <label for="notify_critical_findings" class="ml-2"> Notify me on new critical findings? </label>
                             </div>
-                            <small class="text-color-secondary">Receive notification mail when new critical finding is
-                                created in one of your projects.</small>
+                            <small class="text-color-secondary">Receive notification mail when new critical finding is created in one of your projects.</small>
                         </div>
                     </div>
                 </template>
             </Card>
-
 
             <div class="flex justify-content-end mt-3">
                 <Button @click="patch" label="Save"></Button>

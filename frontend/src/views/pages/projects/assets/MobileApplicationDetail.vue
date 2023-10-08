@@ -1,13 +1,11 @@
 <script>
-import AssetService from "@/service/AssetService";
-import MobileApplicationUpdateDialog from "@/components/dialogs/MobileApplicationUpdateDialog.vue";
-import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
-import markdown from "@/utils/markdown";
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import AssetService from '@/service/AssetService';
+import MobileApplicationUpdateDialog from '@/components/dialogs/MobileApplicationUpdateDialog.vue';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import markdown from '@/utils/markdown';
 
 export default {
-    name: "MobileApplicationDetail",
+    name: 'MobileApplicationDetail',
     mounted() {
         this.getItem();
     },
@@ -19,16 +17,16 @@ export default {
             service: new AssetService(),
             breadcrumbs: [
                 {
-                    label: "Mobile Applications",
-                    route: this.$router.resolve({
-                        name: "MobileApplicationList",
+                    label: 'Mobile Applications',
+                    to: this.$router.resolve({
+                        name: 'MobileApplicationList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Mobile Application Detail",
+                    label: 'Mobile Application Detail',
                     disabled: true
                 }
             ]
@@ -42,39 +40,36 @@ export default {
         },
         renderMarkdown(text) {
             if (text === null || text === undefined) {
-                return "";
+                return '';
             }
             return markdown.renderMarkdown(text);
         },
         deleteAsset() {
             this.service.deleteMobileApplication(this.$api, this.projectId, this.assetId).then(() => {
-                this.$toast.add({ severity: "info", summary: "Confirmed", detail: "Asset deleted!", life: 3000 });
-                this.$router.push({ name: "MobileApplicationList", params: { projectId: this.projectId } });
-
+                this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 });
+                this.$router.push({ name: 'MobileApplicationList', params: { projectId: this.projectId } });
             });
         },
         confirmDialogDelete() {
             this.$confirm.require({
-                message: "Do you want to delete this asset and everything related to it?",
-                header: "Delete confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete this asset and everything related to it?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.deleteAsset();
                 }
             });
         }
     },
-    components: { DetailCardWithIcon, MobileApplicationUpdateDialog, CustomBreadcrumb }
-
+    components: { DetailCardWithIcon, MobileApplicationUpdateDialog }
 };
-
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
@@ -84,11 +79,8 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <MobileApplicationUpdateDialog @object-updated="getItem"
-                                               :asset="this.model"></MobileApplicationUpdateDialog>
-                <Button label="Delete" severity="danger" outlined icon="fa fa-trash"
-                        @click="confirmDialogDelete"></Button>
-
+                <MobileApplicationUpdateDialog @object-updated="getItem" :asset="this.model"></MobileApplicationUpdateDialog>
+                <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
@@ -97,20 +89,16 @@ export default {
             <div class="card">
                 <div class="grid">
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="surface-ground"
-                                            :text="model.os"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="surface-ground" :text="model.os"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground"
-                                            :text="model.environment"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground" :text="model.environment"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground"
-                                            :text="model.accessible"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground" :text="model.accessible"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Version" icon="fa fa-code-branch" class="surface-ground"
-                                            :text="model.version || '-'"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Version" icon="fa fa-code-branch" class="surface-ground" :text="model.version || '-'"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid">

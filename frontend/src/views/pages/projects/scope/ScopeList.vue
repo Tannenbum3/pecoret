@@ -1,20 +1,16 @@
 <script>
-import ProjectScopeService from "@/service/ProjectScopeService";
-import ProjectScopeCreateDialog from "@/components/dialogs/ProjectScopeCreateDialog.vue";
-import SeverityBadge from "@/components/SeverityBadge.vue";
-import BlankSlate from "../../../../components/BlankSlate.vue";
-
+import ProjectScopeService from '@/service/ProjectScopeService';
+import ProjectScopeCreateDialog from '@/components/dialogs/ProjectScopeCreateDialog.vue';
+import BlankSlate from '../../../../components/BlankSlate.vue';
 
 export default {
-    name: "ScopeList",
+    name: 'ScopeList',
     mounted() {
         this.getItems();
     },
     data() {
         return {
-            breadcrumbs: [
-                { label: "Scopes", disabled: true }
-            ],
+            breadcrumbs: [{ label: 'Scopes', disabled: true }],
             projectId: this.$route.params.projectId,
             items: [],
             loading: false,
@@ -24,20 +20,18 @@ export default {
         };
     },
     methods: {
-        onSort(event) {
-        },
-        onFilter(event) {
-        },
+        onSort(event) {},
+        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
-                message: "Do you want to delete this scope?",
-                header: "Delete Confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete this scope?',
+                header: 'Delete Confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.deleteScope(id);
                 }
@@ -49,19 +43,22 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service.getScopes(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.items = response.data.results;
-            }).finally(() => {
-                this.loading = false;
-            });
+            this.service
+                .getScopes(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         deleteScope(id) {
             this.service.deleteScope(this.$api, this.projectId, id).then(() => {
                 this.$toast.add({
-                    severity: "info",
-                    summary: "Deleted",
-                    detail: "Scope was deleted!",
+                    severity: 'info',
+                    summary: 'Deleted',
+                    detail: 'Scope was deleted!',
                     life: 3000
                 });
                 this.getItems();
@@ -72,22 +69,25 @@ export default {
             let params = {
                 search: query
             };
-            this.service.getScopes(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.items = response.data.results;
-            }).finally(() => {
-                this.loading = false;
-            });
+            this.service
+                .getScopes(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
-    components: { SeverityBadge, BlankSlate, ProjectScopeCreateDialog }
+    components: { BlankSlate, ProjectScopeCreateDialog }
 };
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -105,21 +105,15 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit"
-                           :rowHover="items.length > 0"
-                           :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @sort="onSort"
-                           @page="onPage"
-                           @filter="onFilter">
+                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :rowHover="items.length > 0" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @sort="onSort" @page="onPage" @filter="onFilter">
                     <template #empty>
-                        <BlankSlate icon="fa fa-star" text="No scopes!" title="No scopes found!">
-                        </BlankSlate>
+                        <BlankSlate icon="fa fa-star" text="No scopes!" title="No scopes found!"></BlankSlate>
                     </template>
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search" />
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                                           style="width: 100%" />
+                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                             </span>
                         </div>
                     </template>
@@ -127,13 +121,10 @@ export default {
                     <Column field="permission" header="Permission"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger"
-                                    @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-
+                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
                 </DataTable>
-
             </div>
         </div>
     </div>

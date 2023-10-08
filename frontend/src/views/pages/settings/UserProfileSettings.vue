@@ -1,14 +1,14 @@
 <script>
-import SettingsTabMenu from "@/components/pages/SettingsTabMenu.vue";
+import SettingsTabMenu from '@/components/pages/SettingsTabMenu.vue';
 
 export default {
-    name: "UserProfileSettings",
+    name: 'UserProfileSettings',
     components: { SettingsTabMenu },
     data() {
         return {
             breadcrumbs: [
                 {
-                    label: "Settings",
+                    label: 'Settings',
                     disabled: true
                 }
             ],
@@ -17,19 +17,19 @@ export default {
     },
     methods: {
         getItem() {
-            let url = "/auth/check/";
+            let url = '/auth/check/';
             this.$api.get(url).then((response) => {
                 this.model = response.data.user;
             });
         },
         patch() {
-            let url = "/users/update_profile/";
+            let url = '/users/update_profile/';
             this.$api.patch(url, this.model).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Updated",
-                    detail: "Settings were updated successfully!",
+                    severity: 'success',
+                    summary: 'Updated',
+                    detail: 'Settings were updated successfully!',
                     life: 3000
                 });
             });
@@ -43,7 +43,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 

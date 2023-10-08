@@ -1,21 +1,18 @@
 <script>
-import ProjectService from "@/service/ProjectService";
-import FindingService from "@/service/FindingService";
-import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
-import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
-import ProjectUpdateDialog from "@/components/dialogs/ProjectUpdateDialog.vue";
-import markdown from "@/utils/markdown";
-import DashboardSeverityChart from "@/components/pages/projects/DashboardSeverityChart.vue";
-import DashboardFindingsCount from "@/components/pages/projects/DashboardFindingsCount.vue";
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import ProjectService from '@/service/ProjectService';
+import FindingService from '@/service/FindingService';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
+import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
+import markdown from '@/utils/markdown';
+import DashboardSeverityChart from '@/components/pages/projects/DashboardSeverityChart.vue';
+import DashboardFindingsCount from '@/components/pages/projects/DashboardFindingsCount.vue';
 
 const projectService = new ProjectService();
 const findingService = new FindingService();
 
-
 export default {
-    name: "ProjectDetail",
+    name: 'ProjectDetail',
     data() {
         return {
             projectId: this.$route.params.projectId,
@@ -23,12 +20,12 @@ export default {
             latestFindings: [],
             role: {},
             breadcrumbs: [
-                { label: "Projects", route: this.$router.resolve({ name: "ProjectList" }) },
-                { label: "Project Detail", disabled: true }
+                { label: 'Projects', to: this.$router.resolve({ name: 'ProjectList' }) },
+                { label: 'Project Detail', disabled: true }
             ],
             statusChoices: [
-                { label: "Open", value: "Open" },
-                { label: "Closed", value: "Closed" }
+                { label: 'Open', value: 'Open' },
+                { label: 'Closed', value: 'Closed' }
             ]
         };
     },
@@ -45,7 +42,7 @@ export default {
         },
         renderMarkdown(text) {
             if (!text) {
-                return "";
+                return '';
             }
             return markdown.renderMarkdown(text);
         },
@@ -58,7 +55,7 @@ export default {
             let params = {
                 limit: 5,
                 page: 1,
-                ordering: "-date_created"
+                ordering: '-date_created'
             };
             findingService.getFindings(this.$api, this.projectId, params).then((response) => {
                 this.latestFindings = response.data.results;
@@ -66,13 +63,13 @@ export default {
         },
         getPentestTypeDisplay() {
             if (!this.project.pentest_types) {
-                return "";
+                return '';
             }
             let pentestTypeNames = [];
-            this.project.pentest_types.forEach(element => {
+            this.project.pentest_types.forEach((element) => {
                 pentestTypeNames.push(element.name);
             });
-            return pentestTypeNames.join(", ");
+            return pentestTypeNames.join(', ');
         },
         patchProject(data) {
             projectService.patchProject(this.$api, this.projectId, data).then((response) => {
@@ -80,13 +77,12 @@ export default {
             });
         },
         pinProject() {
-            projectService.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {
-            });
+            projectService.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
         }
     },
     computed: {
         projectDateDisplay() {
-            return this.project.start_date + " - " + this.project.end_date;
+            return this.project.start_date + ' - ' + this.project.end_date;
         }
     },
     components: {
@@ -94,8 +90,7 @@ export default {
         DetailCardWithIcon,
         ProjectUpdateDialog,
         InfoCardWithForm,
-        DashboardSeverityChart,
-        CustomBreadcrumb
+        DashboardSeverityChart
     }
 };
 </script>
@@ -103,7 +98,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -120,14 +115,11 @@ export default {
             <DetailCardWithIcon title="Dates" :text="projectDateDisplay" icon="fa-calendar"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role">
-            </DetailCardWithIcon>
+            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role"> </DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <InfoCardWithForm title="Status" icon="fa-bookmark">
-                <Dropdown v-model="project.status" :options="statusChoices" optionValue="value"
-                          @change="patchProject({ status: project.status })" optionLabel="label" class="w-full">
-                </Dropdown>
+                <Dropdown v-model="project.status" :options="statusChoices" optionValue="value" @change="patchProject({ status: project.status })" optionLabel="label" class="w-full"> </Dropdown>
             </InfoCardWithForm>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
@@ -146,22 +138,15 @@ export default {
                         <template #list="slotProps">
                             <div class="col-12">
                                 <div class="flex p-4 gap-4">
-                                    <div class="flex justify-content-start w-full">
-                                        {{ slotProps.data.vulnerability.name }} / {{ slotProps.data.name }}
-                                    </div>
+                                    <div class="flex justify-content-start w-full">{{ slotProps.data.vulnerability.name }} / {{ slotProps.data.name }}</div>
 
                                     <div class="flex align-items-center justify-content-end">
-                                        <span class="severity-badge"
-                                              :class="'severity-' + slotProps.data.severity.toLowerCase()">{{
-                                                slotProps.data.severity
-                                            }}</span>
-
+                                        <span class="severity-badge" :class="'severity-' + slotProps.data.severity.toLowerCase()">{{ slotProps.data.severity }}</span>
                                     </div>
                                 </div>
                             </div>
                         </template>
                     </DataView>
-
                 </template>
             </Card>
 
@@ -200,7 +185,5 @@ export default {
                 </template>
             </Card>
         </div>
-
     </div>
-
 </template>

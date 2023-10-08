@@ -1,8 +1,6 @@
 <script>
-import FindingService from '@/service/FindingService'
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue'
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import FindingService from '@/service/FindingService';
+import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
 
 export default {
     name: 'TimelineList',
@@ -15,15 +13,15 @@ export default {
             breadcrumbs: [
                 {
                     label: 'Findings',
-                    route: this.$router.resolve({
-                        name: "FindingList",
+                    to: this.$router.resolve({
+                        name: 'FindingList',
                         params: { projectId: this.$route.params.projectId }
                     })
                 },
                 {
                     label: 'Finding Detail',
-                    route: this.$router.resolve({
-                        name: "FindingDetail",
+                    to: this.$router.resolve({
+                        name: 'FindingDetail',
                         params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId }
                     })
                 },
@@ -32,26 +30,26 @@ export default {
                     disabled: true
                 }
             ]
-        }
+        };
     },
     methods: {
         getTimeline() {
             this.findingService.getTimeline(this.projectId, this.findingId).then((response) => {
-                this.items = response.data.results
-            })
+                this.items = response.data.results;
+            });
         }
     },
     mounted() {
-        this.getTimeline()
+        this.getTimeline();
     },
-    components: { FindingTabMenu, CustomBreadcrumb }
-}
+    components: { FindingTabMenu }
+};
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
@@ -59,7 +57,6 @@ export default {
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <Card class="border-noround-top">
                 <template #content>
-
                     <Timeline :value="items" class="mt-3">
                         <template #opposite="slotProps">
                             <small class="p-text-secondary">{{ slotProps.item.date_created }}</small>

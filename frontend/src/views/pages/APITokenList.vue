@@ -1,16 +1,16 @@
 <script>
-import UserService from "@/service/UserService";
-import BlankSlate from "@/components/BlankSlate.vue";
-import APITokenCreate from "@/components/dialogs/APITokenCreate.vue";
+import UserService from '@/service/UserService';
+import BlankSlate from '@/components/BlankSlate.vue';
+import APITokenCreate from '@/components/dialogs/APITokenCreate.vue';
 
 export default {
-    name: "APITokenList",
+    name: 'APITokenList',
     components: { APITokenCreate, BlankSlate },
     data() {
         return {
             breadcrumbs: [
                 {
-                    label: "API-Tokens",
+                    label: 'API-Tokens',
                     disabled: true
                 }
             ],
@@ -23,10 +23,8 @@ export default {
         };
     },
     methods: {
-        onSort() {
-        },
-        onFilter() {
-        },
+        onSort() {},
+        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -48,24 +46,24 @@ export default {
         copyToClipboard() {
             navigator.clipboard.writeText(this.tokenKey);
             this.$toast.add({
-                severity: "info",
-                summary: "Copied",
-                detail: "Token copied to clipboard!",
+                severity: 'info',
+                summary: 'Copied',
+                detail: 'Token copied to clipboard!',
                 life: 3000
             });
         },
         onDeleteConfirmDialog(id) {
             this.$confirm.require({
-                message: "Do you want to delete this api token?",
-                header: "Delete confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete this api token?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.service.deleteAPIToken(this.$api, id).then(() => {
                         this.$toast.add({
-                            severity: "info",
-                            summary: "Deleted",
-                            detail: "API Token was deleted!",
+                            severity: 'info',
+                            summary: 'Deleted',
+                            detail: 'API Token was deleted!',
                             life: 3000
                         });
                         this.getItems();
@@ -82,14 +80,13 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-6">
-            <div class="flex justify-content-start">
-            </div>
+            <div class="flex justify-content-start"></div>
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
@@ -100,7 +97,13 @@ export default {
 
     <div class="grid" v-if="tokenKey">
         <div class="col-12">
-            <Message @close="() => {this.tokenKey = null}">
+            <Message
+                @close="
+                    () => {
+                        this.tokenKey = null;
+                    }
+                "
+            >
                 <div class="row">
                     <div class="col">
                         {{ tokenKey }}
@@ -115,28 +118,31 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable :paginator="true" dataKey="pk"
-                           :rowHover="items.length > 0"
-                           :rows="pagination.limit"
-                           :value="items" filterDisplay="menu"
-                           :lazy="true" :loading="loading"
-                           @sort="onSort" @filter="onFilter" @page="onPage"
-                           :totalRecords="totalRecords">
-
+                <DataTable
+                    :paginator="true"
+                    dataKey="pk"
+                    :rowHover="items.length > 0"
+                    :rows="pagination.limit"
+                    :value="items"
+                    filterDisplay="menu"
+                    :lazy="true"
+                    :loading="loading"
+                    @sort="onSort"
+                    @filter="onFilter"
+                    @page="onPage"
+                    :totalRecords="totalRecords"
+                >
                     <Column field="name" header="Name"></Column>
                     <Column field="prefix" header="Prefix"></Column>
                     <Column field="date_last_used" header="Last used"></Column>
                     <Column field="date_created" header="Date created"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger"
-                                    @click="onDeleteConfirmDialog(slotProps.data.pk)">
-                            </Button>
+                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
                     <template #empty>
-                        <BlankSlate icon="fa fa-fingerprint" title="No API-Tokens!"
-                                    text="No API-Tokens found!"></BlankSlate>
+                        <BlankSlate icon="fa fa-fingerprint" title="No API-Tokens!" text="No API-Tokens found!"></BlankSlate>
                     </template>
                 </DataTable>
             </div>

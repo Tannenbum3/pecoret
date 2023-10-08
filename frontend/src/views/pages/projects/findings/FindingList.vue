@@ -1,13 +1,12 @@
 <script>
-import FindingService from "@/service/FindingService";
-import SeverityBadge from "@/components/SeverityBadge.vue";
-import BlankSlate from "@/components/BlankSlate.vue";
-import FindingCopyDialog from "@/components/dialogs/FindingCopyDialog.vue";
-import { FilterMatchMode } from "primevue/api";
-
+import FindingService from '@/service/FindingService';
+import SeverityBadge from '@/components/SeverityBadge.vue';
+import BlankSlate from '@/components/BlankSlate.vue';
+import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
+import { FilterMatchMode } from 'primevue/api';
 
 export default {
-    name: "FindingList",
+    name: 'FindingList',
     mounted() {
         this.getFindings();
     },
@@ -15,7 +14,8 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: "Findings", disabled: true
+                    label: 'Findings',
+                    disabled: true
                 }
             ],
             filters: {
@@ -38,26 +38,31 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.findings = response.data.results;
-            }).finally(() => {
-                this.loading = false;
-            });
+            this.findingService
+                .getFindings(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.findings = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        onSort(event) {
-        },
+        onSort(event) {},
         onFilter(event) {
             this.loading = true;
             let params = {
                 needs_review: event.filters.needs_review.value
             };
-            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.findings = response.data.results;
-            }).finally(() => {
-                this.loading = false;
-            });
+            this.findingService
+                .getFindings(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.findings = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -65,10 +70,10 @@ export default {
         },
         bulkDeleteConfirm() {
             this.$confirm.require({
-                message: "Do you want to delete all selected items?",
-                header: "Delete confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete all selected items?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.deleteButtonLoading = true;
                     this.loading = true;
@@ -92,23 +97,25 @@ export default {
             let params = {
                 search: search
             };
-            this.findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.findings = response.data.results;
-            }).finally(() => {
-                this.loading = false;
-            });
+            this.findingService
+                .getFindings(this.$api, this.projectId, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.findings = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     components: { FindingCopyDialog, SeverityBadge, BlankSlate }
 };
-
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
@@ -117,9 +124,7 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <Button outlined
-                        @click="this.$router.push({ name: 'FindingCreate', params: { projectId: this.projectId } })"
-                        icon="fa fa-plus" label="Finding"></Button>
+                <Button outlined @click="this.$router.push({ name: 'FindingCreate', params: { projectId: this.projectId } })" icon="fa fa-plus" label="Finding"></Button>
             </div>
         </div>
     </div>
@@ -127,25 +132,31 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable :paginator="true" dataKey="pk" :rows="pagination.limit" :value="findings"
-                           :rowHover="findings.length > 0"
-                           v-model:selection="selectedItems"
-                           v-model:filters="filters"
-                           filterDisplay="menu" :lazy="true" responsiveLayout="scroll" :totalRecords="totalRecords"
-                           :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-
+                <DataTable
+                    :paginator="true"
+                    dataKey="pk"
+                    :rows="pagination.limit"
+                    :value="findings"
+                    :rowHover="findings.length > 0"
+                    v-model:selection="selectedItems"
+                    v-model:filters="filters"
+                    filterDisplay="menu"
+                    :lazy="true"
+                    responsiveLayout="scroll"
+                    :totalRecords="totalRecords"
+                    :loading="loading"
+                    @page="onPage"
+                    @sort="onSort"
+                    @filter="onFilter"
+                >
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
-              <span class="p-input-icon-left mb-2">
-                <i class="pi pi-search" />
-                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search"
-                           style="width: 100%" />
-              </span>
-
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search" />
+                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                            </span>
                         </div>
-                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" size="small"
-                                outlined
-                                severity="danger" @click="bulkDeleteConfirm"></Button>
+                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm"></Button>
                     </template>
                     <template #empty>
                         <BlankSlate title="No findings!" text="No findings here!" icon="fa fa-bug"></BlankSlate>
@@ -154,8 +165,7 @@ export default {
 
                     <Column field="name" header="Name">
                         <template #body="slotProps">
-                            <router-link class="text-color underline"
-                                         :to="{name: 'FindingDetail', params: {projectId: this.projectId, findingId: slotProps.data.pk}}">
+                            <router-link class="text-color underline" :to="{ name: 'FindingDetail', params: { projectId: this.projectId, findingId: slotProps.data.pk } }">
                                 {{ slotProps.data.name }}
                             </router-link>
                         </template>
@@ -177,8 +187,7 @@ export default {
                     </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <FindingCopyDialog :finding="slotProps.data.pk"
-                                               @object-created="getFindings"></FindingCopyDialog>
+                            <FindingCopyDialog :finding="slotProps.data.pk" @object-created="getFindings"></FindingCopyDialog>
                         </template>
                     </Column>
                 </DataTable>

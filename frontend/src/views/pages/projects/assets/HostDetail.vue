@@ -1,15 +1,13 @@
 <script>
-import AssetService from '@/service/AssetService'
-import HostUpdateDialog from '@/components/dialogs/HostUpdateDialog.vue'
-import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue'
-import markdown from '@/utils/markdown'
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import AssetService from '@/service/AssetService';
+import HostUpdateDialog from '@/components/dialogs/HostUpdateDialog.vue';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import markdown from '@/utils/markdown';
 
 export default {
     name: 'HostDetail',
     mounted() {
-        this.getItem()
+        this.getItem();
     },
     data() {
         return {
@@ -19,11 +17,11 @@ export default {
             service: new AssetService(),
             breadcrumbs: [
                 {
-                    label: "Hosts",
-                    route: this.$router.resolve({
+                    label: 'Hosts',
+                    to: this.$router.resolve({
                         name: 'HostList',
                         params: {
-                            projectId: this.$route.params.projectId,
+                            projectId: this.$route.params.projectId
                         }
                     })
                 },
@@ -32,59 +30,54 @@ export default {
                     disabled: true
                 }
             ]
-        }
+        };
     },
     methods: {
         getItem() {
             this.service.getHost(this.$api, this.projectId, this.assetId).then((response) => {
-                this.model = response.data
-            })
+                this.model = response.data;
+            });
         },
         renderMarkdown(text) {
             if (text === null || text === undefined) {
-                return ""
+                return '';
             }
-            return markdown.renderMarkdown(text)
+            return markdown.renderMarkdown(text);
         },
-        deleteAsset(){
+        deleteAsset() {
             this.service.deleteHost(this.$api, this.projectId, this.assetId).then(() => {
-                this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 })
-                this.$router.push({ name: 'HostList', params: { projectId: this.projectId } })
-
-            })
+                this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 });
+                this.$router.push({ name: 'HostList', params: { projectId: this.projectId } });
+            });
         },
-        confirmDialogDelete(){
+        confirmDialogDelete() {
             this.$confirm.require({
                 message: 'Do you want to delete this asset and everyhting related to it?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.deleteAsset()
+                    this.deleteAsset();
                 }
-            })
+            });
         }
     },
-    components: { DetailCardWithIcon, HostUpdateDialog, CustomBreadcrumb }
-
-}
-
+    components: { DetailCardWithIcon, HostUpdateDialog }
+};
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
-        <div class="col-6">
-        </div>
+        <div class="col-6"></div>
         <div class="col-6">
             <div class="flex justify-content-end">
                 <HostUpdateDialog @object-updated="getItem" :asset="this.model"></HostUpdateDialog>
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
-
             </div>
         </div>
     </div>
@@ -93,20 +86,16 @@ export default {
             <div class="card">
                 <div class="grid">
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="DNS" icon="fa fa-earth-europe" class="surface-ground"
-                            :text="model.dns || '-'"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="DNS" icon="fa fa-earth-europe" class="surface-ground" :text="model.dns || '-'"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground"
-                            :text="model.environment"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground" :text="model.environment"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground"
-                            :text="model.accessible"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground" :text="model.accessible"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="surface-ground"
-                            :text="model.operating_system || '-'"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="surface-ground" :text="model.operating_system || '-'"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid">

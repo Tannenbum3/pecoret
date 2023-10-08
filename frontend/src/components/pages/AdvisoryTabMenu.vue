@@ -1,21 +1,21 @@
 <script>
 export default {
     name: 'AdvisoryTabMenu',
-    data(){
+    data() {
         return {
             items: [
                 {
                     label: 'Details',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'AdvisoryDetail',
                         params: {
-                            advisoryId: this.$route.params.advisoryId,
+                            advisoryId: this.$route.params.advisoryId
                         }
                     })
                 },
                 {
                     label: 'Proofs',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'AdvisoryProofList',
                         params: {
                             advisoryId: this.$route.params.advisoryId
@@ -24,7 +24,7 @@ export default {
                 },
                 {
                     label: 'Timeline',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'AdvisoryTimelineList',
                         params: {
                             advisoryId: this.$route.params.advisoryId
@@ -33,7 +33,7 @@ export default {
                 },
                 {
                     label: 'Comments',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'AdvisoryCommentList',
                         params: {
                             advisoryId: this.$route.params.advisoryId
@@ -42,7 +42,7 @@ export default {
                 },
                 {
                     label: 'Memberships',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'AdvisoryMembershipList',
                         params: {
                             advisoryId: this.$route.params.advisoryId
@@ -50,11 +50,11 @@ export default {
                     })
                 }
             ]
-        }
+        };
     }
-}
+};
 </script>
 
 <template>
-    <TabMenu :model="items"></TabMenu>
+    <pTabMenu v-model="items"></pTabMenu>
 </template>

@@ -1,13 +1,12 @@
 <script>
-import AdvisoryService from "@/service/AdvisoryService";
-import VulnerabilityTemplateService from "@/service/VulnerabilityTemplateService";
-import SeveritySelectField from "@/components/elements/forms/SeveritySelectField.vue";
-import { useAuthStore } from "@/store/auth";
-import AdvisoryLabelSelectField from "@/components/elements/forms/AdvisoryLabelSelectField.vue";
-
+import AdvisoryService from '@/service/AdvisoryService';
+import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
+import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
+import { useAuthStore } from '@/store/auth';
+import AdvisoryLabelSelectField from '@/components/elements/forms/AdvisoryLabelSelectField.vue';
 
 export default {
-    name: "AdvisoryUpdate",
+    name: 'AdvisoryUpdate',
     data() {
         return {
             service: new AdvisoryService(),
@@ -16,22 +15,22 @@ export default {
             authStore: useAuthStore(),
             breadcrumbs: [
                 {
-                    label: "Advisories",
+                    label: 'Advisories',
                     to: this.$router.resolve({
-                        name: "AdvisoryList"
+                        name: 'AdvisoryList'
                     })
                 },
                 {
-                    label: "Advisory Detail",
+                    label: 'Advisory Detail',
                     to: this.$router.resolve({
-                        name: "AdvisoryDetail",
+                        name: 'AdvisoryDetail',
                         params: {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
                 },
                 {
-                    label: "Update",
+                    label: 'Update',
                     disabled: true
                 }
             ],
@@ -53,24 +52,23 @@ export default {
                 custom_report_title: this.model.custom_report_title
             };
             if (this.authStore.groups.isAdvisoryManagement === true) {
-                data["labels"] = [];
+                data['labels'] = [];
                 this.model.labels.forEach((item) => {
                     if (item.pk) {
                         item = item.pk;
                     }
-                    data["labels"].push(item);
-
+                    data['labels'].push(item);
                 });
             }
             this.service.patchAdvisory(this.$api, this.advisoryId, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Advisory created!",
+                    severity: 'success',
+                    summary: 'Advisory created!',
                     life: 3000,
-                    detail: "Advisory was created successfully!"
+                    detail: 'Advisory was created successfully!'
                 });
                 this.$router.push({
-                    name: "AdvisoryDetail",
+                    name: 'AdvisoryDetail',
                     params: {
                         advisoryId: response.data.pk
                     }
@@ -95,7 +93,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">

@@ -2,9 +2,7 @@
 import markdown from '@/utils/markdown';
 import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
-import MarkdownEditor from '@/components/elements/forms/MarkdownEditor.vue';
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'FindingCommentList',
@@ -21,15 +19,15 @@ export default {
             breadcrumbs: [
                 {
                     label: 'Findings',
-                    route: this.$router.resolve({
-                        name: "FindingList",
+                    to: this.$router.resolve({
+                        name: 'FindingList',
                         params: { projectId: this.$route.params.projectId }
                     })
                 },
                 {
                     label: 'Finding Detail',
-                    route: this.$router.resolve({
-                        name: "FindingDetail",
+                    to: this.$router.resolve({
+                        name: 'FindingDetail',
                         params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId }
                     })
                 },
@@ -68,14 +66,14 @@ export default {
     mounted() {
         this.getComments();
     },
-    components: { MarkdownEditor, FindingTabMenu, CustomBreadcrumb }
+    components: { MarkdownEditor, FindingTabMenu }
 };
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">

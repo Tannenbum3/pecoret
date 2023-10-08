@@ -1,21 +1,21 @@
 <script>
 export default {
-    name: "SettingsTabMenu",
+    name: 'SettingsTabMenu',
     data() {
         return {
             items: [
                 {
-                    label: "General & Notifications",
-                    to: this.$router.resolve({
-                        name: "UserSettingsDetail"
+                    label: 'General & Notifications',
+                    route: this.$router.resolve({
+                        name: 'UserSettingsDetail'
                     })
                 },
                 {
-                    label: "Profile",
-                    to: this.$router.resolve({
-                        name: "UserProfileSettings"
+                    label: 'Profile',
+                    route: this.$router.resolve({
+                        name: 'UserProfileSettings'
                     })
-                },
+                }
             ]
         };
     }
@@ -23,5 +23,5 @@ export default {
 </script>
 
 <template>
-    <TabMenu :model="items"></TabMenu>
+    <pTabMenu v-model="items"></pTabMenu>
 </template>

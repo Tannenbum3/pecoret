@@ -1,16 +1,15 @@
 <script>
-import UserAccountService from "@/service/UserAccountService";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import UserAccountService from '@/service/UserAccountService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "UserAccountUpdateDialog",
+    name: 'UserAccountUpdateDialog',
     props: {
         account: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
@@ -34,7 +33,7 @@ export default {
                 description: this.model.description
             };
             this.service.patchAccount(this.$api, this.$route.params.projectId, this.account.pk, data).then(() => {
-                this.$emit("object-updated", this.model);
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
         }
@@ -56,7 +55,6 @@ export default {
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <Dialog header="Update User Account" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="grid formgrid p-fluid">
             <div class="field col-12">
                 <label for="username">Username</label>

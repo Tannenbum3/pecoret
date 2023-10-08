@@ -1,22 +1,21 @@
 <script>
-import CompanyService from "@/service/CompanyService";
-import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
-import CompanyInformationCreateDialog from "@/components/dialogs/CompanyInformationCreateDialog.vue";
-import CompanyUpdateDialog from "@/components/dialogs/CompanyUpdateDialog.vue";
-import CompanyTabMenu from "../../../components/pages/CompanyTabMenu.vue";
-import BlankSlate from "@/components/BlankSlate.vue";
-import markdown from "@/utils/markdown";
-
+import CompanyService from '@/service/CompanyService';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import CompanyInformationCreateDialog from '@/components/dialogs/CompanyInformationCreateDialog.vue';
+import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
+import CompanyTabMenu from '../../../components/pages/CompanyTabMenu.vue';
+import BlankSlate from '@/components/BlankSlate.vue';
+import markdown from '@/utils/markdown';
 
 export default {
-    name: "CompanyDetail",
+    name: 'CompanyDetail',
     data() {
         return {
             companyService: new CompanyService(),
             companyId: this.$route.params.companyId,
             breadcrumbs: [
-                { label: "Companies", to: this.$router.resolve({ name: "CompanyList" }) },
-                { label: "Company Detail", disabled: true }
+                { label: 'Companies', to: this.$router.resolve({ name: 'CompanyList' }) },
+                { label: 'Company Detail', disabled: true }
             ],
             company: {},
             companyInformation: [],
@@ -35,10 +34,10 @@ export default {
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
-                message: "Do you want to delete this item?",
-                header: "Delete confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete this item?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.companyService.deleteCompanyInformation(this.$api, this.companyId, id).then(() => {
                         this.getCompanyInformation();
@@ -47,7 +46,7 @@ export default {
             });
         },
         getReportTemplate() {
-            let url = "/report-templates/" + this.company.report_template + "/";
+            let url = '/report-templates/' + this.company.report_template + '/';
             this.$api.get(url).then((response) => {
                 this.reportTemplate = response.data;
             });
@@ -63,14 +62,13 @@ export default {
         this.getCompanyInformation();
     },
     components: { DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu, BlankSlate }
-
 };
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -83,8 +81,7 @@ export default {
         <div class="col-6">
             <div class="flex justify-content-end">
                 <CompanyUpdateDialog :company="company" @object-updated="getCompany"></CompanyUpdateDialog>
-                <CompanyInformationCreateDialog @object-created="getCompanyInformation"
-                                                :company-id="company.pk"></CompanyInformationCreateDialog>
+                <CompanyInformationCreateDialog @object-created="getCompanyInformation" :company-id="company.pk"></CompanyInformationCreateDialog>
             </div>
         </div>
     </div>
@@ -96,20 +93,16 @@ export default {
                 <template #content>
                     <div class="grid">
                         <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Street" icon="fa-road" class="surface-ground"
-                                                :text="company.street"></DetailCardWithIcon>
+                            <DetailCardWithIcon title="Street" icon="fa-road" class="surface-ground" :text="company.street"></DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="City" icon="fa-city" class="surface-ground" :text="company.city">
-                            </DetailCardWithIcon>
+                            <DetailCardWithIcon title="City" icon="fa-city" class="surface-ground" :text="company.city"></DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Country" icon="fa-earth" class="surface-ground"
-                                                :text="company.country"></DetailCardWithIcon>
+                            <DetailCardWithIcon title="Country" icon="fa-earth" class="surface-ground" :text="company.country"></DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground"
-                                                :text="reportTemplate.name"></DetailCardWithIcon>
+                            <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="reportTemplate.name"></DetailCardWithIcon>
                         </div>
                     </div>
                     <div class="grid">
@@ -122,22 +115,16 @@ export default {
                                 <template #footer>
                                     <hr />
                                     <div class="grid">
-                                        <div class="col-12 md:col-6">
-                                            {{ info.user.username }} on {{ info.date_created }}
-                                        </div>
+                                        <div class="col-12 md:col-6">{{ info.user.username }} on {{ info.date_created }}</div>
                                         <div class="col-12 md:col-6">
                                             <div class="flex justify-content-end">
-                                                <Button size="small" icon="fa fa-trash" severity="danger" outlined
-                                                        @click="confirmDialogDelete(info.pk)"></Button>
+                                                <Button size="small" icon="fa fa-trash" severity="danger" outlined @click="confirmDialogDelete(info.pk)"></Button>
                                             </div>
                                         </div>
                                     </div>
                                 </template>
                             </Card>
-                            <BlankSlate v-if="companyInformation.length < 1" icon="fa fa-circle-info"
-                                        text="No company information found!"
-                                        title="No company information!">
-                            </BlankSlate>
+                            <BlankSlate v-if="companyInformation.length < 1" icon="fa fa-circle-info" text="No company information found!" title="No company information!"></BlankSlate>
                         </div>
                     </div>
                 </template>

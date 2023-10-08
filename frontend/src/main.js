@@ -99,16 +99,17 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
-
+import pBreadcrumb from '@/components/Breadcrumb.vue';
+import pTabMenu from '@/components/navigation/TabMenu.vue';
+import pMenu from '@/components/navigation/Menu.vue';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/assets/styles.scss';
 
-import {registerPlugins} from "@/plugins"
+import { registerPlugins } from '@/plugins';
 
 const app = createApp(App);
-registerPlugins(app)
-
+registerPlugins(app);
 
 app.use(router);
 app.use(PrimeVue, { ripple: true });
@@ -210,5 +211,10 @@ app.component('TreeSelect', TreeSelect);
 app.component('TreeTable', TreeTable);
 app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
+
+// custom components
+app.component("pBreadcrumb", pBreadcrumb);
+app.component("pTabMenu", pTabMenu);
+app.component("pMenu", pMenu);
 
 app.mount('#app');

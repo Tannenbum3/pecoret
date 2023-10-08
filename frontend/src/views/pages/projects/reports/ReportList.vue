@@ -69,7 +69,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
@@ -87,9 +87,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginatior lazy dataKey="pk" rowHover :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu"
-                    v-if="items.length > 0"
-                    :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
+                <DataTable paginatior lazy dataKey="pk" :rowHover="items.length > 0" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
@@ -97,6 +95,9 @@ export default {
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                             </span>
                         </div>
+                    </template>
+                    <template #empty>
+                        <BlankSlate icon="fa fa-file" text="No reports!" title="No reports found!"></BlankSlate>
                     </template>
                     <Column field="name" header="Name">
                         <template #body="slotProps">
@@ -109,7 +110,6 @@ export default {
                     <Column field="template.name" header="Template"></Column>
                     <Column field="author.username" header="Author"></Column>
                 </DataTable>
-                <BlankSlate icon="fa fa-file" text="No reports!" title="No reports found!" v-else> </BlankSlate>
             </div>
         </div>
     </div>

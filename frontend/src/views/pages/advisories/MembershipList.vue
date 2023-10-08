@@ -1,12 +1,11 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService'
+import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
 import AdvisoryMembershipCreateDialog from '@/components/dialogs/AdvisoryMembershipCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue'
-
+import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {
-    name: "MembershipList",
+    name: 'MembershipList',
     data() {
         return {
             service: new AdvisoryService(),
@@ -15,22 +14,22 @@ export default {
             pagination: { limit: 20, page: 1 },
             breadcrumbs: [
                 {
-                    label: "Advisories",
+                    label: 'Advisories',
                     to: this.$router.resolve({
-                        name: "AdvisoryList"
+                        name: 'AdvisoryList'
                     })
                 },
                 {
-                    label: "Advisory Detail",
+                    label: 'Advisory Detail',
                     to: this.$router.resolve({
-                        name: "AdvisoryDetail",
+                        name: 'AdvisoryDetail',
                         params: {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
                 },
                 {
-                    label: "Memberships",
+                    label: 'Memberships',
                     disabled: true
                 }
             ],
@@ -39,26 +38,31 @@ export default {
         };
     },
     mounted() {
-        this.getItems()
+        this.getItems();
     },
     methods: {
         onPage(event) {
-            this.pagination.page = event.page + 1
-            this.getItems()
+            this.pagination.page = event.page + 1;
+            this.getItems();
         },
-        onFilter(event) { },
-        onSort(event) { },
+        onFilter(event) {},
+        onSort(event) {},
         getItems() {
-            this.loading = true
+            this.loading = true;
             let data = {
                 limit: this.pagination.limit,
                 page: this.pagination.page
-            }
-            this.service.getMemberships(this.$api, this.advisoryId, data).then((response) => {
-                this.items = response.data.results
-            }).finally(() => { this.loading = false })
+            };
+            this.service
+                .getMemberships(this.$api, this.advisoryId, data)
+                .then((response) => {
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        confirmDialogDelete(id){
+        confirmDialogDelete(id) {
             this.$confirm.require({
                 message: 'Do you want to remove this user from accessing advisory?',
                 header: 'Delete confirmation',
@@ -71,28 +75,27 @@ export default {
                             summary: 'Deleted',
                             detail: 'User was removed from advisory',
                             life: 3000
-                        })
-                        this.getItems()
-                    })
+                        });
+                        this.getItems();
+                    });
                 }
-            })
+            });
         }
     },
     components: { AdvisoryTabMenu, AdvisoryMembershipCreateDialog, BlankSlate }
-}
+};
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-6">
-            <div class="flex justify-content-start">
-            </div>
+            <div class="flex justify-content-start"></div>
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
@@ -105,10 +108,10 @@ export default {
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
             <div class="card border-noround-top">
-                <DataTable paginator lazy rowHover dataKey="pk" :totalRecords="totalRecords" :value="items"
-                    v-if="items.length > 0"
-                    :rows="pagination.limit" filterDisplay="menu" :loading="loading" @sort="onSort" @filter="onFilter"
-                    @page="onPage">
+                <DataTable paginator lazy :rowHover="items.length > 0" dataKey="pk" :totalRecords="totalRecords" :value="items" :rows="pagination.limit" filterDisplay="menu" :loading="loading" @sort="onSort" @filter="onFilter" @page="onPage">
+                    <template #empty>
+                        <BlankSlate icon="fa fa-users" title="No members!" text="No members found! You may want to share the advisory with other users using the buttons above!"></BlankSlate>
+                    </template>
                     <Column field="user.username" header="User"></Column>
                     <Column field="role" header="Role"></Column>
                     <Column field="active_until" header="Active Until">
@@ -118,14 +121,10 @@ export default {
                     </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger"
-                                @click="confirmDialogDelete(slotProps.data.pk)"></Button>
+                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
                 </DataTable>
-                <BlankSlate icon="fa fa-users" title="No members!"
-                    v-else
-                    text="No members found! You may want to share the advisory with other users using the buttons above!"></BlankSlate>
             </div>
         </div>
     </div>

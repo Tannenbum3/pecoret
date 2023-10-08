@@ -1,32 +1,14 @@
-<template>
-    <div class="border-0 border-round">
-        <textarea class="p-3" :name="name" :value="modelValue"
-                  @blur="this.$emit('blur')"
-                  @input="handleInput($event.target.value)" />
-    </div>
-</template>
-
 <script>
 /*
 Original source which only support vue2
 https://raw.githubusercontent.com/F-loat/vue-simplemde/master/src/index.vue
 */
-import EasyMDE from "easymde";
-import markdown from "@/utils/markdown";
+import EasyMDE from 'easymde';
+import markdown from '@/utils/markdown';
 
 export default {
-    name: "MarkdownEditor",
     props: {
-        value: String,
         modelValue: String,
-        label: String,
-        name: String,
-        autoinit: {
-            type: Boolean,
-            default() {
-                return true;
-            }
-        },
         forceSync: {
             type: Boolean,
             default() {
@@ -50,97 +32,98 @@ export default {
             default() {
                 return {};
             }
+        },
+        showSaveButton: {
+            default: false,
+            type: Boolean
         }
     },
-    emits: ["blur", "update:modelValue", "input", "initialized"],
+    emits: ['blur', 'update:modelValue', 'input', 'initialized', 'save'],
     data() {
         return {
             isValueUpdateFromInner: false,
-            loading: false
+            loading: false,
+            value: this.modelValue,
+            toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview']
         };
     },
     mounted() {
-        if (this.autoinit) this.initialize();
-    },
-    deactivated() {
-        const editor = this.simplemde;
-        if (!editor) return;
-        const isFullScreen = editor.codemirror.getOption("fullScreen");
-        if (isFullScreen) editor.toggleFullScreen();
+        this.initialize();
     },
     methods: {
         initialize() {
-
-            const configs = Object.assign({
-                element: this.$el.firstElementChild,
-                initialValue: this.modelValue || this.value || "",
-                previewRender: (plaintext) => {
-                    // use markdown-it and sanatize values to prevent XSS
-                    // the default copy&pasted code from the docs rendered `<img src=/X onerror=alert(document.domain)>`
-                    return markdown.renderMarkdown(plaintext);
-                },
-                renderingConfig: {},
-                promptURLs: false,
-                uploadImage: false,
-                maxHeight: "400px",
-                hideIcons: ["guide", "image", "fullscreen", "side-by-side"],
-                imagesPreviewHandler: (src) => {
-                },
-                imageUploadFunction: (file, onSuccess, onError) => {
-                    const reader = new FileReader();
-                    reader.onload = () => onSuccess(reader.result);
-                    reader.onerror = () => onError(`Error loading ${file.name}`);
-                    reader.readAsDataURL(file);
-                }
-            }, this.configs);
-
-            if (configs.initialValue) {
-                this.$emit("update:modelValue", configs.initialValue);
+            if (this.value === null) {
+                this.value = '';
             }
-
-            if (this.highlight) {
-                configs.renderingConfig.codeSyntaxHighlighting = true;
+            if (this.showSaveButton) {
+                toolbar.push({
+                    name: 'Save',
+                    className: 'fa fa-save',
+                    action: () => {
+                        this.$emit('save');
+                    }
+                });
             }
-
+            const configs = Object.assign(
+                {
+                    element: this.$el.firstElementChild,
+                    initialValue: this.value,
+                    previewRender: (plaintext) => {
+                        // use markdown-it and sanitize values to prevent XSS
+                        // the default copy&pasted code from the docs rendered
+                        // `<img src=/X onerror=alert(document.domain)>`
+                        return markdown.renderMarkdown(plaintext);
+                    },
+                    renderingConfig: {
+                        codeSyntaxHighlighting: true
+                    },
+                    toolbar: this.toolbar,
+                    promptURLs: false,
+                    uploadImage: false,
+                    maxHeight: '400px'
+                },
+                this.configs
+            );
             this.simplemde = new EasyMDE(configs);
 
-            const className = this.previewClass || "";
-
+            if (configs.initialValue) {
+                this.$emit('update:modelValue', this.value);
+            }
             this.bindingEvents();
 
             this.$nextTick(() => {
-                this.$emit("initialized", this.simplemde);
+                this.$emit('initialized', this.simplemde);
             });
         },
         bindingEvents() {
-            this.simplemde.codemirror.on("change", (instance, changeObj) => {
-                if (changeObj.origin === "setValue") {
+            this.simplemde.codemirror.on('change', (instance, changeObj) => {
+                if (changeObj.origin === 'setValue') {
                     return;
                 }
                 const val = this.simplemde.value();
                 this.handleInput(val);
             });
 
-            this.simplemde.codemirror.on("blur", () => {
+            this.simplemde.codemirror.on('blur', () => {
                 const val = this.simplemde.value();
                 this.handleBlur(val);
             });
         },
         addPreviewClass(className) {
             const wrapper = this.simplemde.codemirror.getWrapperElement();
-            const preview = document.createElement("div");
+            const preview = document.createElement('div');
             wrapper.nextSibling.className += ` ${className}`;
             preview.className = `editor-preview ${className}`;
             wrapper.appendChild(preview);
         },
         handleInput(val) {
             this.isValueUpdateFromInner = true;
-            this.$emit("update:modelValue", val);
-            this.$emit("input", val);
+            this.$emit('update:modelValue', val);
+            this.$emit('input', val);
         },
         handleBlur(val) {
             this.isValueUpdateFromInner = true;
-            this.$emit("blur", val);
+            this.$emit('blur', val);
         }
     },
     unmounted() {
@@ -148,15 +131,16 @@ export default {
     },
     watch: {
         modelValue(val) {
+            if (this.simplemde === null) {
+                this.initialize();
+            }
             if (!this.forceSync && this.isValueUpdateFromInner) {
                 this.isValueUpdateFromInner = false;
             } else {
-                //if(this.simplemde === null){
-                //  this.initialize()
-                //}
                 if (val === null) {
-                    val = "";
+                    val = '';
                 }
+                this.value = val;
                 const pos = this.simplemde.codemirror.getCursor();
                 this.simplemde.value(val);
                 this.simplemde.codemirror.setSelection(pos);
@@ -165,10 +149,13 @@ export default {
     }
 };
 </script>
-
+<template>
+    <div class="border-0 border-round">
+        <textarea class="p-3" :value="modelValue" @blur="handleBlur($event.target.value)" @input="handleInput($event.target.value)" />
+    </div>
+</template>
 <style>
 @import '@/../node_modules/easymde/dist/easymde.min.css';
-
 
 .CodeMirror {
     background: var(--surface-b) !important;
@@ -179,12 +166,10 @@ export default {
 .editor-preview {
     background: var(--surface-b) !important;
     color: inherit !important;
-
 }
 
 .editor-toolbar button:hover {
     background-color: var(--surface-c) !important;
-
 }
 
 .editor-toolbar {
@@ -197,7 +182,8 @@ export default {
     border-left: 1px solid var(--text-color);
 }
 
-.editor-toolbar button.active, .editor-toolbar button:hover {
+.editor-toolbar button.active,
+.editor-toolbar button:hover {
     background-color: var(--surface-c);
     color: var(--text-color);
 }
@@ -215,4 +201,3 @@ export default {
     padding: 1em;
 }
 </style>
-  

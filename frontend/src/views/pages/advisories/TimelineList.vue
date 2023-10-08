@@ -1,32 +1,31 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService'
+import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
 import AdvisoryTimelineCreateDialog from '../../../components/dialogs/AdvisoryTimelineCreateDialog.vue';
 
-
 export default {
-    name: "TimelineList",
+    name: 'TimelineList',
     data() {
         return {
             service: new AdvisoryService(),
             breadcrumbs: [
                 {
-                    label: "Advisories",
+                    label: 'Advisories',
                     to: this.$router.resolve({
-                        name: "AdvisoryList"
+                        name: 'AdvisoryList'
                     })
                 },
                 {
-                    label: "Advisory Detail",
+                    label: 'Advisory Detail',
                     to: this.$router.resolve({
-                        name: "AdvisoryDetail",
+                        name: 'AdvisoryDetail',
                         params: {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
                 },
                 {
-                    label: "Timeline",
+                    label: 'Timeline',
                     disabled: true
                 }
             ],
@@ -35,13 +34,13 @@ export default {
         };
     },
     mounted() {
-        this.getItems()
+        this.getItems();
     },
     methods: {
         getItems() {
             this.service.getTimeline(this.$api, this.advisoryId).then((response) => {
-                this.items = response.data.results
-            })
+                this.items = response.data.results;
+            });
         },
         onDeleteConfirmDialog(id) {
             this.$confirm.require({
@@ -56,28 +55,27 @@ export default {
                             summary: 'Deleted',
                             detail: 'Timeline item was deleted!',
                             life: 3000
-                        })
-                        this.getItems()
-                    })
+                        });
+                        this.getItems();
+                    });
                 }
-            })
+            });
         }
     },
     components: { AdvisoryTabMenu, AdvisoryTimelineCreateDialog }
-}
+};
 </script>
 
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-6">
-            <div class="flex justify-content-start">
-            </div>
+            <div class="flex justify-content-start"></div>
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">

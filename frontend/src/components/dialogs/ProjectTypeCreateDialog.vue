@@ -1,12 +1,11 @@
 <script>
-import AdminService from '@/service/AdminService'
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import AdminService from '@/service/AdminService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "ProjectTypeCreateDialog",
+    name: 'ProjectTypeCreateDialog',
     components: { MarkdownEditor },
-    emits: ["object-created"],
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -14,7 +13,7 @@ export default {
                 name: null,
                 description: null
             },
-            service: new AdminService(),
+            service: new AdminService()
         };
     },
     methods: {
@@ -28,25 +27,25 @@ export default {
             let data = {
                 name: this.model.name,
                 description: this.model.description
-            }
+            };
             this.service.createProjectType(this.$api, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Project type Created!",
+                    severity: 'success',
+                    summary: 'Project type Created!',
                     life: 3000,
-                    detail: "Project type created successfully!"
+                    detail: 'Project type created successfully!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         },
-        getGroups(){
+        getGroups() {
             this.service.getGroups(this.$api).then((response) => {
-                this.groupChoices = response.data.results
-            })
+                this.groupChoices = response.data.results;
+            });
         }
-    },
-}
+    }
+};
 </script>
 
 <template>

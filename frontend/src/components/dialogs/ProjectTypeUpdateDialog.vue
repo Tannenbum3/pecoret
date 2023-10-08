@@ -1,22 +1,21 @@
 <script>
-import AdminService from '@/service/AdminService'
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import AdminService from '@/service/AdminService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "ProjectTypeUpdateDialog",
+    name: 'ProjectTypeUpdateDialog',
     components: { MarkdownEditor },
     props: {
         pentestType: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
             model: this.pentestType,
-            service: new AdminService(),
+            service: new AdminService()
         };
     },
     methods: {
@@ -30,12 +29,12 @@ export default {
             let data = {
                 name: this.model.name,
                 description: this.model.description
-            }
+            };
             this.service.patchProjectType(this.$api, this.pentestType.pk, data).then(() => {
-                this.$emit("object-updated", this.model);
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
-        },
+        }
     },
     watch: {
         pentestType: {
@@ -45,15 +44,14 @@ export default {
                 this.model = value;
             }
         }
-    },
-}
+    }
+};
 </script>
 
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <Dialog header="Update Project Type" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="formgrid grid p-fluid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -65,9 +63,7 @@ export default {
             </div>
         </div>
 
-        <div class="flex flex-column gap-2">
-
-        </div>
+        <div class="flex flex-column gap-2"></div>
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>

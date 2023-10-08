@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: "CustomBreadcrumb",
+    name: '"pBreadcrumb"
     props: {
         modelValue: {
             required: true
@@ -12,7 +12,7 @@ export default {
 <template>
     <Breadcrumb :model="modelValue">
         <template #item="{ label, item, props }">
-            <router-link v-if="item.route" :to="item.route" v-bind="props.action">
+            <router-link v-if="item.to" :to="item.to" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
             </router-link>
@@ -23,7 +23,3 @@ export default {
         </template>
     </Breadcrumb>
 </template>
-
-<style scoped>
-
-</style>

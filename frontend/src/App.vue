@@ -1,13 +1,12 @@
 <script>
-import AuthService from "@/service/AuthService";
+import AuthService from '@/service/AuthService';
 
 export default {
     created() {
         // check dark theme
-        const hasDarkPreference = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const hasDarkPreference = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (hasDarkPreference) {
-            this.$primevue.changeTheme("lara-light-indigo", "lara-dark-indigo", "theme-css", () => {
-            });
+            this.$primevue.changeTheme('lara-light-indigo', 'lara-dark-indigo', 'theme-css', () => {});
         }
         const authService = new AuthService();
         authService.checkAuth(this.$api);
@@ -18,5 +17,3 @@ export default {
 <template>
     <router-view />
 </template>
-
-<style scoped></style>

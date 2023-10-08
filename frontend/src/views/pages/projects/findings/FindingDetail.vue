@@ -1,16 +1,14 @@
 <script>
-import FindingService from "@/service/FindingService";
-import FindingTabMenu from "@/components/pages/FindingTabMenu.vue";
-import DetailCardWithIcon from "@/components/DetailCardWithIcon.vue";
-import InfoCardWithForm from "@/components/InfoCardWithForm.vue";
-import FindingAsAdvisoryDialog from "@/components/dialogs/FindingAsAdvisoryDialog.vue";
-import FileDrop from "@/components/elements/forms/FileDrop.vue";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-import CustomBreadcrumb from "@/components/CustomBreadcrumb.vue";
-
+import FindingService from '@/service/FindingService';
+import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
+import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
+import FindingAsAdvisoryDialog from '@/components/dialogs/FindingAsAdvisoryDialog.vue';
+import FileDrop from '@/components/elements/forms/FileDrop.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "FindingDetail",
+    name: 'FindingDetail',
     mounted() {
         this.getFinding();
     },
@@ -22,28 +20,28 @@ export default {
             finding: { user_account: {}, component: {} },
             breadcrumbs: [
                 {
-                    label: "Findings",
-                    route: this.$router.resolve({
-                        name: "FindingList",
+                    label: 'Findings',
+                    to: this.$router.resolve({
+                        name: 'FindingList',
                         params: { projectId: this.$route.params.projectId }
                     }).path
                 },
                 {
-                    label: "Finding Detail",
+                    label: 'Finding Detail',
                     disabled: true
                 }
             ],
             severityOptions: [
-                { label: "Critical", value: "Critical" },
-                { label: "High", value: "High" },
-                { label: "Medium", value: "Medium" },
-                { label: "Low", value: "Low" },
-                { label: "Informational", value: "Informational" }
+                { label: 'Critical', value: 'Critical' },
+                { label: 'High', value: 'High' },
+                { label: 'Medium', value: 'Medium' },
+                { label: 'Low', value: 'Low' },
+                { label: 'Informational', value: 'Informational' }
             ],
             statusChoices: [
-                { title: "Open", value: "Open" },
-                { title: "Fixed", value: "Fixed" },
-                { title: "Won't Fix", value: "Wont Fix" }
+                { title: 'Open', value: 'Open' },
+                { title: 'Fixed', value: 'Fixed' },
+                { title: "Won't Fix", value: 'Wont Fix' }
             ],
             downloadPending: false
         };
@@ -59,9 +57,8 @@ export default {
         },
         deleteFinding() {
             this.findingService.deleteFinding(this.$api, this.projectId, this.findingId).then(() => {
-                this.$toast.add({ severity: "info", summary: "Confirmed", detail: "Finding deleted!", life: 3000 });
-                this.$router.push({ name: "FindingList", params: { projectId: this.projectId } });
-
+                this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Finding deleted!', life: 3000 });
+                this.$router.push({ name: 'FindingList', params: { projectId: this.projectId } });
             });
         },
         patchFindingData(data) {
@@ -74,32 +71,35 @@ export default {
         },
         confirmDialogDelete() {
             this.$confirm.require({
-                message: "Do you want to delete this finding?",
-                header: "Delete Confirmation",
-                icon: "fa fa-trash",
-                acceptClass: "p-button-danger",
+                message: 'Do you want to delete this finding?',
+                header: 'Delete Confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
                 accept: () => {
                     this.deleteFinding();
                 }
             });
         },
         forceFileDownload(response, title) {
-            let blob = new Blob([response.data], { type: "application/pdf" });
+            let blob = new Blob([response.data], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = url;
-            link.setAttribute("download", title);
+            link.setAttribute('download', title);
             link.click();
             this.downloadPending = false;
         },
         downloadAsPDF() {
             this.downloadPending = true;
-            this.findingService.downloadAsPDF(this.$api, this.projectId, this.findingId).then((response) => {
-                const filename = "finding_" + this.finding.internal_id + ".pdf";
-                this.forceFileDownload(response, filename);
-            }).finally(() => {
-                this.downloadPending = false;
-            });
+            this.findingService
+                .downloadAsPDF(this.$api, this.projectId, this.findingId)
+                .then((response) => {
+                    const filename = 'finding_' + this.finding.internal_id + '.pdf';
+                    this.forceFileDownload(response, filename);
+                })
+                .finally(() => {
+                    this.downloadPending = false;
+                });
         }
     },
     components: {
@@ -108,8 +108,7 @@ export default {
         DetailCardWithIcon,
         InfoCardWithForm,
         FindingAsAdvisoryDialog,
-        FileDrop,
-        CustomBreadcrumb
+        FileDrop
     }
 };
 </script>
@@ -117,28 +116,22 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <CustomBreadcrumb v-model="breadcrumbs"></CustomBreadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-6">
             <div class="flex justify-content-start">
-                <strong class="text-lg" v-if="finding.vulnerability">{{ finding.vulnerability.name }} / {{ finding.name
-                    }}</strong>
+                <strong class="text-lg" v-if="finding.vulnerability">{{ finding.vulnerability.name }} / {{ finding.name }}</strong>
             </div>
         </div>
         <div class="col-6 h-full">
             <div class="flex justify-content-end">
-                <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending"
-                        :disabled="downloadPending"
-                        @click="downloadAsPDF"></Button>
+                <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
-                <Button outlined icon="fa fa-pen-to-square" label="Edit"
-                        @click="this.$router.push({name: 'FindingUpdate', params: {projectId: this.projectId, findingId: this.findingId}})"
-                ></Button>
-                <Button label="Delete" severity="danger" outlined icon="fa fa-trash"
-                        @click="confirmDialogDelete"></Button>
+                <Button outlined icon="fa fa-pen-to-square" label="Edit" @click="this.$router.push({ name: 'FindingUpdate', params: { projectId: this.projectId, findingId: this.findingId } })"></Button>
+                <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
@@ -150,46 +143,34 @@ export default {
                 <template #content>
                     <div class="grid">
                         <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground"
-                                                :text="finding.component.display_name">
-                            </DetailCardWithIcon>
+                            <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground" :text="finding.component.display_name"></DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground"
-                                                :text="finding.user_account.username || '-'"></DetailCardWithIcon>
+                            <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="finding.user_account.username || '-'"></DetailCardWithIcon>
                         </div>
                         <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground"
-                                                :text="finding.status"></DetailCardWithIcon>
+                            <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground" :text="finding.status"></DetailCardWithIcon>
                         </div>
                     </div>
                     <div class="grid">
                         <div class="col-12 md:col-3">
                             <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                                <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value"
-                                          @change="patchFindingData({ status: finding.status })" optionLabel="title"
-                                          class="w-full">
-                                </Dropdown>
+                                <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
                             </InfoCardWithForm>
                         </div>
                         <div class="col-12 md:col-3">
                             <InfoCardWithForm class="surface-ground" title="Finding Date" icon="fa-calendar">
-                                <Calendar v-model="finding.finding_date"
-                                          @change="patchFindingData({ finding_date: finding.finding_date })"></Calendar>
+                                <Calendar v-model="finding.finding_date" @change="patchFindingData({ finding_date: finding.finding_date })"></Calendar>
                             </InfoCardWithForm>
                         </div>
                         <div class="col-12 md:col-3">
                             <InfoCardWithForm class="surface-ground" title="Severity" icon="fa-attention">
-                                <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label"
-                                          @change="patchFindingData({ severity: finding.severity })"
-                                          optionValue="value">
-                                </Dropdown>
+                                <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
                             </InfoCardWithForm>
                         </div>
                         <div class="col-12 md:col-3">
                             <InfoCardWithForm class="surface-ground" title="Needs review?" icon="fa-user-tag">
-                                <InputSwitch v-model="finding.needs_review"
-                                             @change="patchFindingData({ needs_review: finding.needs_review })"></InputSwitch>
+                                <InputSwitch v-model="finding.needs_review" @change="patchFindingData({ needs_review: finding.needs_review })"></InputSwitch>
                             </InfoCardWithForm>
                         </div>
                     </div>
@@ -197,8 +178,7 @@ export default {
                     <div class="grid formgrid p-fluid mt-3">
                         <div class="col-12 field">
                             <label>Proof</label>
-                            <MarkdownEditor @blur="patchFindingData({ proof_text: finding.proof_text})"
-                                            v-model="finding.proof_text"></MarkdownEditor>
+                            <MarkdownEditor @blur="patchFindingData({ proof_text: finding.proof_text })" v-model="finding.proof_text"></MarkdownEditor>
                         </div>
                         <div class="col-12">
                             <FileDrop></FileDrop>

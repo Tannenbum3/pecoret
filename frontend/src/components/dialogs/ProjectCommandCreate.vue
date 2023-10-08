@@ -1,11 +1,10 @@
 <script>
-import ProjectCommandService from "@/service/ProjectCommandService";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-
+import ProjectCommandService from '@/service/ProjectCommandService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "ProjectCommandCreate",
-    emits: ["object-created"],
+    name: 'ProjectCommandCreate',
+    emits: ['object-created'],
     components: { MarkdownEditor },
     data() {
         return {
@@ -29,12 +28,12 @@ export default {
         create() {
             this.service.createCommand(this.$api, this.projectId, this.model).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Created!",
+                    severity: 'success',
+                    summary: 'Created!',
                     life: 3000,
-                    detail: "Command created!"
+                    detail: 'Command created!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }

@@ -1,12 +1,12 @@
 <script>
 export default {
     name: 'ReportTabMenu',
-    data(){
+    data() {
         return {
             items: [
                 {
                     label: 'Configuration',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'ReportDetail',
                         params: {
                             projectId: this.$route.params.projectId,
@@ -16,7 +16,7 @@ export default {
                 },
                 {
                     label: 'Executive Summary',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'ReportExecutiveSummaryDetail',
                         params: {
                             projectId: this.$route.params.projectId,
@@ -26,7 +26,7 @@ export default {
                 },
                 {
                     label: 'Version History',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'ReportVersionHistoryList',
                         params: {
                             projectId: this.$route.params.projectId,
@@ -36,7 +36,7 @@ export default {
                 },
                 {
                     label: 'Documents',
-                    to: this.$router.resolve({
+                    route: this.$router.resolve({
                         name: 'ReportDocumentList',
                         params: {
                             projectId: this.$route.params.projectId,
@@ -45,11 +45,11 @@ export default {
                     })
                 }
             ]
-        }
+        };
     }
-}
+};
 </script>
 
 <template>
-    <TabMenu :model="items"></TabMenu>
+    <pTabMenu v-model="items"></pTabMenu>
 </template>

@@ -1,27 +1,26 @@
 <script>
-import ReportTabMenu from "../../../../components/pages/ReportTabMenu.vue";
-import MarkdownEditor from "@/components/elements/forms/MarkdownEditor.vue";
-import ReportService from "@/service/ReportService";
-
+import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue';
+import ReportService from '@/service/ReportService';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: "ExecutiveSummary",
+    name: 'ExecutiveSummary',
     data() {
         return {
             breadcrumbs: [
                 {
-                    label: "Reports",
+                    label: 'Reports',
                     to: this.$router.resolve({
-                        name: "ReportList",
+                        name: 'ReportList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Report Detail",
+                    label: 'Report Detail',
                     to: this.$router.resolve({
-                        name: "ReportDetail",
+                        name: 'ReportDetail',
                         params: {
                             projectId: this.$route.params.projectId,
                             reportId: this.$route.params.reportId
@@ -29,13 +28,13 @@ export default {
                     })
                 },
                 {
-                    label: "Executive Summary",
+                    label: 'Executive Summary',
                     disabled: true
                 }
             ],
             model: {
-                evaluation: "",
-                recommendation: ""
+                evaluation: '',
+                recommendation: ''
             },
             reportService: new ReportService(),
             reportId: this.$route.params.reportId,
@@ -52,10 +51,10 @@ export default {
             };
             this.reportService.updateReport(this.$api, this.projectId, this.reportId, data).then(() => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Evaluation updated!",
+                    severity: 'success',
+                    summary: 'Evaluation updated!',
                     life: 3000,
-                    detail: "Evaluation was updated successfully!"
+                    detail: 'Evaluation was updated successfully!'
                 });
             });
         },
@@ -70,10 +69,10 @@ export default {
             };
             this.reportService.updateReport(this.$api, this.projectId, this.reportId, data).then(() => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Recommendation updated!",
+                    severity: 'success',
+                    summary: 'Recommendation updated!',
                     life: 3000,
-                    detail: "Recommendation was updated successfully!"
+                    detail: 'Recommendation was updated successfully!'
                 });
             });
         }
@@ -85,7 +84,7 @@ export default {
 <template>
     <div class="grid mt-3">
         <div class="col-12">
-            <Breadcrumb :model="breadcrumbs"></Breadcrumb>
+            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
     <div class="grid">
@@ -96,11 +95,11 @@ export default {
                     <div class="grid formgrid p-fluid">
                         <div class="field col-12">
                             <label for="evaluation">Evaluation</label>
-                            <MarkdownEditor v-model="model.evaluation" @blur="patchEvaluation"></MarkdownEditor>
+                            <MarkdownEditor v-model="model.evaluation" @save="patchEvaluation"></MarkdownEditor>
                         </div>
                         <div class="field col-12">
                             <label for="recommendation">Recommendation</label>
-                            <MarkdownEditor v-model="model.recommendation" @blur="patchRecommendation"></MarkdownEditor>
+                            <MarkdownEditor v-model="model.recommendation" @save="patchRecommendation"></MarkdownEditor>
                         </div>
                     </div>
                 </template>
