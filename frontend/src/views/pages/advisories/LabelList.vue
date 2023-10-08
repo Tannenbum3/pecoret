@@ -7,7 +7,8 @@ import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
 import AdvisoryManagementLabelUpdateDialog from '@/components/dialogs/advisory-management/AdvisoryManagementLabelUpdateDialog.vue';
 
 export default defineComponent({
-    name: 'Lab"LabelList"  components: {
+    name: 'LabelList',
+    components: {
         AdvisoryManagementLabelUpdateDialog,
         AdvisoryManagementLabelCreateDialog,
         BlankSlate,
@@ -19,7 +20,8 @@ export default defineComponent({
             loading: false,
             breadcrumbs: [
                 {
-                    label: 'Lab"Labels"                  disabled: true
+                    label: 'Labels',
+                    disabled: true
                 }
             ],
             items: [],
@@ -49,15 +51,17 @@ export default defineComponent({
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
-                message: 'Do you want to remove"Do you want to remove this label?"er: 'Delete confirmation',"Delete confirmation": 'fa fa-trash',
-       "fa fa-trash"ptClass: 'p-button-danger',
-   "p-button-danger"pt: () => {
+                message: 'Do you want to remove this label?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
+                accept: () => {
                     this.service.deleteLabel(this.$api, id).then(() => {
                         this.$toast.add({
                             severity: 'info',
-              "info"        summary: 'Deleted',
-           "Deleted"        detail: 'Label was removed!',
-"Label was removed!"        life: 3000
+                            summary: 'Deleted',
+                            detail: 'Label was removed!',
+                            life: 3000
                         });
                         this.getItems();
                     });
@@ -129,7 +133,7 @@ export default defineComponent({
                         </div>
                     </template>
                     <template #empty>
-                        <BlankSlate icon="fa fa-tags" text="No labels found!" title="No labels!"></BlankSlate>
+                        <BlankSlate icon="fa fa-tags" text="No labels found!" title="No labels!"> </BlankSlate>
                     </template>
 
                     <Column field="name" header="Name"></Column>
@@ -141,7 +145,7 @@ export default defineComponent({
                     </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></AdvisoryManagementLabelUpdateDialog>
+                            <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"> </AdvisoryManagementLabelUpdateDialog>
                             <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
