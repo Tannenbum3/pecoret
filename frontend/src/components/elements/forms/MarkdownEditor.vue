@@ -70,9 +70,10 @@ export default {
     },
     methods: {
         initialize() {
+
             const configs = Object.assign({
                 element: this.$el.firstElementChild,
-                initialValue: this.modelValue || this.value,
+                initialValue: this.modelValue || this.value || "",
                 previewRender: (plaintext) => {
                     // use markdown-it and sanatize values to prevent XSS
                     // the default copy&pasted code from the docs rendered `<img src=/X onerror=alert(document.domain)>`
@@ -153,6 +154,9 @@ export default {
                 //if(this.simplemde === null){
                 //  this.initialize()
                 //}
+                if (val === null) {
+                    val = "";
+                }
                 const pos = this.simplemde.codemirror.getCursor();
                 this.simplemde.value(val);
                 this.simplemde.codemirror.setSelection(pos);
