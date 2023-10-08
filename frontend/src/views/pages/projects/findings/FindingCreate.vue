@@ -6,7 +6,8 @@ import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
 import FindingService from '@/service/FindingService';
 
 export default {
-    name: 'Fin"FindingCreate"  methods: {
+    name: 'FindingCreate',
+    methods: {
         onUserAccountFocus() {
             if (this.userAccountChoices.length) {
                 return;
@@ -23,18 +24,23 @@ export default {
                 component: this.model.component,
                 severity: this.model.severity.value,
                 name: this.model.name,
-                status: 'Ope"Open"              vulnerability_id: this.model.vulnerability,
+                status: 'Open',
+                vulnerability_id: this.model.vulnerability,
                 authenticated_test: this.model.authentication_required
             };
             if (this.model.user_account) {
-                data['use"user_account"this.model.user_account.pk;
+                data['user_account'] = this.model.user_account.pk;
             }
             this.service.createFinding(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({
-                    severity: 'suc"success"                  summary: 'Fin"Finding created!"                  life: 3000,
-                    detail: 'Fin"Finding was created successfully!"             });
+                    severity: 'success',
+                    summary: 'Finding created!',
+                    life: 3000,
+                    detail: 'Finding was created successfully!'
+                });
                 this.$router.push({
-                    name: 'Fin"FindingDetail"                  params: {
+                    name: 'FindingDetail',
+                    params: {
                         projectId: this.projectId,
                         findingId: response.data.pk
                     }
@@ -46,14 +52,17 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: 'Fin"Findings"                  to: this.$router.resolve({
-                        name: 'Fin"FindingList"                      params: {
+                    label: 'Findings',
+                    to: this.$router.resolve({
+                        name: 'FindingList',
+                        params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: 'Cre"Create"                  disabled: true
+                    label: 'Create',
+                    disabled: true
                 }
             ],
             model: {

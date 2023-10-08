@@ -5,7 +5,7 @@ import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
 import AssetChecklistCreateDialog from '@/components/dialogs/AssetChecklistCreateDialog.vue';
 
 export default {
-    name"ChecklistList"t',
+    name: 'ChecklistList',
     data() {
         return {
             projectId: this.$route.params.projectId,

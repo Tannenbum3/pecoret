@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: '"pBreadcrumb"
+    name: 'pBreadcrumb',
     props: {
         modelValue: {
             required: true
