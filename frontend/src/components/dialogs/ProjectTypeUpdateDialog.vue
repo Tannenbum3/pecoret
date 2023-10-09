@@ -15,6 +15,7 @@ export default {
         return {
             visible: false,
             model: this.pentestType,
+            loading: false,
             service: new AdminService()
         };
     },
@@ -26,14 +27,20 @@ export default {
             this.visible = true;
         },
         patch() {
+            this.loading = true;
             let data = {
                 name: this.model.name,
                 description: this.model.description
             };
-            this.service.patchProjectType(this.$api, this.pentestType.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            this.service
+                .patchProjectType(this.$api, this.pentestType.pk, data)
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     watch: {
@@ -67,7 +74,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patch" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

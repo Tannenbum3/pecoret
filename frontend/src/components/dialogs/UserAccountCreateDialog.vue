@@ -1,6 +1,5 @@
 <script>
 import UserAccountService from '@/service/UserAccountService';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'UserAccountCreateDialog',
@@ -9,6 +8,7 @@ export default {
         return {
             visible: false,
             projectId: this.$route.params.projectId,
+            loading: false,
             model: {
                 username: null,
                 password: null,
@@ -27,6 +27,7 @@ export default {
             this.visible = true;
         },
         create() {
+            this.loading = true;
             let data = {
                 username: this.model.username,
                 password: this.model.password,
@@ -34,19 +35,23 @@ export default {
                 compromised: this.model.compromised,
                 description: this.model.description
             };
-            this.accountService.createAccount(this.$api, this.projectId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Account added!',
-                    life: 3000,
-                    detail: 'Account added to project!'
+            this.accountService
+                .createAccount(this.$api, this.projectId, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Account added!',
+                        life: 3000,
+                        detail: 'Account added to project!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
-    },
-    components: { MarkdownEditor }
+    }
 };
 </script>
 
@@ -69,7 +74,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
-                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+                <InputText v-model="model.description"></InputText>
             </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
@@ -81,7 +86,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="create" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

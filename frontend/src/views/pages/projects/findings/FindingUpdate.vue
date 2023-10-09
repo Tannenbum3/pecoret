@@ -31,6 +31,7 @@ export default {
                     disabled: true
                 }
             ],
+            loading: false,
             service: new FindingService(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
@@ -60,6 +61,7 @@ export default {
             });
         },
         patchFinding() {
+            this.loading = true;
             let data = {
                 name: this.model.name,
                 exclude_from_report: this.model.exclude_from_report,
@@ -71,15 +73,20 @@ export default {
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
             }
-            this.service.patchFinding(this.$api, this.projectId, this.findingId, data).then((response) => {
-                this.$router.push({
-                    name: 'FindingDetail',
-                    params: {
-                        projectId: this.projectId,
-                        findingId: this.findingId
-                    }
+            this.service
+                .patchFinding(this.$api, this.projectId, this.findingId, data)
+                .then((response) => {
+                    this.$router.push({
+                        name: 'FindingDetail',
+                        params: {
+                            projectId: this.projectId,
+                            findingId: this.findingId
+                        }
+                    });
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-            });
         }
     },
     components: { MarkdownEditor }
@@ -130,7 +137,7 @@ export default {
                 </div>
                 <div class="flex flex-column gap-2 mt-3">
                     <div class="flex justify-content-end">
-                        <Button label="Save" @click="patchFinding"></Button>
+                        <Button label="Save" :loading="loading" @click="patchFinding"></Button>
                     </div>
                 </div>
             </div>

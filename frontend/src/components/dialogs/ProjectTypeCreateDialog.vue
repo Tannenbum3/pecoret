@@ -13,6 +13,7 @@ export default {
                 name: null,
                 description: null
             },
+            loading: false,
             service: new AdminService()
         };
     },
@@ -24,20 +25,26 @@ export default {
             this.visible = true;
         },
         create() {
+            this.loading = true;
             let data = {
                 name: this.model.name,
                 description: this.model.description
             };
-            this.service.createProjectType(this.$api, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Project type Created!',
-                    life: 3000,
-                    detail: 'Project type created successfully!'
+            this.service
+                .createProjectType(this.$api, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Project type Created!',
+                        life: 3000,
+                        detail: 'Project type created successfully!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         },
         getGroups() {
             this.service.getGroups(this.$api).then((response) => {
@@ -65,7 +72,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="create" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

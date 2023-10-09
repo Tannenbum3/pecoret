@@ -46,6 +46,19 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(response.json()["count"], 1)
         self.assertEqual(response.json()["results"][0]["pk"], self.finding1.pk)
 
+    def test_filter_component_valid(self):
+        self.client.force_login(self.pentester1)
+        self.url = f"{self.url}?{self.asset1.asset_type}={self.asset1.pk}"
+        response = self.client.get(self.url)
+        self.assertEqual(response.json()["count"], 1)
+        self.assertEqual(response.json()["results"][0]["pk"], self.finding1.pk)
+
+    def test_filter_component_invalid(self):
+        self.client.force_login(self.pentester1)
+        self.url = f"{self.url}?{self.asset2.asset_type}={self.asset2.pk}"
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 400)
+
 
 class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:

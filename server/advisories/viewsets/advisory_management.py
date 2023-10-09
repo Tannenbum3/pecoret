@@ -6,8 +6,8 @@ from pecoret.core.viewsets import GenericViewSet
 from pecoret.core import mixins
 from pecoret.core import permissions
 from backend.models import Advisory
-from backend.filters.advisory import InboxFilter
-from advisories.serializers.advisory import AdvisoryAdvisoryManagementSerializer
+from advisories.filters import InboxFilter
+from advisories.serializers.advisory_management import AdvisoryAdvisoryManagementSerializer
 
 
 class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):

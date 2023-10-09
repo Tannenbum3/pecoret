@@ -8,7 +8,7 @@ class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
-            "backend:advisories:membership-list", advisory=self.advisory1.pk
+            "advisories:membership-list", advisory=self.advisory1.pk
         )
         self.data = {
             "email": self.management1.email,
@@ -47,7 +47,7 @@ class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:membership-list", advisory=self.advisory2.pk
+            "advisories:membership-list", advisory=self.advisory2.pk
         )
         users = [
             self.pentester1,
@@ -75,7 +75,7 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
             self.vendor2, Roles.READ_ONLY, self.advisory2
         )
         self.url = self.get_url(
-            "backend:advisories:membership-list", advisory=self.advisory1.pk
+            "advisories:membership-list", advisory=self.advisory1.pk
         )
 
     def test_advisory_management(self):
@@ -104,7 +104,7 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_allowed(self):
         self.url = self.get_url(
-            "backend:advisories:membership-list", advisory=self.advisory2.pk
+            "advisories:membership-list", advisory=self.advisory2.pk
         )
         users = [self.pentester2]
         for user in users:
@@ -113,7 +113,7 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:membership-list", advisory=self.advisory2.pk
+            "advisories:membership-list", advisory=self.advisory2.pk
         )
         users = [
             self.vendor1,
@@ -150,7 +150,7 @@ class AdvisoryMembershipDestroyView(APITestCase, PeCoReTTestCaseMixin):
             self.vendor1, Roles.READ_ONLY, self.advisory2
         )
         self.url = self.get_url(
-            "backend:advisories:membership-detail",
+            "advisories:membership-detail",
             advisory=self.advisory1.pk,
             pk=self.membership.pk,
         )
@@ -177,7 +177,7 @@ class AdvisoryMembershipDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:membership-detail",
+            "advisories:membership-detail",
             advisory=self.advisory2.pk,
             pk=self.membership2.pk,
         )

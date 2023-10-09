@@ -32,11 +32,13 @@ export default {
                 vendor_name: null,
                 vendor_url: null
             },
+            loading: false,
             templateChoices: []
         };
     },
     methods: {
         create() {
+            this.loading = true;
             let data = {
                 internal_name: this.model.internal_name,
                 vulnerability_id: this.model.template,
@@ -48,22 +50,27 @@ export default {
                 vendor_name: this.model.vendor_name,
                 vendor_url: this.model.vendor_url
             };
-            this.service.createAdvisory(this.$api, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Advisory created!',
-                    life: 3000,
-                    detail: 'Advisory was created successfully!'
+            this.service
+                .createAdvisory(this.$api, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Advisory created!',
+                        life: 3000,
+                        detail: 'Advisory was created successfully!'
+                    });
+                    this.$router.push({
+                        name: 'AdvisoryDetail',
+                        params: {
+                            advisoryId: response.data.pk
+                        }
+                    });
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$router.push({
-                    name: 'AdvisoryDetail',
-                    params: {
-                        advisoryId: response.data.pk
-                    }
-                });
-            });
         },
-        preSelectTemplateValues(obj) {
+        preSelectTemplateValues() {
             this.templateChoices.forEach((item) => {
                 if (item.vulnerability_id === this.model.template) {
                     this.model.severity = item.severity;
@@ -140,7 +147,7 @@ export default {
                     </div>
                     <div class="mt-3 col-12">
                         <div class="justify-content-end flex">
-                            <Button label="Save" @click="create"></Button>
+                            <Button label="Save" :loading="loading" @click="create"></Button>
                         </div>
                     </div>
                 </div>

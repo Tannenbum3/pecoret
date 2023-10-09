@@ -2,6 +2,7 @@ import re
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.core.files.images import ImageFile
 from pecoret.core.models import TimestampedModel
@@ -125,6 +126,10 @@ class Advisory(TimestampedModel):
     custom_report_title = models.CharField(max_length=255, null=True, blank=True)
     hide_advisory_id_in_report = models.BooleanField(default=False)
     proof_text = models.TextField(blank=True, default="")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.old_is_draft = self.is_draft
 
     def __str__(self):
         return self.advisory_id

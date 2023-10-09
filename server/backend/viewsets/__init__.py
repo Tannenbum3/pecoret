@@ -12,12 +12,6 @@ from .cwe import CWEViewSet
 from .vulnerability_category import VulnerabilityCategoryViewSet
 from .users import UserViewSet, GroupViewSet
 from .finding_timeline import FindingTimelineViewSet
-# advisories
-from .advisory import AdvisoryViewSet
-from .advisory_timeline import AdvisoryTimelineViewSet
-from .advisory_membership import AdvisoryMembershipViewSet
-from .advisory_comment import AdvisoryCommentViewSet
-
 from .company_contact import CompanyContactViewSet
 from .project_contact import ProjectContactViewSet
 from .finding_comment import FindingCommentViewSet

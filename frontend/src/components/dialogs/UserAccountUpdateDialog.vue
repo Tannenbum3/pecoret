@@ -1,6 +1,5 @@
 <script>
 import UserAccountService from '@/service/UserAccountService';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'UserAccountUpdateDialog',
@@ -13,6 +12,7 @@ export default {
     data() {
         return {
             visible: false,
+            loading: false,
             model: this.account,
             service: new UserAccountService()
         };
@@ -25,6 +25,7 @@ export default {
             this.visible = true;
         },
         patch() {
+            this.loading = true;
             let data = {
                 username: this.model.username,
                 password: this.model.password,
@@ -32,10 +33,15 @@ export default {
                 compromised: this.model.compromised,
                 description: this.model.description
             };
-            this.service.patchAccount(this.$api, this.$route.params.projectId, this.account.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            this.service
+                .patchAccount(this.$api, this.$route.params.projectId, this.account.pk, data)
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     watch: {
@@ -46,8 +52,7 @@ export default {
                 this.model = value;
             }
         }
-    },
-    components: { MarkdownEditor }
+    }
 };
 </script>
 
@@ -70,7 +75,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
-                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+                <InputText v-model="model.description"></InputText>
             </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
@@ -82,7 +87,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patch" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

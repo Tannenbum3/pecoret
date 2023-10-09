@@ -1,6 +1,6 @@
 from backend.models.advisory_comment import AdvisoryComment
 from backend.models.advisory_membership import Roles
-from backend.serializers.advisory_comment import AdvisoryCommentSerializer
+from advisories.serializers.comment import AdvisoryCommentSerializer
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
 from pecoret.core import permissions
 

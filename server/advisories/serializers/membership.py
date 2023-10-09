@@ -5,7 +5,7 @@ from pecoret.core.serializers import ValuedChoiceField
 from backend.models.advisory_membership import AdvisoryMembership, Roles
 from backend.models.user import User
 from backend.tasks import mail
-from .user import BaseUserSerializer
+from backend.serializers.user import BaseUserSerializer
 
 
 class AdvisoryMembershipSerializer(serializers.ModelSerializer):

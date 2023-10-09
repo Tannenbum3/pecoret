@@ -114,6 +114,7 @@ export default {
                         <template #body=""> *** </template>
                     </Column>
                     <Column field="role" header="Role"></Column>
+                    <Column field="description" header="Description"></Column>
                     <Column field="compromised" header="Compromised"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">

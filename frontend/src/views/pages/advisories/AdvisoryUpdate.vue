@@ -36,11 +36,13 @@ export default {
             ],
             model: {},
             templateChoices: [],
+            loading: false,
             loaded: false
         };
     },
     methods: {
         update() {
+            this.loading = true;
             let data = {
                 internal_name: this.model.internal_name,
                 product: this.model.product,
@@ -49,7 +51,9 @@ export default {
                 vendor_name: this.model.vendor_name,
                 vendor_url: this.model.vendor_url,
                 hide_advisory_id_in_report: this.model.hide_advisory_id_in_report,
-                custom_report_title: this.model.custom_report_title
+                custom_report_title: this.model.custom_report_title,
+                cve_id: this.model.cve_id,
+                vulnerability_id: this.model.template
             };
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 data['labels'] = [];
@@ -60,19 +64,37 @@ export default {
                     data['labels'].push(item);
                 });
             }
-            this.service.patchAdvisory(this.$api, this.advisoryId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Advisory created!',
-                    life: 3000,
-                    detail: 'Advisory was created successfully!'
+            this.service
+                .patchAdvisory(this.$api, this.advisoryId, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Advisory created!',
+                        life: 3000,
+                        detail: 'Advisory was created successfully!'
+                    });
+                    this.$router.push({
+                        name: 'AdvisoryDetail',
+                        params: {
+                            advisoryId: response.data.pk
+                        }
+                    });
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$router.push({
-                    name: 'AdvisoryDetail',
-                    params: {
-                        advisoryId: response.data.pk
-                    }
-                });
+        },
+        onFocusTemplate() {
+            this.templateService.getTemplates(this.$api).then((response) => {
+                this.templateChoices = response.data.results;
+            });
+        },
+        onFilterTemplate(event) {
+            let params = {
+                search: event.value
+            };
+            this.templateService.getTemplates(this.$api, params).then((response) => {
+                this.templateChoices = response.data.results;
             });
         },
         getAdvisory() {
@@ -100,6 +122,10 @@ export default {
         <div class="col-12">
             <div class="card">
                 <div class="p-fluid formgrid grid" v-if="loaded">
+                    <div class="field col-12">
+                        <label for="template">Vulnerability Template</label>
+                        <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Dropdown>
+                    </div>
                     <div class="field col-12">
                         <label for="name">Internal Name</label>
                         <InputText id="name" v-model="model.internal_name"></InputText>
@@ -130,9 +156,13 @@ export default {
                     <div class="field col-12" v-if="authStore.groups.isAdvisoryManagement === true">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <label for="custom_title">Custom Report Title</label>
                         <InputText id="custom_title" v-model="model.custom_report_title"></InputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="cve-id">CVE-ID</label>
+                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
                     </div>
                     <div class="field col-12">
                         <InputSwitch v-model="model.hide_advisory_id_in_report" id="hide_id"></InputSwitch>
@@ -140,7 +170,7 @@ export default {
                     </div>
                     <div class="mt-3 col-12">
                         <div class="justify-content-end flex">
-                            <Button label="Save" @click="update"></Button>
+                            <Button label="Save" :loading="loading" @click="update"></Button>
                         </div>
                     </div>
                 </div>

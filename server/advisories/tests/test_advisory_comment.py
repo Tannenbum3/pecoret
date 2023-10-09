@@ -8,7 +8,7 @@ class AdvisoryCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.data = {"comment": "test"}
         self.url = self.get_url(
-            "backend:advisories:comment-list", advisory=self.advisory1.pk
+            "advisories:comment-list", advisory=self.advisory1.pk
         )
 
     def test_allowed(self):
@@ -43,7 +43,7 @@ class AdvisoryCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
             AdvisoryComment, advisory=self.advisory1, user=self.pentester1
         )
         self.url = self.get_url(
-            "backend:advisories:comment-detail",
+            "advisories:comment-detail",
             advisory=self.advisory1.pk,
             pk=self.comment1.pk,
         )
@@ -92,7 +92,7 @@ class APITokenReadTestCase(APITestCase, PeCoReTTestCaseMixin):
             AdvisoryComment, advisory=self.advisory1, user=self.pentester1
         )
         self.url = self.get_url(
-            "backend:advisories:comment-detail",
+            "advisories:comment-detail",
             advisory=self.advisory1.pk,
             pk=self.comment1.pk,
         )
@@ -125,7 +125,7 @@ class APITokenWriteTestCase(APITestCase, PeCoReTTestCaseMixin):
             AdvisoryComment, advisory=self.advisory1, user=self.pentester1
         )
         self.url = self.get_url(
-            "backend:advisories:comment-detail",
+            "advisories:comment-detail",
             advisory=self.advisory1.pk,
             pk=self.comment1.pk,
         )

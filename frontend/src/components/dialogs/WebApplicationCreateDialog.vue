@@ -10,6 +10,7 @@ export default {
     data() {
         return {
             visible: false,
+            loading: false,
             projectId: this.$route.params.projectId,
             model: {
                 name: null,
@@ -29,16 +30,22 @@ export default {
             this.visible = true;
         },
         create() {
-            this.assetService.createWebApplication(this.$api, this.projectId, this.model).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created!',
-                    life: 3000,
-                    detail: 'Web application created!'
+            this.loading = true;
+            this.assetService
+                .createWebApplication(this.$api, this.projectId, this.model)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Created!',
+                        life: 3000,
+                        detail: 'Web application created!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
     },
     components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
@@ -72,7 +79,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" :loading="loading" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

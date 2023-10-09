@@ -7,7 +7,7 @@ class AdvisoryTimelineCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
-            "backend:advisories:timeline-list", advisory=self.advisory1.pk
+            "advisories:timeline-list", advisory=self.advisory1.pk
         )
         self.data = {"text": "test", "date": "2022-01-01"}
 
@@ -58,7 +58,7 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
@@ -88,7 +88,7 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_allowed(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory2.pk,
             pk=self.timeline2.pk,
         )
@@ -101,7 +101,7 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory2.pk,
             pk=self.timeline2.pk,
         )
@@ -124,7 +124,7 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline2.is_draft = True
         self.timeline2.save()
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline2.pk,
         )
@@ -138,7 +138,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
@@ -154,7 +154,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_allowed(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory2.pk,
             pk=self.timeline2.pk,
         )
@@ -184,7 +184,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_broken_access(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline2.pk,
         )
@@ -193,7 +193,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.advisory_manager1)
         self.basic_status_code_check(self.url, self.client.patch, 404, data=self.data)
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory2.pk,
             pk=self.timeline1.pk,
         )
@@ -202,7 +202,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-detail",
+            "advisories:timeline-detail",
             advisory=self.advisory2.pk,
             pk=self.timeline2.pk,
         )
@@ -230,7 +230,7 @@ class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "backend:advisories:timeline-list", advisory=self.advisory1.pk
+            "advisories:timeline-list", advisory=self.advisory1.pk
         )
 
     def test_allowed(self):
@@ -246,7 +246,7 @@ class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_allowed(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-list", advisory=self.advisory2.pk
+            "advisories:timeline-list", advisory=self.advisory2.pk
         )
         users = [self.pentester2]
         for user in users:
@@ -268,7 +268,7 @@ class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
-            "backend:advisories:timeline-list", advisory=self.advisory2.pk
+            "advisories:timeline-list", advisory=self.advisory2.pk
         )
         users = [
             self.advisory_manager1,

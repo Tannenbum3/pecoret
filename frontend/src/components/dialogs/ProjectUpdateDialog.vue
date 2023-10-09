@@ -1,31 +1,32 @@
 <script>
-import PentestTypeSelectField from "../elements/forms/PentestTypeSelectField.vue";
-import CompanyService from "@/service/CompanyService";
-import ProjectService from "@/service/ProjectService";
+import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
+import CompanyService from '@/service/CompanyService';
+import ProjectService from '@/service/ProjectService';
 
 const projectService = new ProjectService();
 
 export default {
-    name: "ProjectUpdateDialog",
+    name: 'ProjectUpdateDialog',
     props: {
         project: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
+            loading: false,
             model: this.project,
             projectId: this.$route.params.projectId,
             companyService: new CompanyService(),
             availableLanguages: [],
             companyChoices: null,
             testMethodChoices: [
-                { title: "Unknown", value: "Unknown" },
-                { title: "Greybox", value: "Grey Box" },
-                { title: "Blackbox", value: "Black Box" },
-                { title: "Whitebox", value: "White Box" }
+                { title: 'Unknown', value: 'Unknown' },
+                { title: 'Greybox', value: 'Grey Box' },
+                { title: 'Blackbox', value: 'Black Box' },
+                { title: 'Whitebox', value: 'White Box' }
             ]
         };
     },
@@ -61,7 +62,7 @@ export default {
             });
         },
         getLanguages() {
-            let url = "/projects/available-languages/";
+            let url = '/projects/available-languages/';
             this.$api.get(url).then((response) => {
                 this.availableLanguages = response.data;
             });
@@ -72,7 +73,8 @@ export default {
             });
         },
         patchProject() {
-            if (typeof this.model.pentest_types === "object") {
+            this.loading = true;
+            if (typeof this.model.pentest_types === 'object') {
                 if (this.model.pentest_types.length > 0) {
                     if (this.model.pentest_types[0].pk) {
                         delete this.model.pentest_types;
@@ -91,10 +93,15 @@ export default {
                 description: this.model.description,
                 company: this.model.company
             };
-            projectService.patchProject(this.$api, this.projectId, data).then(() => {
-                this.$emit("object-updated", this.model);
-                this.visible = false;
-            });
+            projectService
+                .patchProject(this.$api, this.projectId, data)
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     watch: {
@@ -116,9 +123,7 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" label="Edit" @click="open()" outlined></Button>
 
-    <Dialog header="Edit Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }"
-            :style="{ width: '70vw' }"
-            :modal="true">
+    <Dialog header="Edit Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }" :modal="true">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -136,22 +141,19 @@ export default {
 
             <div class="field col-12">
                 <label for="test_method">Test Method</label>
-                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title"
-                          optionValue="value"></Dropdown>
+                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="language">Language</label>
-                <Dropdown optionLabel="language" optionValue="language" v-model="model.language"
-                          :options="availableLanguages"></Dropdown>
+                <Dropdown optionLabel="language" optionValue="language" v-model="model.language" :options="availableLanguages"></Dropdown>
             </div>
 
             <div class="field col-12">
                 <label for="company">Company</label>
-                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter
-                          optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
             </div>
 
             <div class="field col-12">
@@ -162,8 +164,7 @@ export default {
             </div>
             <div class="field col-12">
                 <div class="flex align-items-center">
-                    <Checkbox v-model="model.require_owasp_risk_rating" :binary="true"
-                              inputId="require_owasp"></Checkbox>
+                    <Checkbox v-model="model.require_owasp_risk_rating" :binary="true" inputId="require_owasp"></Checkbox>
                     <label for="require_owasp" class="ml-2">Require OWASP Risk Rating?</label>
                 </div>
             </div>
@@ -175,7 +176,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patchProject" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patchProject" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

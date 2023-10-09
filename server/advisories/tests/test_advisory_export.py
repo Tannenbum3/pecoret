@@ -7,7 +7,7 @@ class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.report_template = ReportTemplate.objects.get(name="default_template")
-        self.url = self.get_url("backend:advisory-export-pdf", pk=self.advisory1.pk)
+        self.url = self.get_url("advisories:advisory-export-pdf", pk=self.advisory1.pk)
 
     def test_allowed(self):
         users = [
@@ -44,7 +44,7 @@ class AdvisoryMarkdownExportView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
-            "backend:advisory-export-markdown", pk=self.advisory1.pk
+            "advisories:advisory-export-markdown", pk=self.advisory1.pk
         )
 
     def test_allowed(self):

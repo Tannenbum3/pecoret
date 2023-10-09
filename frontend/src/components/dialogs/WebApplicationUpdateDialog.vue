@@ -16,7 +16,8 @@ export default {
         return {
             visible: false,
             model: this.asset,
-            service: new AssetService()
+            service: new AssetService(),
+            loading: false
         };
     },
     methods: {
@@ -27,6 +28,7 @@ export default {
             this.visible = true;
         },
         patch() {
+            this.loading = true;
             let data = {
                 name: this.model.name,
                 base_url: this.model.base_url,
@@ -34,10 +36,15 @@ export default {
                 accessible: this.model.accessible,
                 description: this.model.description
             };
-            this.service.patchWebApplication(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            this.service
+                .patchWebApplication(this.$api, this.$route.params.projectId, this.asset.pk, data)
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     watch: {
@@ -80,7 +87,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patch" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

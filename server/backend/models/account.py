@@ -20,7 +20,7 @@ class Account(models.Model):
     password = models.CharField(max_length=256, blank=True)
     accessible = models.BooleanField(null=True, blank=True)
     compromised = models.BooleanField(default=False, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         ordering = ("-pk",)

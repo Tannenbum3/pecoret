@@ -101,6 +101,12 @@ export default {
         patchAdvisory(data) {
             this.service.patchAdvisory(this.$api, this.advisoryId, data).then((response) => {
                 this.advisory = response.data;
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Advisory updated!',
+                    life: 3000,
+                    detail: 'Advisory was updated!'
+                });
             });
         },
         patchAdvisoryDisclosureDate() {

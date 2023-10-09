@@ -4,6 +4,7 @@ import SeverityBadge from '@/components/SeverityBadge.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
 import { FilterMatchMode } from 'primevue/api';
+import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
 
 export default {
     name: 'FindingList',
@@ -19,8 +20,10 @@ export default {
                 }
             ],
             filters: {
-                needs_review: { value: null, matchMode: FilterMatchMode.EQUALS }
+                needs_review: { value: null, matchMode: FilterMatchMode.EQUALS },
+                component: { value: null, matchMode: FilterMatchMode.EQUALS }
             },
+            filterAsset: null,
             projectId: this.$route.params.projectId,
             findingService: new FindingService(),
             findings: [],
@@ -48,12 +51,15 @@ export default {
                     this.loading = false;
                 });
         },
-        onSort(event) {},
+        onSort() {},
         onFilter(event) {
             this.loading = true;
             let params = {
                 needs_review: event.filters.needs_review.value
             };
+            if (event.filters.component.value !== null) {
+                params[event.filters.component.value.type] = event.filters.component.value.pk;
+            }
             this.findingService
                 .getFindings(this.$api, this.projectId, params)
                 .then((response) => {
@@ -108,7 +114,7 @@ export default {
                 });
         }
     },
-    components: { FindingCopyDialog, SeverityBadge, BlankSlate }
+    components: { AssetSelectField, FindingCopyDialog, SeverityBadge, BlankSlate }
 };
 </script>
 
@@ -175,7 +181,11 @@ export default {
                             <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                         </template>
                     </Column>
-                    <Column field="component.name" header="Asset"></Column>
+                    <Column field="component.display_name" filterField="component" header="Asset" :showFilterMatchModes="false">
+                        <template #filter="{ filterModel }">
+                            <AssetSelectField v-model="filterModel.value"></AssetSelectField>
+                        </template>
+                    </Column>
                     <Column field="vulnerability.name" header="Vulnerability"></Column>
                     <Column field="internal_id" header="ID"></Column>
                     <Column field="status" header="Status"></Column>

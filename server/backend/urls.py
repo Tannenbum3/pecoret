@@ -2,7 +2,6 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from backend import views
 from backend.viewsets import assets as asset_viewsets
-from advisories import viewsets as advisory_viewsets
 from . import viewsets
 
 
@@ -26,7 +25,6 @@ router.register(
 )
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
-router.register("advisories", viewsets.AdvisoryViewSet, "advisory")
 
 router.register("pentest-types", viewsets.PentestTypeViewSet, "pentest-type")
 router.register("api-tokens", viewsets.APITokenViewSet, "api-token")
@@ -79,14 +77,6 @@ report_router.register(
     "change-histories", viewsets.ChangeHistoryViewSet, "change-history"
 )
 
-# advisory routes
-advisory_router = DefaultRouter()
-advisory_router.register("timelines", viewsets.AdvisoryTimelineViewSet, "timeline")
-advisory_router.register(
-    "memberships", viewsets.AdvisoryMembershipViewSet, "membership"
-)
-advisory_router.register("comments", viewsets.AdvisoryCommentViewSet, "comment")
-advisory_router.register("attachments", advisory_viewsets.ImageAttachmentViewSet, "attachment")
 
 urlpatterns = [
     path(
@@ -105,10 +95,7 @@ urlpatterns = [
         include((finding_router.urls, "backend"), namespace="findings"),
     ),
     path("projects/<int:project>/reports/<int:report>/", include(report_router.urls)),
-    path(
-        "advisories/<str:advisory>/",
-        include((advisory_router.urls, "backend"), namespace="advisories"),
-    ),
+
     path(
         "companies/<int:company>/",
         include((company_router.urls, "backend"), namespace="companies"),

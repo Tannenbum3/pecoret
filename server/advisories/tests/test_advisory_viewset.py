@@ -8,7 +8,7 @@ from advisories.models.label import Label
 class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:advisory-list")
+        self.url = self.get_url("advisories:advisory-list")
 
     def test_status_allowed(self):
         users = [
@@ -58,7 +58,7 @@ class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:advisory-list")
+        self.url = self.get_url("advisories:advisory-list")
         self.create_instance(VulnerabilityTemplate, vulnerability_id="path-traversal")
         self.data = {
             "product": "Test Product",
@@ -106,9 +106,10 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:advisory-detail", pk=self.advisory1.pk)
-        self.url2 = self.get_url("backend:advisory-detail", pk=self.advisory2.pk)
-        self.data = {"product": "new product"}
+        self.url = self.get_url("advisories:advisory-detail", pk=self.advisory1.pk)
+        self.url2 = self.get_url("advisories:advisory-detail", pk=self.advisory2.pk)
+        self.template = self.create_instance(VulnerabilityTemplate, vulnerability_id='new-test-vulnerability')
+        self.data = {"product": "new product", "vulnerability_id": self.template.vulnerability_id}
 
     def test_status_allowed(self):
         users = [self.advisory_manager1, self.pentester1]
@@ -117,6 +118,8 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(
                 self.url, self.client.patch, 200, data=self.data
             )
+            self.assertEqual(Advisory.objects.filter(
+                vulnerability__vulnerability_id='new-test-vulnerability').exists(), True)
 
     def test_draft_status(self):
         self.advisory1.is_draft = True
@@ -187,15 +190,15 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
         # test with draft
         draft = self.create_instance(Advisory, is_draft=True, user=self.pentester1)
-        self.url = self.get_url("backend:advisory-detail", pk=draft.pk)
+        self.url = self.get_url("advisories:advisory-detail", pk=draft.pk)
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
 
 
 class AdvisoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:advisory-detail", pk=self.advisory1.pk)
-        self.url2 = self.get_url("backend:advisory-detail", pk=self.advisory2.pk)
+        self.url = self.get_url("advisories:advisory-detail", pk=self.advisory1.pk)
+        self.url2 = self.get_url("advisories:advisory-detail", pk=self.advisory2.pk)
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)

@@ -20,6 +20,7 @@ export default {
             this.model.severity = event;
         },
         createFinding() {
+            this.loading = true;
             let data = {
                 component: this.model.component,
                 severity: this.model.severity.value,
@@ -31,21 +32,26 @@ export default {
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
             }
-            this.service.createFinding(this.$api, this.projectId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Finding created!',
-                    life: 3000,
-                    detail: 'Finding was created successfully!'
+            this.service
+                .createFinding(this.$api, this.projectId, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Finding created!',
+                        life: 3000,
+                        detail: 'Finding was created successfully!'
+                    });
+                    this.$router.push({
+                        name: 'FindingDetail',
+                        params: {
+                            projectId: this.projectId,
+                            findingId: response.data.pk
+                        }
+                    });
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$router.push({
-                    name: 'FindingDetail',
-                    params: {
-                        projectId: this.projectId,
-                        findingId: response.data.pk
-                    }
-                });
-            });
         }
     },
     data() {
@@ -72,6 +78,7 @@ export default {
                 authentication_required: false,
                 user_account: null
             },
+            loading: false,
             userAccountChoices: [],
             accountService: new UserAccountService(),
             service: new FindingService(),
@@ -116,7 +123,7 @@ export default {
                     </div>
                     <div class="flex flex-column gap-2 mt-3">
                         <div class="flex justify-content-end">
-                            <Button label="Save" @click="createFinding"></Button>
+                            <Button label="Save" :loading="loading" @click="createFinding"></Button>
                         </div>
                     </div>
                 </template>

@@ -9,6 +9,7 @@ export default {
             visible: false,
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
+            loading: false,
             model: {
                 product: null,
                 affected_versions: null,
@@ -26,6 +27,7 @@ export default {
             this.visible = true;
         },
         create() {
+            this.loading = true;
             let data = {
                 product: this.model.product,
                 affected_versions: this.model.affected_versions,
@@ -33,16 +35,21 @@ export default {
                 vendor_name: this.model.vendor_name,
                 vendor_url: this.model.vendor_url
             };
-            this.service.findingAsAdvisory(this.$api, this.projectId, this.findingId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Finding copies as advisory!',
-                    life: 3000,
-                    detail: 'Finding was successfully copied as advisory!'
+            this.service
+                .findingAsAdvisory(this.$api, this.projectId, this.findingId, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Finding copies as advisory!',
+                        life: 3000,
+                        detail: 'Finding was successfully copied as advisory!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
     },
     components: {}
@@ -74,7 +81,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" :loading="loading" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>
