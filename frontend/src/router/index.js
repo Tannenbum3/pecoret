@@ -9,10 +9,11 @@ const router = createRouter({
             component: AppLayout,
             children: [
                 {
-                    pa"/" '/',
-                    "Home"'Home',
-                    component: () =>"@/views/Home.vue"ome.vue')
+                    path: '/',
+                    name: 'Home',
+                    component: () => import('@/views/Home.vue')
                 },
+
                 {
                     path: '/admin',
                     children: [

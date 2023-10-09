@@ -8,8 +8,8 @@ export default class AssetService {
         return api.get(url, config);
     }
 
-    createWebApplication(api, p"/projects/"ta) {
-        l"/web-applications/"' + projectId + '/web-applications/';
+    createWebApplication(api, projectId, data) {
+        let url = '/projects/' + projectId + '/web-applications/';
         return api.post(url, data);
     }
 
