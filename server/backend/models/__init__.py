@@ -34,7 +34,7 @@ from .assets.host import Host
 from .assets.service import Service
 from .assets.web_application import WebApplication
 from .assets.mobile_application import MobileApplication
-
+from .assets.thick_client import ThickClient
 
 # advisory
 from .advisory import Advisory

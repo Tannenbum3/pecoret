@@ -1,10 +1,9 @@
 <script>
-import { useAuthStore } from "@/store/auth";
-import ProjectService from "@/service/ProjectService";
-
+import { useAuthStore } from '@/store/auth';
+import ProjectService from '@/service/ProjectService';
 
 export default {
-    name: "ProjectTabMenu",
+    name: 'ProjectTabMenu',
     mounted() {
         if (!this.authStore.activeProject.name) {
             this.projectService.getProject(this.$route.params.projectId).then((response) => {
@@ -18,66 +17,75 @@ export default {
             projectService: new ProjectService(),
             items: [
                 {
-                    label: "Dashboard",
-                    icon: "fa fa-chart-line",
+                    label: 'Dashboard',
+                    icon: 'fa fa-chart-line',
                     route: this.$router.resolve({
-                        name: "ProjectDetail",
+                        name: 'ProjectDetail',
                         params: { projectId: this.$route.params.projectId }
                     }).path
                 },
                 {
-                    label: "Findings",
-                    icon: "fa fa-bug",
+                    label: 'Findings',
+                    icon: 'fa fa-bug',
                     route: this.$router.resolve({
-                        name: "FindingList",
+                        name: 'FindingList',
                         params: { projectId: this.$route.params.projectId }
                     }).path
                 },
                 {
-                    label: "Checklists",
-                    icon: "fa fa-circle-check",
+                    label: 'Checklists',
+                    icon: 'fa fa-circle-check',
                     route: this.$router.resolve({
-                        name: "ProjectChecklistList",
+                        name: 'ProjectChecklistList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Assets",
-                    icon: "fa fa-crosshairs",
+                    label: 'Assets',
+                    icon: 'fa fa-crosshairs',
                     items: [
                         {
-                            label: "Web Applications",
+                            label: 'Web Applications',
                             route: this.$router.resolve({
-                                name: "WebApplicationList",
+                                name: 'WebApplicationList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             }).path
                         },
                         {
-                            label: "Hosts",
+                            label: 'Hosts',
                             route: this.$router.resolve({
-                                name: "HostList",
+                                name: 'HostList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             }).path
                         },
                         {
-                            label: "Services",
+                            label: 'Services',
                             route: this.$router.resolve({
-                                name: "ServiceList",
+                                name: 'ServiceList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             }).path
                         },
                         {
-                            label: "Mobile Applications",
+                            label: 'Mobile Applications',
                             route: this.$router.resolve({
-                                name: "MobileApplicationList",
+                                name: 'MobileApplicationList',
+                                params: {
+                                    projectId: this.$route.params.projectId
+                                }
+                            })
+                        },
+                        {
+                            label: 'Thick Clients',
+                            route: this.$router.resolve({
+                                name: 'ThickClientList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
@@ -86,50 +94,50 @@ export default {
                     ]
                 },
                 {
-                    label: "Reports",
-                    icon: "fa fa-file",
+                    label: 'Reports',
+                    icon: 'fa fa-file',
                     route: this.$router.resolve({
-                        name: "ReportList",
+                        name: 'ReportList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Management",
-                    icon: "fa fa-calendar",
+                    label: 'Management',
+                    icon: 'fa fa-calendar',
                     items: [
                         {
-                            label: "Contributors",
+                            label: 'Contributors',
                             route: this.$router.resolve({
-                                name: "ContributorList",
+                                name: 'ContributorList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             })
                         },
                         {
-                            label: "User Accounts",
+                            label: 'User Accounts',
                             route: this.$router.resolve({
-                                name: "UserAccountList",
+                                name: 'UserAccountList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             })
                         },
                         {
-                            label: "Contacts",
+                            label: 'Contacts',
                             route: this.$router.resolve({
-                                name: "ContactList",
+                                name: 'ContactList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
                             })
                         },
                         {
-                            label: "Files",
+                            label: 'Files',
                             route: this.$router.resolve({
-                                name: "ProjectFileList",
+                                name: 'ProjectFileList',
                                 params: {
                                     projectId: this.$route.params.projectId
                                 }
@@ -138,30 +146,30 @@ export default {
                     ]
                 },
                 {
-                    label: "Vulnerabilities",
-                    icon: "fa fa-bolt",
+                    label: 'Vulnerabilities',
+                    icon: 'fa fa-bolt',
                     route: this.$router.resolve({
-                        name: "VulnerabilityList",
+                        name: 'VulnerabilityList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Commands",
-                    icon: "fa fa-terminal",
+                    label: 'Commands',
+                    icon: 'fa fa-terminal',
                     route: this.$router.resolve({
-                        name: "ProjectCommandList",
+                        name: 'ProjectCommandList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
                     })
                 },
                 {
-                    label: "Scopes",
-                    icon: "fa fa-star",
+                    label: 'Scopes',
+                    icon: 'fa fa-star',
                     route: this.$router.resolve({
-                        name: "ProjectScopeList",
+                        name: 'ProjectScopeList',
                         params: {
                             projectId: this.$route.params.projectId
                         }
@@ -185,8 +193,7 @@ export default {
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]"
-                      v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>

@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from backend.models import ProjectVulnerability
-from backend.models import WebApplication, Host, Service, MobileApplication
+from backend.models import WebApplication, Host, Service, MobileApplication, ThickClient
 from backend.models.finding import Finding, Severity, FindingStatus
 from backend.serializers.assets.web_application import WebApplicationSerializer
 from backend.serializers.assets.host import HostSerializer
+from backend.serializers.assets.thick_client import ThickClientSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 from pecoret.core.serializers import (
@@ -30,7 +31,8 @@ class FindingSerializer(serializers.ModelSerializer):
         WebApplication: WebApplicationSerializer(),
         Host: HostSerializer(),
         Service: MinimalServiceSerializer(),
-        MobileApplication: MobileApplicationSerializer()
+        MobileApplication: MobileApplicationSerializer(),
+        ThickClient: ThickClientSerializer()
     })
 
     class Meta:

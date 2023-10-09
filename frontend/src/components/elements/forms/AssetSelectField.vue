@@ -36,6 +36,11 @@ export default {
                     label: 'Mobile Application',
                     value: 'mobile_application',
                     url: 'mobile-applications'
+                },
+                {
+                    label: 'Thick Client',
+                    value: 'thick_client',
+                    url: 'thick-clients'
                 }
             ]
         };
