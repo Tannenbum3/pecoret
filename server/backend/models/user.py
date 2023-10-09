@@ -7,6 +7,7 @@ class User(AbstractUser):
     Custom user class with unique emails
     """
     email = models.EmailField(unique=True)
+    new_email = models.EmailField(null=True, blank=True)
 
     class Meta:
         ordering = ["username"]
