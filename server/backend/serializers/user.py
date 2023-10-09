@@ -1,10 +1,12 @@
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
+
 from backend.models.user import User
+from backend.utils.change_email_token_generator import change_email_token_generator
 from pecoret.core.utils import decode_uid
 
 
@@ -37,7 +39,6 @@ class MinimalUserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ["pk", "username", "first_name", "last_name", "email", "groups"]
@@ -105,6 +106,43 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
             self.fail("invalid_password", msg=str(';'.join(list(e.messages))))
         self.user = user
         return validated_data
+
+
+class ChangeEmailConfirmSerializer(serializers.Serializer):
+    default_error_messages = {
+        "invalid_token": 'Token is not valid',
+        'invalid_uid': 'Invalid user!'
+    }
+
+    def validate(self, attrs):
+        validated_Data = super().validate(attrs)
+        try:
+            uid = decode_uid(self.initial_data.get('uid', ''))
+            user = User.objects.get(pk=uid)
+            # ensure, that no one has stolen my token, since my password was already supplied.
+            # user2 should not be able to submit tokens of user1
+            if self.context['request'].user.pk is not user.pk:
+                self.fail("invalid_uid")
+        except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+            self.fail("invalid_uid")
+        is_token_valid = change_email_token_generator.check_token(user, self.initial_data.get('token'))
+        if not is_token_valid:
+            self.fail("invalid_token")
+        self.user = user
+        return validated_Data
+
+
+class ChangeEmailSerializer(serializers.Serializer):
+    default_error_messages = {"invalid_password": "password incorrect!"}
+
+    password = serializers.CharField()
+    email = serializers.EmailField()
+
+    def validate_password(self, value):
+        request = self.context["request"]
+        if request.user.check_password(value):
+            return True
+        self.fail("invalid_password")
 
 
 class ActivationSerializer(PasswordResetConfirmSerializer):

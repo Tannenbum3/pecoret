@@ -31,3 +31,11 @@ def send_new_critical_finding_mail(context, to):
         to = [to]
     email.send(to)
     return True
+
+
+def send_change_email_mail(context, to):
+    email = emails.ChangeEmail(context)
+    if not isinstance(to, list):
+        to = [to]
+    email.send(to)
+    return True
