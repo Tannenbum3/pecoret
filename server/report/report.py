@@ -1,10 +1,25 @@
 import datetime
-from django.db.models import Count, Max, Q
+
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from django.conf import settings
+from django.db.models import Count, Max, Q
+from django.utils.translation import gettext as _
+
 from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
+from pecoret.core.reporting.charts.base import Chart
 from pecoret.core.reporting.error import ReportError
+
+SEVERITY_COLORS = {
+    'critical': '#9c1720',
+    'high': '#d13c0f',
+    'medium': '#e8971e',
+    'low': '#2075f5',
+    'informational': '#059D1D',
+    'fixed': ' #43616f'
+}
 
 
 class ErrorMixin:
@@ -17,6 +32,30 @@ class ErrorMixin:
             if self.get_project().require_cvss_base_score and finding.cvssbasescore.is_incomplete:
                 error = ReportError("Missing CVSS base score", f"#finding-{finding.pk}-title")
                 self._add_error(error)
+
+
+class FindingBarChart(Chart):
+    def __init__(self, findings):
+        super().__init__()
+        self.findings = findings
+
+    def plot(self):
+        fig, ax = plt.subplots(figsize=[6, 2.5])
+        findings = self.findings.exclude_fixed()
+        labels = [_('Critical'), _('High'), _('Medium'), _('Low'), _('Informational')]
+        counts = [
+            findings.with_severity('critical').count(),
+            findings.with_severity('high').count(),
+            findings.with_severity('medium').count(),
+            findings.with_severity('low').count(),
+            findings.with_severity('informational').count()
+        ]
+        colors = [SEVERITY_COLORS['critical'], SEVERITY_COLORS['high'], SEVERITY_COLORS['medium'],
+                  SEVERITY_COLORS['low'], SEVERITY_COLORS['informational']]
+        ax.bar(labels, counts, color=colors)
+        ya = ax.get_yaxis()
+        ya.set_major_locator(MaxNLocator(integer=True))
+        return self.to_html(plt)
 
 
 class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
@@ -34,6 +73,9 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
         context["findings"] = Finding.objects.for_report(self.get_project())
         context["members"] = Membership.objects.for_project(self.get_project()).for_report()
         context["scopes"] = ProjectScope.objects.for_project(self.get_project())
+        context["charts"] = {
+            'findings_bar': FindingBarChart(context['findings'])
+        }
         return context
 
     def get_unique_vulnerabilities_by_severity(self):

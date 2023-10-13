@@ -41,6 +41,9 @@ class FindingQuerySet(models.QuerySet):
     def is_fixed(self):
         return self.filter(status=FindingStatus.FIXED)
 
+    def exclude_fixed(self):
+        return self.exclude(status=FindingStatus.FIXED)
+
 
 class FindingManager(models.Manager):
     def create_from_template(self, **data):

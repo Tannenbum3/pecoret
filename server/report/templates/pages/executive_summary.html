@@ -55,6 +55,22 @@
     </table>
   </section>
 
+
+  <section>
+    <p>
+      {% trans %}
+      The following chart gives an overview of how many vulnerabilities were found for which severity.
+      {% endtrans %}
+    </p>
+  </section>
+  <section class="chart-container">
+    <div class="findings-bar">
+      {{ charts.findings_bar.plot() }}
+
+    </div>
+  </section>
+
+
   <section>
     <h2 id="executive-summary-recommendation">{{ _('Recommendations') }}</h2>
     <p>
