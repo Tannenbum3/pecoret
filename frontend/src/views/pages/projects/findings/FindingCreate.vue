@@ -23,7 +23,7 @@ export default {
             this.loading = true;
             let data = {
                 component: this.model.component,
-                severity: this.model.severity.value,
+                severity: this.model.severity,
                 name: this.model.name,
                 status: 'Open',
                 vulnerability_id: this.model.vulnerability,
@@ -31,6 +31,9 @@ export default {
             };
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
+            }
+            if (this.model.severity && this.model.severity.value) {
+                data['severity'] = this.model.severity.value;
             }
             this.service
                 .createFinding(this.$api, this.projectId, data)
