@@ -42,62 +42,87 @@
     {% endtrans %}
   </p>
 
-  <table class="table-custom">
-    <thead>
-    <tr>
-      <th>{{ _('Risk Rating') }}</th>
-      <th>{{ _('Description') }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <th class="text-critical">{{ _('Critical') }}</th>
-      <td>
-        {% trans %}
-          Critical vulnerabilities can lead to a full compromise of the asset.
-          They pose a serious risk to the security of the target and should be remediated immediately.
-        {% endtrans %}
-      </td>
-    </tr>
-    <tr>
-      <th class="text-high">{{ _('High') }}</th>
-      <td>
-        {% trans %}
-          High-risk vulnerabilities pose a serious threat to the target.
-          These vulnerabilities require resolution in a short-term.
-        {% endtrans %}
-      </td>
-    </tr>
-    <tr>
-      <th class="text-medium">{{ _('Medium') }}</th>
-      <td>
-        {% trans %}
-          Vulnerabilities indicated with this severity level pose a medium risk to the target.
-          Typically, these vulnerabilities depend on other factors that must be present for successful exploitation.
-          These vulnerabilities should be resolved throughout the ongoing maintenance process.
-        {% endtrans %}
-      </td>
-    </tr>
-    <tr>
-      <th class="text-low">{{ _('Low') }}</th>
-      <td>
-        {% trans %}
-          Low severity vulnerabilities pose a minimal risk to the target and are often theoretical in nature.
-          These vulnerabilities should be addressed as part of routine maintenance tasks.
-        {% endtrans %}
-      </td>
-    </tr>
-    <tr>
-      <th class="text-informational">{{ _('Informational') }}</th>
-      <td>
-        {% trans %}
-          Informational vulnerabilities, by themselves, have little or no impact on the target.
-          These vulnerabilities should be addressed in order to meet leading practice.
-        {% endtrans %}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div>
+    <p class="text-critical"><strong>{{ _('Critical') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "critical" represents the highest level of risk associated with a security issue.
+        It indicates that the finding has the potential to cause severe damage, compromise sensitive data, or
+        enable unauthorized access to critical systems or resources.
+        The finding has a high likelihood of being exploited, either
+        by a skilled attacker or through automated tools.
+        The finding requires immediate attention and remediation to prevent potential breaches or compromise of critical
+        assets.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-high"><strong>{{ _('High') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk "high" describes a security issue that poses a significant threat to asset being tested.
+        A high risk finding is easily exploitable, has a wide range of potential impacts, and may lead to unauthorized
+        access, data breaches or system compromise.
+        High risk findings may have limitations in exploitation or impact compared to findings classified as critical.
+        The finding requires immediate attention and remediation to prevent potential breaches or compromise of critical
+        assets.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-medium"><strong>{{ _('Medium') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "medium" indicates a level of risk that is not as severe as "high" but is
+        more significant than "low". It suggests that there are weaknesses identified during the
+        penetration testing that could potentially be exploited by attackers.
+
+        A medium risk rating implies that the identified issues can pose a moderate threat to the security of the system
+        or network. While they may not immediately result in a significant impact, they still have the potential to be
+        exploited with some effort or under certain circumstances. However, the risk is not severe enough to cause
+        immediate damage or compromise critical assets.
+        Once identified, these findings should be addressed and mitigated by the organization as part of their
+        risk management strategy.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-low"><strong>{{ _('Low') }}</strong></p>
+    <p>
+      {% trans %}
+        This rating suggests that the issue, if exploited, is unlikely to result in significant harm or have a
+        substantial impact on the target system or organization.
+        The finding may have certain weaknesses or weaknesses that are
+        difficult to exploit, significantly reducing the chances of successful exploitation.
+        The consequences of exploiting the finding are minimal and generally do not
+        pose a severe threat to the target organization's infrastructure, data, or operations.
+
+        While a "low" risk rating may suggest a relatively low priority for immediate mitigation, it is essential to
+        remember that maintaining a holistic security posture requires addressing findings, even if they present
+        lower risks, to avoid potential future exploitation or connection with higher-risk findings.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-informational"><strong>{{ _('Informational') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "informational" refers a finding that poses little to no immediate threat or risk to the organization's systems or infrastructure.
+        It means that the identified issue may not have a significant impact on the security of the environment, but it is
+        still documented for informational purposes.
+
+        An informational risk rating denotes findings that do not necessarily require
+        immediate action or remediation but may provide valuable insights for improving the overall security posture.
+        These findings could include things like harmless misconfigurations, or general
+        information about the system's architecture.
+
+        While Informational issues may not pose an immediate risk, they are still crucial for organizations to be aware
+        of, as they provide an opportunity to proactively address potential security weaknesses before they can be
+        exploited by malicious actors. Hence, it is essential to review and prioritize these findings accordingly, even
+        if immediate remediation is not necessary.
+      {% endtrans %}
+    </p>
+  </div>
 </section>
 <div class="page-break-after"></div>
 
