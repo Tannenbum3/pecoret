@@ -1,10 +1,10 @@
 import datetime
 
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 from django.conf import settings
 from django.db.models import Count, Max, Q
 from django.utils.translation import gettext as _
+from matplotlib.ticker import MaxNLocator
 
 from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
 from backend.models.vulnerability import Severity
@@ -72,6 +72,8 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
         context["REPORT_COMPANY_INFORMATION"] = settings.REPORT_COMPANY_INFORMATION
         context["findings"] = Finding.objects.for_report(self.get_project())
         context["members"] = Membership.objects.for_project(self.get_project()).for_report()
+        context['vulnerabilities'] = ProjectVulnerability.objects.for_project(self.get_project()).filter(
+            pk__in=context['findings'].values('vulnerability'))
         context["scopes"] = ProjectScope.objects.for_project(self.get_project())
         context["charts"] = {
             'findings_bar': FindingBarChart(context['findings'])

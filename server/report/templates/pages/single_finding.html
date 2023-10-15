@@ -1,5 +1,5 @@
 <section class="page-break-after">
-  <h2 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.internal_id }}</h2>
+  <h3 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.internal_id }}</h3>
   {% with section="#finding-" + finding.pk|string + "-title" %}
     {% include './components/report_error_for_section.html' %}
   {% endwith %}
@@ -24,6 +24,13 @@
   </table>
 
   <table style="margin-top: 30px;">
+    <tr>
+      <th style="padding-right:65px">{{ _('Vulnerability') }}</th>
+      <td>
+        <a href="#vulnerability-{{ finding.vulnerability.pk }}" class="text-dark">{{ finding.vulnerability.name|dynamic_trans }}</a>
+      </td>
+    </tr>
+
     {% if finding.project.require_cvss_base_score %}
       <tr>
         <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
@@ -43,14 +50,9 @@
     {% endif %}
   </table>
 
-  <h4>{{ _('Description') }}</h4>
-  {{ report_helpers.bleach_md(finding.vulnerability.description)|safe }}
-
-  <h4>{{ _('Recommendation') }}</h4>
   {% if finding.recommendation %}
+    <h4>{{ _('Recommendation') }}</h4>
     {{ report_helpers.bleach_md(finding.recommendation)|safe }}
-  {% else %}
-    {{ report_helpers.bleach_md(finding.vulnerability.recommendation)|safe }}
   {% endif %}
 
   <h4>{{ _('Steps to reproduce') }}</h4>

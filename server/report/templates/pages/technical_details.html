@@ -8,7 +8,20 @@
   {% endtrans %}
 </section>
 
+{% include './pages/vulnerabilities_overview.html' %}
 
-{% for finding in findings %}
-  {% include './pages/single_finding.html' %}
-{% endfor %}
+<section id="findings">
+  <h2>{{ _('Findings') }}</h2>
+  <p>
+    {% trans %}
+      "Findings" are occurrences of various vulnerabilities described in the previous section.
+      If the remediation of a finding requires steps other than those described in the vulnerability, the
+      recommendations for the finding are listed accordingly.
+    {% endtrans %}
+  </p>
+
+  {% for finding in findings %}
+    {% include './pages/single_finding.html' %}
+  {% endfor %}
+</section>
+
