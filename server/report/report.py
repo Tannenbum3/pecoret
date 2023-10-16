@@ -1,11 +1,12 @@
 import datetime
-
+from pathlib import Path
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.font_manager as font_manager
 from django.conf import settings
 from django.db.models import Count, Max, Q
 from django.utils.translation import gettext as _
 from matplotlib.ticker import MaxNLocator
-
 from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
@@ -59,6 +60,14 @@ class FindingBarChart(Chart):
 
 
 class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        origin = Path(__file__).parent
+        font_manager.fontManager.addfont(str(origin / 'templates/fonts/roboto/Roboto-Regular.ttf'))
+        font_manager.fontManager.addfont(str(origin / 'templates/fonts/roboto/Roboto-Bold.ttf'))
+        font_manager.fontManager.addfont(str(origin / 'templates/fonts/roboto/Roboto-Light.ttf'))
+        mpl.rcParams['font.family'] = 'Roboto'
+        mpl.rcParams['font.size'] = 9
 
     def get_assets(self):
         assets = []
@@ -76,7 +85,7 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
             pk__in=context['findings'].values('vulnerability'))
         context["scopes"] = ProjectScope.objects.for_project(self.get_project())
         context["charts"] = {
-            'findings_bar': FindingBarChart(context['findings'])
+            'findings_bar': FindingBarChart(context['findings']),
         }
         return context
 

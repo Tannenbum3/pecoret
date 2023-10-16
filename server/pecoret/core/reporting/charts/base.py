@@ -1,4 +1,5 @@
 import io
+
 import matplotlib as mpl
 from django.utils.html import format_html
 
@@ -17,10 +18,8 @@ class Chart:
     def plot(self):
         raise NotImplementedError()
 
-    def to_html(self, plot):
+    def to_html(self, plot, css_class="chart"):
         f = io.StringIO()
         plot.savefig(f, format='svg', transparent=True)
         plot.close('all')
-        data = f.getvalue().split("<svg")[1]
-        #print(f.getvalue())
-        return format_html('<img class="chart" src="data:image/svg+xml;utf8,{}" Z>', f.getvalue())
+        return format_html('<img class="{}" src="data:image/svg+xml;utf8,{}">', css_class, f.getvalue())
