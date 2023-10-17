@@ -1,3 +1,5 @@
+import sys, os
+from pathlib import Path
 from django.utils import translation
 from django.core.exceptions import ImproperlyConfigured
 from jinja2 import FileSystemLoader
@@ -18,7 +20,7 @@ class BaseReportType:
 
     def __init__(self, report_template, *args, **kwargs):
         self.report_template = report_template
-        self.jinja_loader = FileSystemLoader(self.report_template.template_path)
+        self.jinja_loader = FileSystemLoader(self.template_path)
         self.jinja_env = SandboxedEnvironment(
             loader=self.jinja_loader,
             autoescape=self.jinja_autoescape,
@@ -27,11 +29,16 @@ class BaseReportType:
         self.enable_i18n()
         self.errors = {}
 
+    @property
+    def template_dir(self):
+        return Path(sys.modules[self.__module__].__file__).parent
+
+    @property
+    def template_path(self):
+        path = self.template_dir / 'templates'
+        return str(path)
+
     def enable_i18n(self):
-        # pylint: disable=no-member
-        #self.jinja_env.install_gettext_callables(
-        #    gettext=translation.gettext, ngettext=translation.ngettext, newstyle=True
-        #)
         self.jinja_env.install_gettext_translations(translation)
         self.jinja_env.policies['ext.i18n.trimmed'] = True
         self.jinja_env.filters['dynamic_trans'] = dynamic_trans
