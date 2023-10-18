@@ -1,14 +1,13 @@
 from django.core.exceptions import ImproperlyConfigured
-from .mixins.plain import PlainJinjaMixin
-from .mixins.pdf import PDFExportMixin
+from pecoret.reporting.mixins import PDFMixin
 from .base import BaseReportType
 
 
-class AdvisoryMarkdownExport(PlainJinjaMixin, BaseReportType):
+class AdvisoryMarkdownExport(BaseReportType):
     content_type = "text/plain"
     file_extension = "md"
     default_title = ""
-    template_name = "advisory.md"
+    template_file = "advisory.md"
 
     def __init__(self, *args, **kwargs):
         if "advisory" not in kwargs:
@@ -21,9 +20,12 @@ class AdvisoryMarkdownExport(PlainJinjaMixin, BaseReportType):
         context["advisory"] = self.advisory
         return context
 
+    def render_report(self):
+        return self.render_to_string(self.get_context())
 
-class AdvisoryPDFExport(PDFExportMixin, BaseReportType):
-    template_name = "advisory_export.html"
+
+class AdvisoryPDFExport(PDFMixin, BaseReportType):
+    template_file = "advisory_export.html"
 
     def __init__(self, *args, **kwargs):
         if "advisory" not in kwargs:
@@ -35,3 +37,6 @@ class AdvisoryPDFExport(PDFExportMixin, BaseReportType):
         context = super().get_context()
         context["advisory"] = self.advisory
         return context
+
+    def render_report(self):
+        return self.render_pdf(self.get_context())

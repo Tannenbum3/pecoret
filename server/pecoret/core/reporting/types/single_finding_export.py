@@ -1,15 +1,15 @@
 from django.core.exceptions import ImproperlyConfigured
+from pecoret.reporting.mixins import PDFMixin
 from .base import ProjectRelatedReportType
-from .mixins.pdf import PDFExportMixin
 
 
-class SingleFindingPDFReport(PDFExportMixin, ProjectRelatedReportType):
+class SingleFindingPDFReport(PDFMixin, ProjectRelatedReportType):
     """report for a exporting a single finding to PDF"""
 
     content_type = "application/pdf"
     file_extension = "pdf"
     default_title = "Finding Export"
-    template_name = "single_finding_export.html"
+    template_file = "single_finding_export.html"
 
     def __init__(self, *args, **kwargs):
         if "finding" not in kwargs:
@@ -29,12 +29,12 @@ class SingleFindingPDFReport(PDFExportMixin, ProjectRelatedReportType):
         pass
 
     def generate(self):
-        """generated the report by doing pre processing, rendering and post processing steps.
+        """generated the report by doing pre-processing, rendering and post-processing steps.
 
         Returns:
             tuple: True and string if report was created
         """
         self.pre_processing()
-        rendered_report = self.render_report()
+        rendered_report = self.render_pdf(self.get_context())
         self.post_processing(rendered_report=rendered_report)
         return rendered_report

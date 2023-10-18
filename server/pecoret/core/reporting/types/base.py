@@ -1,50 +1,21 @@
-import sys, os
-from pathlib import Path
-from django.utils import translation
 from django.core.exceptions import ImproperlyConfigured
-from jinja2 import FileSystemLoader
-from jinja2.sandbox import SandboxedEnvironment
 from backend.models.reports.change_history import ChangeHistory
 from pecoret.core.utils.markdown import bleach_md
 from pecoret.core.utils import image64
-from pecoret.core.reporting.jinja.utils import dynamic_trans
+from pecoret.reporting import mixins
 
 
-class BaseReportType:
+class BaseReportType(mixins.JinjaMixin):
     """the base report type that other report types must inherit from"""
 
-    jinja_autoescape = True
     template_name = None
     content_type = None
     file_extension = None
 
     def __init__(self, report_template, *args, **kwargs):
         self.report_template = report_template
-        self.jinja_loader = FileSystemLoader(self.template_path)
-        self.jinja_env = SandboxedEnvironment(
-            loader=self.jinja_loader,
-            autoescape=self.jinja_autoescape,
-            extensions=["jinja2.ext.i18n"],
-        )
-        self.enable_i18n()
         self.errors = {}
-
-    @property
-    def template_dir(self):
-        return Path(sys.modules[self.__module__].__file__).parent
-
-    @property
-    def template_path(self):
-        path = self.template_dir / 'templates'
-        return str(path)
-
-    def enable_i18n(self):
-        self.jinja_env.install_gettext_translations(translation)
-        self.jinja_env.policies['ext.i18n.trimmed'] = True
-        self.jinja_env.filters['dynamic_trans'] = dynamic_trans
-
-    def _activate_translation_lang(self, lang):
-        translation.activate(lang)
+        super().__init__(*args, **kwargs)
 
     def get_content_type(self):
         """get the content type for this type of report.
@@ -117,7 +88,7 @@ class BaseReportType:
         pass
 
     def generate(self):
-        """generated the report by doing pre processing, rendering and post processing steps.
+        """generated the report by doing pre-processing, rendering and post-processing steps.
 
         Returns:
             tuple: True and string if report was created
