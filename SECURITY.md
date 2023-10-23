@@ -1,7 +1,3 @@
 # Security Policy
 
-
-## Reporting a Vulnerability
-
-Security vulnerabilities can be reported to pecoret-project+security@riseup.net
-
+See [documentation](https://pecoret.github.io/docs/Installation/report-bugs/#security-vulnerabilities).
