@@ -1,5 +1,6 @@
-from pecoret.core.reporting import types as report_types
+from pecoret.reporting.template import AdvisoryMarkdownTemplate
+from .base import DefaultBaseTemplate
 
 
-class AdvisoryMarkdownExport(report_types.AdvisoryMarkdownExport):
+class AdvisoryMarkdownExport(AdvisoryMarkdownTemplate, DefaultBaseTemplate):
     pass

@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 from django.utils import translation
+from django.core.exceptions import ImproperlyConfigured
 from jinja2 import FileSystemLoader
 from jinja2.sandbox import SandboxedEnvironment
 from pecoret.core.reporting.jinja.utils import dynamic_trans
@@ -29,6 +30,8 @@ class JinjaMixin:
         return str(path)
 
     def get_template_file(self):
+        if not self.template_file:
+            raise ImproperlyConfigured("Template must have a template_file set.")
         return self.template_file
 
     def enable_i18n(self):

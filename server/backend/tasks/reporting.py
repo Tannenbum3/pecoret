@@ -10,5 +10,5 @@ def create_report_document_task(report_document_pk):
     loader = TemplateLoader(report_document.report.template)
     # pylint: disable=invalid-name
     RenderableReport = loader.load_template_for_variant(report_variant)
-    result = RenderableReport(loader.template, report_document).generate()
+    result = RenderableReport(loader.template, report_document=report_document).generate()
     return result

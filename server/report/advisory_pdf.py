@@ -1,8 +1,10 @@
 import datetime
-from pecoret.core.reporting import types as report_types
+from pecoret.reporting.template import AdvisoryPDFTemplate
+from .base import DefaultBaseTemplate
 
 
-class AdvisoryPDFExport(report_types.AdvisoryPDFExport):
+class AdvisoryPDFExport(AdvisoryPDFTemplate, DefaultBaseTemplate):
+    template_file = "advisory_export.html"
 
     def get_context(self):
         context = super().get_context()
