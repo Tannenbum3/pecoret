@@ -1,5 +1,0 @@
-{% if not report_document or report_document.get_release_type_display() == "Preview" %}
-  {% for error in template.get_report_errors_for_section(section) %}
-    <p class="text-color-error"><strong>Error: </strong>{{ error.message }}</p>
-  {% endfor %}
-{% endif %}
