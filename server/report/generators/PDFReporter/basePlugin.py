@@ -3,8 +3,11 @@ import os
 from pathlib import Path
 from weasyprint import HTML, CSS
 from jinja2 import Environment, PackageLoader, select_autoescape
+import markdown
+from playwright.sync_api import sync_playwright
 
 
+# Could be usefull to standarize the context of a report
 class ReportContext:
     def __init__(self, remport_name, filename, company, members, scopes, vulnerabilities, findings, parts, errors):
         self.report_name = report_name
@@ -20,14 +23,15 @@ class ReportContext:
     def to_dict(self):
         return vars(self)
 
-class PDFReporter():
+class BaseReporter():
     """
-    Simple PDF Report plugin
+    Base peporter plugin
     """
 
-    NAME = "PDFReporter"
-    DESCRIPTION = "Create a PDF report"
+    NAME = "BaseReporter" # Display Name of the reporter
+    DESCRIPTION = "Defines a Plugin"
 
+    # Describe all options available to the user and set default values
     options = {
         "template_parts_dir": {
             "description": "Directory containing HTML template parts",
@@ -44,6 +48,14 @@ class PDFReporter():
         "colors": {
             "description": "Path to color configuration",
             "default": str(Path(__file__).parent.resolve() / "conf/colors.yml")
+        },
+        "allow_js": {
+            "description": "Allow JavaScript in templates",
+            "default": False
+        },
+        "highlight_engine": {
+            "description": "Select a highlighting engine. Highlight.js requires allow_js = True",
+            "default": str(Path(__file__).parent.resolve() / "conf/colors.yml")
         }
     }
 
@@ -51,8 +63,11 @@ class PDFReporter():
         self.config = config
         self.context = context
         self.config = {key: config.get(key, self.options[key]['default']) for key in self.config}
+        # TODO: Create a shared templates dir which all reporter can access?
+        # This way its possible to completly decouple the generation strategy from the design
+        # same for cscc and so on
         self.jinja_env = Environment(
-            loader=PackageLoader(self.NAME)
+            loader=PackageLoader(self.NAME)  
         )
 
     def _load_css(self):
@@ -61,7 +76,6 @@ class PDFReporter():
 
     def get_parts(self):
         return list(Path(self.config).rglob("*.html"))
-    
 
     def _md_to_html(md):
         return md
@@ -76,7 +90,19 @@ class PDFReporter():
         """
         Postprocess the HTML representation of the report
         """
+        if not self.config['allow_js']:
+            html = self._execute_js(html)
         return html
+
+    def _execute_js(self, html):
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            context = browser.new_context()
+            page = context.new_page()
+            page.set_content(html)
+            executed_html_content = page.content()
+            browser.close()
+            return executed_html_content
 
     def generate(self):
         self._preprocess()
